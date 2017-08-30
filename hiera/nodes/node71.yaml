@@ -1,0 +1,30 @@
+---
+
+packages::toinstall:
+  - mapr-zookeeper
+  - mapr-fileserver
+  - mapr-cldb
+
+  - mapr-nfs
+# - mapr-gateway
+
+  - mapr-resourcemanager
+  - mapr-nodemanager
+# - mapr-historyserver
+
+  - mapr-webserver
+
+# - mapr-client
+# - mapr-loopbacknfs
+# - mapr-posix-client-basic
+
+  - mapr-httpfs
+  - mapr-hiveserver2
+  - mapr-spark
+  - mapr-hue
+  - mapr-hue-livy
+
+  - mapr-drill
+
+# kerberos
+  - krb5-workstation  

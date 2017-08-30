@@ -1,0 +1,14 @@
+---
+
+version: 5
+
+defaults:
+  datadir: '/vagrant/hiera'
+  data_hash: yaml_data
+
+hierarchy:
+  - name: "per node data"
+    path: "nodes/%{facts.networking.hostname}.yaml"
+
+  - name: "common"
+    path: "common.yaml"
