@@ -1,11 +1,11 @@
-# Class: mapr
+# Class: mapr_repo
 #
-# This module installs/configures the MapR cluster
+# This module installs/configures MapR repo
 #
 
-class mapr (
-  $mapr_version = $mapr::mapr_version,
-  $mep_version  = $mapr::mep_version,
+class mapr_repo (
+  $core_version = $mapr_repo::core_version,
+  $mep_version  = $mapr_repo::mep_version,
 ) {
 
   exec { "import_mapr_gpg_key":
@@ -18,7 +18,7 @@ class mapr (
   file { 'mapr_repo_file':
     path    => '/etc/yum.repos.d/mapr.repo',
     ensure  => present,
-    content => epp('mapr/mapr.repo.epp'),
+    content => epp('mapr_repo/mapr.repo.epp'),
   }
 
 }

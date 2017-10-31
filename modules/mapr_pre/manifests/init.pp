@@ -8,22 +8,12 @@ class mapr_pre (
   $java_version_major = $mapr_pre::java_version_major,
   $java_version_minor = $mapr_pre::java_version_minor,
   $java_url_hash      = $mapr_pre::java_url_hash,
-  $cluster_name       = $mapr_pre::cluster_name,  
-  $cldb_node_list     = $mapr_pre::cldb_node_list,
-  $zk_node_list       = $mapr_pre::zk_node_list,  
-  $disk_list          = $mapr_pre::disk_list, 
 ) {
 
   ### /etc/hosts
   file { '/etc/hosts':
     ensure  => present,
     content => epp('mapr_pre/hosts.epp'),
-  }
-
-  ### configure.sh
-  file { '/vagrant/configure_mapr.sh':
-    ensure  => present,
-    content => epp('mapr_pre/configure_mapr.sh.epp'),
   }
 
   ### sysctl.conf
@@ -83,7 +73,7 @@ class mapr_pre (
     url_hash      => $java_url_hash,
   } 
 
-  ### mapr user
+  ### mapr user, passwd is 'mapr'
   group { 'mapr':
     ensure => present,
     gid    => 5000,
@@ -95,32 +85,5 @@ class mapr_pre (
     gid        => 'mapr',
     password   => '$6$lF68yer5CX$hGkROyp0TLcgNPHKCgXKb2Ckr27YV/7.Y.63dTjAHCCnaXYZXpelFXUZE5w.nbh4ugiMXXq5gtDwimd418ryV1',
   }
-
-  ### jqin user
-  group { 'jqin':
-    ensure => present,
-    gid    => 6000,
-  } ->
-  user { 'jqin':
-    ensure     => present,
-    managehome => true,
-    uid        => 6000,
-    gid        => 'jqin',
-    password   => '$6$lF68yer5CX$hGkROyp0TLcgNPHKCgXKb2Ckr27YV/7.Y.63dTjAHCCnaXYZXpelFXUZE5w.nbh4ugiMXXq5gtDwimd418ryV1',
-  }
-
-  ### demo user
-  group { 'demo':
-    ensure => present,
-    gid    => 6001,
-  } ->
-  user { 'demo':
-    ensure     => present,
-    managehome => true,
-    uid        => 6001,
-    gid        => 'demo',
-    password   => '$6$lF68yer5CX$hGkROyp0TLcgNPHKCgXKb2Ckr27YV/7.Y.63dTjAHCCnaXYZXpelFXUZE5w.nbh4ugiMXXq5gtDwimd418ryV1',
-  }
-
 
 }

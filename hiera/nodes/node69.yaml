@@ -1,0 +1,10 @@
+---
+
+classes:
+  - mapr_core
+  - mapr_sasl
+  - mapr_kerberos
+  - mapr_httpfs
+
+mapr_config::refreshonly: false
+#mapr_config::genkey_opts: -genkeys

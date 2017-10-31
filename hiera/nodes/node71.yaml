@@ -23,6 +23,7 @@ packages::toinstall:
   - mapr-spark
   - mapr-hue
   - mapr-hue-livy
+  - mapr-hbasethrift
 
   - mapr-drill
 

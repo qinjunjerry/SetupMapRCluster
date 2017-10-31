@@ -18,6 +18,8 @@ packages::toinstall:
 # - mapr-loopbacknfs
 # - mapr-posix-client-basic
 
+  - mapr-hbasethrift
+
   - mapr-spark
   - mapr-spark-historyserver
 

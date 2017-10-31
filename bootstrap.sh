@@ -1,7 +1,5 @@
 #!/bin/sh
 
-sudo yum update -y
-
 # install puppet repo
 sudo rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
 
