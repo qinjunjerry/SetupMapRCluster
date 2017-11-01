@@ -1,6 +1,6 @@
 # Class: mapr_core
 #
-# This module installs/configures  MapR core
+# This module installs/configures MapR core
 #
 
 class mapr_core (
@@ -13,8 +13,6 @@ class mapr_core (
   $core_packages = [
     'mapr-zookeeper',
     'mapr-fileserver',
-    'mapr-cldb',
-    'mapr-nfs',
     'mapr-nodemanager',
     'mapr-resourcemanager',
     'mapr-webserver'

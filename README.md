@@ -30,31 +30,14 @@
 - Reboot after selinux change
 - Setup from any directory like /home/ec2-user
 
-## Overview of Modules
+## Overview of Puppet Modules
 - mapr_pre      : prerequisites (OS settings, 'mapr' account and its settings)
 - mapr_repo     : yum/apt repo
 - mapr_user     : additional users
-- mapr_core     : core packages, mfs, cldb, etc.
-- mapr_sasl     : configure MapR SASL
-- mapr_kerberos : configure Kerberos 
-- mapr_config   : generate and run configure.sh
-
-
-## Steps to create a VM
-
-- Create a directory to hold the VM on datastore 'VM'
-- Copy VM template (nodeNN.vmx, nodeNN.vmdk) from datastore 'Home'
-- Select vmx file and right click to add into vSphere Inventory
-- Boot up the VM, run commands:
-  - vi /etc/sysconfig/network-scripts/ifcfg-ens192
-  	ONBOOT="YES"
-  	IPADDR="<IPADDR>"
-  - systemctl restart network
-  - hostnamectl set-hostname <nodeNN>
-  - vi /etc/selinux/config
-  	SELINUX=disabled
-  - yum update -y
-  - reboot
-- ssh-copy-id <nodeNN>
-- ssh <nodeNN>  
-- Thin provision a 32GB disk in datastore
+- mapr_core     : core packages, zookeeper, mfs, etc.
+- mapr_cldb     : install and configure cldb
+- mapr_sasl     : create MapR SASL related files: cldb.key, maprserverticket, ssl_keystore, ssl_truststore
+- mapr_kerberos : configure Kerberos: krb5.conf, mapr.keytab 
+- mapr_config   : run configure.sh -C ... -Z ...
+- mapr_httpfs   : install and configure httpfs
+- mapr_config_r : run configure.sh -R

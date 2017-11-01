@@ -7,10 +7,11 @@ class mapr_httpfs (
 ) {
 
   require mapr_core
+  require mapr_config
 
   package { 'mapr-httpfs':
     ensure  => present,
-    notify  => Class['mapr_config'],
+    notify  => Class['mapr_config_r'],
   }
 
 }

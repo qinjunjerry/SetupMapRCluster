@@ -10,7 +10,6 @@ class mapr_config (
   $secure         = $mapr_config::secure, 
   $kerberos       = $mapr_config::kerberos, 
   $genkey_opts    = $mapr_config::genkey_opts, 
-  $refreshonly    = $mapr_config::refreshonly, 
   $disk_list      = $mapr_config::disk_list, 
 ) {
 

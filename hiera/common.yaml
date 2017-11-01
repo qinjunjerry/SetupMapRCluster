@@ -33,7 +33,7 @@ mapr_repo::mep_version : 3.0.1
 
 # Cluster level settings
 mapr_config::cluster_name  : qinsup.cluster
-mapr_config::cldb_node_list: node67,node68,node69
+mapr_config::cldb_node_list: node67
 mapr_config::zk_node_list  : node67,node68,node69
 mapr_config::secure        : -secure
 mapr_config::kerberos      : -kerberosEnable -P mapr/qinsup.cluster
@@ -42,11 +42,6 @@ mapr_config::genkey_opts   : -nocerts
 # Default setttings for all nodes
 # Override by setting this to the correct disk in individual nodes' yaml file
 mapr_config::disk_list     : /dev/sdb
-# 'true' means running configure.sh wit "-R"
-mapr_config::refreshonly   : true
-
-mapr_kerberos::jce_policy_file_url  : http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip
-
 
 ### packages to install
 # This provides a convenient way to install packages. No services are started.

@@ -5,20 +5,16 @@ if [ -e /opt/mapr/roles/historyserver ]; then
 	HS="-HS `hostname`"
 fi
 
-if [ '<%= $mapr_config::refreshonly %>' = 'true' ]; then
-   sudo /opt/mapr/server/configure.sh -R
-else
-   sudo /opt/mapr/server/configure.sh --isvm \
-      -N <%= $mapr_config::cluster_name %> \
-      -C <%= $mapr_config::cldb_node_list %> \
-      -Z <%= $mapr_config::zk_node_list %> \
-      <%= $mapr_config::secure %> \
-      <%= $mapr_config::kerberos %> \
-      <%= $mapr_config::genkey_opts %> \
-      -no-autostart \
-      $HS \
-      -f
-fi      
+sudo /opt/mapr/server/configure.sh --isvm \
+   -N <%= $mapr_config::cluster_name %> \
+   -C <%= $mapr_config::cldb_node_list %> \
+   -Z <%= $mapr_config::zk_node_list %> \
+   <%= $mapr_config::secure %> \
+   <%= $mapr_config::kerberos %> \
+   <%= $mapr_config::genkey_opts %> \
+   -no-autostart \
+   $HS \
+   -f
 
 if [ ! -e /opt/mapr/conf/disktab ]; then
 	sudo echo <%= $mapr_config::disk_list %> > /tmp/disks.txt
