@@ -39,7 +39,6 @@
 - `mapr_config_r` : run configure.sh -R
 
 ### TODO
-- Add property/value to XML file
 - Setup from any directory like /home/ec2-user
 - Generate MapR SASL files without install first
 - Reboot after selinux change
