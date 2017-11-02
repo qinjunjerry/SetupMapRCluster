@@ -17,7 +17,10 @@ class mapr_httpfs (
   } ->
 
   mapr_util::hadoop_xml_conf { 
-  	"name": file=>$file, value=>"new value", description=>"description", ensure=>"present";
-  }
+  	"name" : file=>$file, ensure=>"absent";
+   	"name2": file=>$file, value =>"value2";
+  	"name3": file=>$file, value =>"value3", description=>"description";
+  	"name4": file=>$file, value =>"value4", description=>"description", ensure=>"present";
+ }
 
 }
