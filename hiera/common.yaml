@@ -6,6 +6,7 @@ classes:
   - mapr_repo
   - mapr_user
   - mapr_config
+  - mapr_util
 
 # This is used to generate /etc/hosts
 mapr_pre::hosts:

@@ -23,8 +23,25 @@
 - Start MapR cluster
   `systemctl start mapr-zookeeper && systemctl start mapr-warden`
 
-### Known issues
-- This script currently runs only under /MapRSetup
+### FAQ
+
+#### How to update properties in a hadoop xml configuration file?
+Include the following into the corresponding module, for example for module mapr_httpfs:
+
+  ```
+  $file = "/opt/mapr/httpfs/httpfs-1.0/etc/hadoop/httpfs-site.xml"
+
+  package { ... } 
+  ->
+  mapr_util::hadoop_xml_conf { 
+    # add a property
+    "property_name1": file=>$file, value =>"value1", description=>"description1", ensure=>"present";
+    # shorthand
+    "property_name2": file=>$file, value =>"value2";
+    # remove a property
+    "property_name3": file=>$file, ensure=>"absent";
+ }
+ ```
 
 ### Overview of Puppet Modules
 - `mapr_pre`      : prerequisites (OS settings, 'mapr' account and its settings)
