@@ -1,20 +1,30 @@
-define mapr_util::hadoop_xml_conf ( 
+define mapr_util::hadoop_xml_conf (
   $file,
   $value       = 'value',
-  $description = 'No description given here',
+  $description = undef,
   $ensure      = 'present',
 ) {
 
   $property_name = $title
 
   case $ensure {
+
     'present': {
-      $changes = [
+
+      $_changes = [
         "defnode property_node configuration/property[name/#text='$property_name'] ''",
         "set \$property_node/name/#text        '$property_name'",
         "set \$property_node/value/#text       '$value'",
-        "set \$property_node/description/#text '$description'",
       ]
+      # add description if set
+      if $description == undef {
+        $changes = $_changes
+      } elsif $description == '' {
+        $changes = concat($_changes, "rm  \$property_node/description")
+      } else {
+        $changes = concat($_changes, "set \$property_node/description/#text '$description'")
+      }
+
     }
 
     'absent': {
