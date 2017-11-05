@@ -9,36 +9,18 @@ class mapr_sasl (
 
   require mapr_core
 
-  file { '/opt/mapr/conf/cldb.key':
-    ensure => file,
-    owner  => 'mapr',
-    group  => 'mapr',
-    mode   => '0600',
-    source => "puppet:///modules/mapr_sasl/cldb.key",
-  }
+  $inputdir = "/MapRSetup/input"
 
-  file { '/opt/mapr/conf/maprserverticket':
-    ensure => file,
-    owner  => 'mapr',
-    group  => 'mapr',
-    mode   => '0600',
-    source => "puppet:///modules/mapr_sasl/maprserverticket",
-  }
-
-  file { '/opt/mapr/conf/ssl_keystore':
-    ensure => file,
-    owner  => 'mapr',
-    group  => 'mapr',
-    mode   => '0400',
-    source => "puppet:///modules/mapr_sasl/ssl_keystore",
-  }
-
-  file { '/opt/mapr/conf/ssl_truststore':
-    ensure => file,
-    owner  => 'mapr',
-    group  => 'mapr',
-    mode   => '0444',
-    source => "puppet:///modules/mapr_sasl/ssl_truststore",
+  file {
+    default:
+      ensure => file,
+      owner  => 'mapr',
+      group  => 'mapr',
+      mode   => '0600';
+    '/opt/mapr/conf/cldb.key'        : source => "$inputdir/cldb.key";
+    '/opt/mapr/conf/maprserverticket': source => "$inputdir/maprserverticket";
+    '/opt/mapr/conf/ssl_keystore'    : source => "$inputdir/ssl_keystore",  mode => '0400';
+    '/opt/mapr/conf/ssl_truststore'  : source => "$inputdir/ssl_truststore",mode => '0444';
   }
 
 }

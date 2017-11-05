@@ -2,26 +2,29 @@
 
 ### Prerequisites
 
-- The entire directory must to be downloaded to the node where MapR is to be installed. 
-- The user who run this script must be root or can sudo to root
+- The entire directory must be downloaded to the node where MapR is to be installed.
+- The user who runs this script must be root or can sudo to root
 
 ### Steps
 
 - Change into the directory
   `cd /MapRSetup`
-- Install puppet and puppet modules
-  `sh bootstrap.sh`
 - Set variables (e.g., cluster name, MapR version, etc.) in:
 	- `hiera/common.yaml` for common settings
 	- `hiera/nodes/<nodename>.yaml` for node specific settings
 - For MapR SASL secured cluster
-  - Prepare `cldb.key`, `maprserverticket`, `ssl_keystore`, `ssl_truststore`
+  - Copy `cldb.key`, `maprserverticket`, `ssl_keystore`, `ssl_truststore` to `input/`
 - For Kerberos secured cluster
-  - Prepare `krb5.conf`, `mapr.keytab`
+  - Copy `krb5.conf` to `input/`
+  - Copy `mapr.keytab` to `input/`
+    - `mapr.keytab` must contain the principal `mapr/<clustername>`
+    - and also the principals `HTTP/<node>` and `mapr/<node>`, if httpfs kerberos authentication is configfured
+- Install puppet and puppet modules
+  `maprbox init`
 - Install and configure MapR
-  `sh install_mapr.sh`
+  `maprbox setup`
 - Start MapR cluster
-  `systemctl start mapr-zookeeper && systemctl start mapr-warden`
+  `maprbox start`
 
 ### FAQ
 
@@ -31,9 +34,9 @@ Include the following into the corresponding module, for example for module mapr
   ```
   $file = "/opt/mapr/httpfs/httpfs-1.0/etc/hadoop/httpfs-site.xml"
 
-  package { ... } 
+  package { ... }
   ->
-  mapr_util::hadoop_xml_conf { 
+  mapr_util::hadoop_xml_conf {
     # add a property
     "property_name1": file=>$file, value =>"value1", description=>"description1", ensure=>"present";
     # shorthand
@@ -50,7 +53,7 @@ Include the following into the corresponding module, for example for module mapr
 - `mapr_core`     : core packages, zookeeper, mfs, etc.
 - `mapr_cldb`     : install and configure cldb
 - `mapr_sasl`     : create MapR SASL related files: cldb.key, maprserverticket, ssl_keystore, ssl_truststore
-- `mapr_kerberos` : configure Kerberos: krb5.conf, mapr.keytab 
+- `mapr_kerberos` : configure Kerberos: krb5.conf, mapr.keytab
 - `mapr_config`   : run configure.sh -C ... -Z ...
 - `mapr_httpfs`   : install and configure httpfs
 - `mapr_config_r` : run configure.sh -R
