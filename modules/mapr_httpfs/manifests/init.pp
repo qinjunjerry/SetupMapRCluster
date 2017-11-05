@@ -14,21 +14,15 @@ class mapr_httpfs (
 
   package { 'mapr-httpfs':
     ensure  => present,
-    notify  => Class['mapr_config_r'],
-  } ->
-  file { "/opt/mapr/conf/httpfs-$hostname.keytab":
-    ensure => file,
-    owner  => 'mapr',
-    group  => 'mapr',
-    mode   => '0600',
-    source => "puppet:///modules/mapr_httpfs/httpfs-$hostname.keytab",
-  } ->
+    #notify  => Class['mapr_config_r'],
+  }
+  ->
   mapr_util::hadoop_xml_conf {
   	default: file=>$file;
     "httpfs.authentication.type"                     : value =>"kerberos";
     "httpfs.hadoop.authentication.type"              : value =>"kerberos";
     "httpfs.hadoop.authentication.kerberos.principal": value =>"mapr/$hostname";
-    "httpfs.hadoop.authentication.kerberos.keytab"   : value =>"/opt/mapr/conf/httpfs-$hostname.keytab";
+    "httpfs.hadoop.authentication.kerberos.keytab"   : value =>"/opt/mapr/conf/mapr.keytab";
     "httpfs.authentication.kerberos.name.rules"      : value =>"DEFAULT";
   }
 
