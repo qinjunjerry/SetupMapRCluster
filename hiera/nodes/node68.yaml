@@ -6,6 +6,3 @@ classes:
   - mapr_kerberos
   - mapr_httpfs
   - mapr_config_r
-
-mapr_config::refreshonly: false
-#mapr_config::genkey_opts: -genkeys
