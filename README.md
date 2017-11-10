@@ -59,7 +59,10 @@ Include the following into the corresponding module, for example for module mapr
 - `mapr_config_r` : run configure.sh -R
 
 ### TODO
+- Run actions only after cluster is started, e.g., hadoop fs
 - Setup from any directory like /home/ec2-user
 - Generate MapR SASL files without install first
 - Reboot after selinux change
+- Dynamically check package verions, e.g., spark-2.1.0 in order to determine spark_home
+- Run actions on one node only: spark.yarn.archive
 
