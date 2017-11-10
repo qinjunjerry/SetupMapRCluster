@@ -11,9 +11,16 @@ class mapr_spark (
   require mapr_user
 
   $spark_home = '/opt/mapr/spark/spark-2.1.0'
+  $host_name = fact('networking.hostname')
 
+  exec { "kinit mapr/$host_name":
+    command   => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$host_name",
+    logoutput => on_failure,
+    require   => File['/opt/mapr/conf/mapr.keytab'],
+  }
+  ->
   exec { 'mkdir /apps/spark':
-    command   => "/usr/bin/hadoop fs -mkdir /apps/spark",
+    command   => "/usr/bin/hadoop fs -mkdir -p /apps/spark",
     logoutput => on_failure,
     unless    => "/usr/bin/hadoop fs -ls /apps/spark",
   }
@@ -31,22 +38,25 @@ class mapr_spark (
   # Configure Spark JAR Location (Spark 2.0.1 and later)
   ->
   exec { "zip $spark_home/jars/*":
-    cwd       => '$spark_home/jars',
-    command   => 'zip $spark_home/spark-jars.zip ./*',
-    creates   => '$spark_home/spark-jars.zip',
+    # keep '/' before $spark_home: required by puppet validation
+    cwd       => "/$spark_home/jars",
+    command   => "/usr/bin/zip $spark_home/spark-jars.zip ./*",
+    # keep '/' before $spark_home: required by puppet validation
+    creates   => "/$spark_home/spark-jars.zip",
     logoutput => on_failure,
+    require   => Package['zip'],
   }
   ->
   exec { 'upload spark-jars.zip':
-    command   => "hadoop fs -put $spark_home/spark-jars.zip /user/mapr/",
+    command   => "/usr/bin/hadoop fs -put $spark_home/spark-jars.zip /var/mapr/",
     logoutput => on_failure,
-    unless    => 'hadoop fs -ls /user/mapr/spark-jars.zip',
+    unless    => '/usr/bin/hadoop fs -ls /var/mapr/spark-jars.zip',
   }
   ->
   file_line { 'spark.yarn.archive':
     ensure => present,
     path   => "$spark_home/conf/spark-defaults.conf",
-    line   => "spark.yarn.archive maprfs:///user/mapr/spark-jars.zip",
+    line   => "spark.yarn.archive maprfs:///var/mapr/spark-jars.zip",
     match  => '^spark.yarn.archive',
   }
 

@@ -57,4 +57,5 @@ packages::toinstall:
   - net-tools # netstat
   - lsof
   - vim
+  - zip
 
