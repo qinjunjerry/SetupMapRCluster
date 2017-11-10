@@ -5,4 +5,4 @@ classes:
   - mapr_sasl
   - mapr_kerberos
   - mapr_httpfs
-  - mapr_config_r
+  - mapr_spark
