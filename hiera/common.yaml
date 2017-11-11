@@ -37,13 +37,13 @@ mapr_repo::mep_version : 3.0.1
 mapr_config::cluster_name  : qinsup.cluster
 mapr_config::cldb_node_list: node67
 mapr_config::zk_node_list  : node67,node68,node69
-mapr_config::secure        : -secure
-mapr_config::kerberos      : -kerberosEnable -P mapr/qinsup.cluster
-# Override by setting this to '-genkeys' to generate SSL certs on the first CLDB node
-mapr_config::genkey_opts   : -nocerts
+mapr_config::secure        : true
+mapr_config::kerberos      : true
 # Default setttings for all nodes
 # Override by setting this to the correct disk in individual nodes' yaml file
 mapr_config::disk_list     : /dev/sdb
+
+mapr_config::kdc           : node70
 
 ### packages to install
 # This provides a convenient way to install packages. No services are started.
@@ -57,5 +57,4 @@ packages::toinstall:
   - net-tools # netstat
   - lsof
   - vim
-  - zip
-
+  - zip # required by spark (spark.yarn.archive)
