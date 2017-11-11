@@ -9,6 +9,7 @@ class mapr_spark (
   require mapr_pre
   require mapr_repo
   require mapr_user
+  require mapr_config
 
   $spark_home = '/opt/mapr/spark/spark-2.1.0'
   $host_name = fact('networking.hostname')

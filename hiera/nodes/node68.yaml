@@ -1,8 +1,19 @@
 ---
 
 classes:
-  - mapr_core
-  - mapr_sasl
-  - mapr_kerberos
+  # mapr core
+  - mapr_zookeeper
+
+  - mapr_fileserver
+  - mapr_nodemanager
+
+  - mapr_resourcemanager
+  - mapr_webserver
+
+  # security
+  - mapr_config::sasl
+  - mapr_config::kerberos
+
+  # ecosystem
   - mapr_httpfs
   - mapr_spark

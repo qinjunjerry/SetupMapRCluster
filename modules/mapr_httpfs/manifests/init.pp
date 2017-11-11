@@ -6,7 +6,6 @@
 class mapr_httpfs (
 ) {
 
-  require mapr_core
   require mapr_config
 
   $file = "/opt/mapr/httpfs/httpfs-1.0/etc/hadoop/httpfs-site.xml"

@@ -50,7 +50,6 @@ Include the following into the corresponding module, for example for module mapr
 - `mapr_pre`      : prerequisites (OS settings, 'mapr' account and its settings)
 - `mapr_repo`     : yum/apt repo
 - `mapr_user`     : additional users
-- `mapr_core`     : core packages, zookeeper, mfs, etc.
 - `mapr_cldb`     : install and configure cldb
 - `mapr_sasl`     : create MapR SASL related files: cldb.key, maprserverticket, ssl_keystore, ssl_truststore
 - `mapr_kerberos` : configure Kerberos: krb5.conf, mapr.keytab
