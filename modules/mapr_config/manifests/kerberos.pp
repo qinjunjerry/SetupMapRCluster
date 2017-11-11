@@ -1,14 +1,14 @@
-# Class: mapr_kerberos
+# Class: mapr_config::kerberos
 #
 # This module configures kerberos
 #
 
-class mapr_kerberos (
-
-) {
+class mapr_config::kerberos (
+  $cluster_name   = $mapr_config::cluster_name,
+) inherits mapr_config {
 
   require mapr_pre
-  require mapr_sasl
+  require mapr_config::sasl
 
   $hostname = fact('networking.hostname')
   $inputdir = '/MapRSetup/input'
@@ -29,7 +29,7 @@ class mapr_kerberos (
     owner  => 'root',
     group  => 'root',
     mode   => '0644',
-    source => "$inputdir/krb5.conf",
+    content => epp("$inputdir/krb5.conf.epp"),
   }
 
   file { '/opt/mapr/conf/mapr.keytab':
