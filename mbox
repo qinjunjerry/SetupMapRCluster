@@ -1,26 +1,27 @@
 #!/bin/sh
 
-maprbox_help() {
+mbox_help() {
   cat << EOF
 Usage: $0 command
 
 Common commands:
    help        shows this help
 
-   init        installs puppet, r10k, and puppet modules
-   setup       install and configure MapR cluster node
+   init        bootstrap: installs puppet, r10k, and puppet modules
+   setup       install, configure and start MapR
 
-   start       start mapr zookeeper and warden
-   stop        stop mapr warden and zookeeper
-   restart     restart mapr zookeeper and warden
+   start       start mapr-zookeeper and then mapr-warden
+   stop        stop mapr-warden and then mapr-zookeeper
+   restart     stop + start
+
    remove      remove mapr packages and /opt/mapr
 
-   up          init + setup + start
+   up          init + setup
    clean       stop + remove
 EOF
 }
 
-maprbox_init() {
+mbox_init() {
 	DIR=$(dirname $0)
 
 	# install puppet repo
@@ -37,7 +38,7 @@ maprbox_init() {
 	sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install
 }
 
-maprbox_setup() {
+mbox_setup() {
 	DIR=$(dirname $0)
 	ENVIRON=production
 	sudo /opt/puppetlabs/bin/puppet apply \
@@ -48,48 +49,48 @@ maprbox_setup() {
 		$DIR/environments/$ENVIRON/manifests/default.pp
 }
 
-maprbox_start() {
+mbox_start() {
 	sudo systemctl daemon-reload
-	sudo systemctl start mapr-zookeeper && systemctl start mapr-warden
+	sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
 }
 
-maprbox_stop() {
+mbox_stop() {
 	sudo systemctl daemon-reload
-	sudo systemctl stop mapr-warden && systemctl stop mapr-zookeeper
+	sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
 }
 
-maprbox_restart() {
+mbox_restart() {
 	sudo systemctl daemon-reload
-	sudo systemctl stop mapr-warden && systemctl stop mapr-zookeeper && \
-	sudo systemctl start mapr-zookeeper && systemctl start mapr-warden
+	sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper && \
+	sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
 }
 
-maprbox_up() {
-	maprbox_init && maprbox_setup && maprbox_start
+mbox_up() {
+	mbox_init && mbox_setup && mbox_start
 }
 
-maprbox_remove() {
+mbox_remove() {
 	sudo yum erase -y mapr-* && sudo rm -fr /opt/mapr
 }
 
-maprbox_clean() {
-	maprbox_stop && maprbox_remove
+mbox_clean() {
+	mbox_stop && mbox_remove
 }
 
 
 ##### ##### main ##### #####
 
 if [ $# -eq 0 ]; then
-	help
+	mbox_help
 	exit 1
 fi
 
 commandList=(help init setup start stop restart remove up clean)
 command=$1
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
-    maprbox_$command
+    mbox_$command
 else
 	echo Error: invalid command: $command
 	echo
-	help
+	mbox_help
 fi
