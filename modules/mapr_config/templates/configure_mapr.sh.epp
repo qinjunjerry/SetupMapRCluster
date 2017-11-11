@@ -9,9 +9,9 @@ sudo /opt/mapr/server/configure.sh --isvm \
    -N <%= $mapr_config::cluster_name %> \
    -C <%= $mapr_config::cldb_node_list %> \
    -Z <%= $mapr_config::zk_node_list %> \
-   <%= $mapr_config::secure %> \
-   <%= $mapr_config::kerberos %> \
-   <%= $mapr_config::genkey_opts %> \
+   <%= $mapr_config::secure_opt %> \
+   <%= $mapr_config::kerberos_opt %> \
+   -nocerts \
    -no-autostart \
    $HS \
    -f
