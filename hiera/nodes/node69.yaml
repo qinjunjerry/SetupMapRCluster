@@ -2,13 +2,13 @@
 
 classes:
   # mapr core
-  - mapr_zookeeper
+  - mapr_core::zookeeper
 
-  - mapr_fileserver
-  - mapr_nodemanager
+  - mapr_core::fileserver
+  - mapr_core::nodemanager
 
-  - mapr_resourcemanager
-  - mapr_webserver
+  - mapr_core::resourcemanager
+  - mapr_core::webserver
 
   # security
   - mapr_config::sasl
@@ -17,4 +17,5 @@ classes:
   # ecosystem
   - mapr_httpfs
   - mapr_spark
+  - mapr_spark::conf
   - mapr_spark::historyserver
