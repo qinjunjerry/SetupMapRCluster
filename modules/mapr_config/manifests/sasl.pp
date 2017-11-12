@@ -8,7 +8,6 @@ class mapr_config::sasl (
 ) inherits mapr_config {
 
   require mapr_core::zookeeper
-  require mapr_core::cldb
 
   $inputdir = "/MapRSetup/input"
 

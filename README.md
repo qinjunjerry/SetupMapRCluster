@@ -58,6 +58,7 @@ Include the following into the corresponding module, for example for module mapr
 - `mapr_config_r` : run configure.sh -R
 
 ### TODO
+- Require some class before run configure.sh
 - Run actions only after cluster is started, e.g., hadoop fs
 - Setup from any directory like /home/ec2-user
 - Generate MapR SASL files without install first
