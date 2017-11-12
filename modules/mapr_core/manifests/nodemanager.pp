@@ -3,7 +3,7 @@
 # This module installs/configures MapR nodemanager
 #
 
-class mapr_nodemanager (
+class mapr_core::nodemanager (
 ) {
 
   require mapr_pre

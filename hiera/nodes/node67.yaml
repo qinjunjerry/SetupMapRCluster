@@ -2,13 +2,13 @@
 
 classes:
   # mapr core
-  - mapr_zookeeper
+  - mapr_core::zookeeper
 
-  - mapr_fileserver
-  - mapr_nodemanager
-  - mapr_cldb
+  - mapr_core::fileserver
+  - mapr_core::nodemanager
+  - mapr_core::cldb
 
-  - mapr_resourcemanager
+  - mapr_core::resourcemanager
   - mapr_webserver
 
   # security

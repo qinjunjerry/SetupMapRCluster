@@ -1,16 +1,16 @@
-# Class: mapr_zookeeper
+# Class: mapr_fileserver
 #
-# This module installs/configures MapR zookeeper
+# This module installs/configures MapR fileserver
 #
 
-class mapr_zookeeper (
+class mapr_core::fileserver (
 ) {
 
   require mapr_pre
   require mapr_repo
   require mapr_user
 
-  package { 'mapr-zookeeper':
+  package { 'mapr-fileserver':
     ensure  => present,
     notify  => Class['mapr_config'],
   }

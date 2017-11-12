@@ -1,16 +1,16 @@
-# Class: mapr_cldb
+# Class: mapr_webserver
 #
-# This module installs/configures MapR cldb
+# This module installs/configures MapR webserver
 #
 
-class mapr_cldb (
+class mapr_core::webserver (
 ) {
 
   require mapr_pre
   require mapr_repo
   require mapr_user
 
-  package { 'mapr-cldb':
+  package { 'mapr-webserver':
     ensure  => present,
     notify  => Class['mapr_config'],
   }

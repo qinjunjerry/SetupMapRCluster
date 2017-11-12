@@ -17,4 +17,4 @@ classes:
   # ecosystem
   - mapr_httpfs
   - mapr_spark
-  - mapr_spark_historyserver
+  - mapr_spark::historyserver

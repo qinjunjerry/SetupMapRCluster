@@ -3,7 +3,7 @@
 # This module installs/configures MapR loopbacknfs
 #
 
-class mapr_posix_loopbacknfs (
+class mapr_core::posix_loopbacknfs (
 ) {
 
   require mapr_pre

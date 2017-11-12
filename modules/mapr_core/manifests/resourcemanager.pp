@@ -3,7 +3,7 @@
 # This module installs/configures MapR resourcemanager
 #
 
-class mapr_resourcemanager (
+class mapr_core::resourcemanager (
 ) {
 
   require mapr_pre

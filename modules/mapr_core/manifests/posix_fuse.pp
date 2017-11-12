@@ -3,7 +3,7 @@
 # This module installs/configures MapR posix client basics
 #
 
-class mapr_posix_fuse (
+class mapr_core::posix_fuse (
 ) {
 
   require mapr_pre

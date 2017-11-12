@@ -3,7 +3,7 @@
 # This module installs/configures MapR spark historyserver
 #
 
-class mapr_spark_historyserver (
+class mapr_spark::historyserver (
 ) {
 
   require mapr_pre
