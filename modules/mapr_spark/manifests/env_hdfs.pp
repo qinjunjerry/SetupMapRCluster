@@ -1,9 +1,9 @@
-# Class: mapr_spark
+# Class: mapr_spark::env_hdfs
 #
-# This module installs/configures MapR spark
+# This module installs/configures MapR spark env on HDFS
 #
 
-class mapr_spark::conf (
+class mapr_spark::env_hdfs (
 ) {
 
   require mapr_pre
@@ -11,17 +11,11 @@ class mapr_spark::conf (
   require mapr_user
   require mapr_spark
   require mapr_config
+  require mapr_core::cldb_ready
 
   $spark_home = '/opt/mapr/spark/spark-2.1.0'
-  $host_name = fact('networking.hostname')
 
-  exec { "kinit mapr/$host_name":
-    command   => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$host_name",
-    logoutput => on_failure,
-    require   => File['/opt/mapr/conf/mapr.keytab'],
-  }
   # Create and chmod /apps/spark
-  ->
   exec { 'mkdir /apps/spark':
     command   => "/usr/bin/hadoop fs -mkdir -p /apps/spark",
     logoutput => on_failure,
