@@ -21,7 +21,7 @@ class mapr_spark (
   file_line { 'spark.yarn.archive':
     ensure => present,
     path   => "$spark_home/conf/spark-defaults.conf",
-    line   => "spark.yarn.archive maprfs:///var/mapr/spark-jars.zip",
+    line   => "spark.yarn.archive maprfs:///spark-jars.zip",
     match  => '^spark.yarn.archive',
   }
 

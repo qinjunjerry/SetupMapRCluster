@@ -46,9 +46,9 @@ class mapr_spark::conf (
   }
   ->
   exec { 'upload spark-jars.zip':
-    command   => "/usr/bin/hadoop fs -put $spark_home/spark-jars.zip /var/mapr/",
+    command   => "/usr/bin/hadoop fs -put $spark_home/spark-jars.zip /",
     logoutput => on_failure,
-    unless    => '/usr/bin/hadoop fs -ls /var/mapr/spark-jars.zip',
+    unless    => '/usr/bin/hadoop fs -ls /spark-jars.zip',
   }
   # Configure Spark with the NodeManager Local Directory Set to MapR-FS:
   #
