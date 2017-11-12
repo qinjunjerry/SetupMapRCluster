@@ -9,6 +9,7 @@ classes:
 
   - mapr_core::resourcemanager
   - mapr_core::webserver
+  - mapr_core::historyserver
 
   # security
   - mapr_config::sasl
