@@ -38,6 +38,7 @@ mapr_repo::mep_version : 3.0.1
 mapr_config::cluster_name  : qinsup.cluster
 mapr_config::cldb_node_list: node67
 mapr_config::zk_node_list  : node67,node68,node69
+mapr_config::historyserver : node69
 mapr_config::secure        : true
 mapr_config::kerberos      : true
 # Default setttings for all nodes
