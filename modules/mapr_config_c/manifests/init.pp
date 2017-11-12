@@ -10,8 +10,8 @@ class mapr_config_c (
   $secure         = $mapr_config::secure,
 ) {
 
-  require mapr_sasl
-  require mapr_kerberos
+  require mapr_config::sasl
+  require mapr_config::kerberos
 
   # run configure_mapr.sh -c
   exec { 'Run configure.sh -c':

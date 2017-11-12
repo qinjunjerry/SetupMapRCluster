@@ -7,8 +7,8 @@ class mapr_config::sasl (
   $cluster_name   = $mapr_config::cluster_name,
 ) inherits mapr_config {
 
-  require mapr_zookeeper
-  require mapr_cldb
+  require mapr_core::zookeeper
+  require mapr_core::cldb
 
   $inputdir = "/MapRSetup/input"
 

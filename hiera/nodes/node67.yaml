@@ -9,7 +9,7 @@ classes:
   - mapr_core::cldb
 
   - mapr_core::resourcemanager
-  - mapr_webserver
+  - mapr_core::webserver
 
   # security
   - mapr_config::sasl
