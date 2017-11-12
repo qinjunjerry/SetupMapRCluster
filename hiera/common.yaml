@@ -1,6 +1,7 @@
 ---
 
 classes:
+  - bash_profile
   - packages
   - mapr_pre
   - mapr_repo
