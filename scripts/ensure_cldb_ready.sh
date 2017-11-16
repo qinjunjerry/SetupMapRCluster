@@ -8,6 +8,6 @@
 LOGFILE=/tmp/ensure_cldb_ready.log
 echo > $LOGFILE
 while ! maprcli node cldbmaster 2>&1 >>$LOGFILE; do
-	echo sleep 10 >> $LOGFILE
+	echo `date`: sleep 10 >> $LOGFILE
 	sleep 10
 done
