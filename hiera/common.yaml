@@ -6,6 +6,7 @@ classes:
   - mapr_pre
   - mapr_repo
   - mapr_user
+  - mapr_core::core
   - mapr_config::configure
   - mapr_config_r
   - mapr_util

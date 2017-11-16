@@ -6,7 +6,7 @@
 class mapr_config::sasl (
 ) {
 
-  require mapr_core::zookeeper
+  require mapr_core::core
 
   include mapr_config
 
