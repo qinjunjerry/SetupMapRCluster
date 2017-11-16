@@ -12,7 +12,7 @@ class mapr_core::cldb (
 
   package { 'mapr-cldb':
     ensure  => present,
-    notify  => Class['mapr_config'],
+    notify  => Class['mapr_config::configure'],
   }
 
 }

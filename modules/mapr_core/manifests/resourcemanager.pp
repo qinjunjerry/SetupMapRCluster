@@ -12,7 +12,7 @@ class mapr_core::resourcemanager (
 
   package { 'mapr-resourcemanager':
     ensure  => present,
-    notify  => Class['mapr_config'],
+    notify  => Class['mapr_config::configure'],
   }
 
 }

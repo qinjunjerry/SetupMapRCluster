@@ -6,7 +6,7 @@ classes:
   - mapr_pre
   - mapr_repo
   - mapr_user
-  - mapr_config
+  - mapr_config::configure
   - mapr_config_r
   - mapr_util
 
@@ -30,6 +30,11 @@ mapr_pre::java_version_major: '8u152'
 mapr_pre::java_version_minor: 'b16'
 mapr_pre::java_url_hash     : 'aa0333dd3019491ca4f6ddbe78cdb6d0'
 
+# For version 8u144
+#mapr_pre::java_version_major: '8u144'
+#mapr_pre::java_version_minor: 'b01'
+#mapr_pre::java_url_hash     : '090f390dda5b47b9b721c7dfaa008135'
+
 # MapR versions
 mapr_repo::core_version: 5.2.2
 mapr_repo::mep_version : 3.0.1
@@ -45,7 +50,9 @@ mapr_config::kerberos      : true
 # Override by setting this to the correct disk in individual nodes' yaml file
 mapr_config::disk_list     : /dev/sdb
 
-mapr_config::kdc           : node70
+# kerberos
+kerberos::default_realm    : SUPPORT.MAPR.COM
+kerberos::kdc_server       : node70
 
 ### packages to install
 # This provides a convenient way to install packages. No services are started.

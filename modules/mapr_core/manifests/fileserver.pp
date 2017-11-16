@@ -12,7 +12,7 @@ class mapr_core::fileserver (
 
   package { 'mapr-fileserver':
     ensure  => present,
-    notify  => Class['mapr_config'],
+    notify  => Class['mapr_config::configure'],
   }
 
 }

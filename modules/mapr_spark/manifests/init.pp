@@ -9,7 +9,7 @@ class mapr_spark (
   require mapr_pre
   require mapr_repo
   require mapr_user
-  require mapr_config
+  require mapr_config::configure
 
   $spark_home = '/opt/mapr/spark/spark-2.1.0'
 

@@ -7,7 +7,7 @@ class mapr_core::cldb_ready (
   $cluster_name = $mapr_config::cluster_name,
 ) {
 
-  require mapr_config
+  require mapr_config::configure
 
   exec { 'kinit mapr':
     command     => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$cluster_name",

@@ -12,7 +12,7 @@ class mapr_core::historyserver (
 
   package { 'mapr-historyserver':
     ensure  => present,
-    notify  => Class['mapr_config'],
+    notify  => Class['mapr_config::configure'],
   }
 
 }

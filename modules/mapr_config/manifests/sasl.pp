@@ -4,10 +4,11 @@
 #
 
 class mapr_config::sasl (
-  $cluster_name   = $mapr_config::cluster_name,
-) inherits mapr_config {
+) {
 
   require mapr_core::zookeeper
+
+  include mapr_config
 
   $inputdir = "/MapRSetup/input"
 

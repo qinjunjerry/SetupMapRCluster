@@ -10,7 +10,7 @@ class mapr_spark::env_hdfs (
   require mapr_repo
   require mapr_user
   require mapr_spark
-  require mapr_config
+  require mapr_config::configure
   require mapr_core::cldb_ready
 
   $spark_home = '/opt/mapr/spark/spark-2.1.0'

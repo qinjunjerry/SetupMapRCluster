@@ -6,7 +6,7 @@
 class mapr_httpfs (
 ) {
 
-  require mapr_config
+  require mapr_config::configure
 
   $file = "/opt/mapr/httpfs/httpfs-1.0/etc/hadoop/httpfs-site.xml"
   $hostname = fact('networking.hostname')
