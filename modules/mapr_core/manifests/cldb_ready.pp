@@ -20,7 +20,7 @@ class mapr_core::cldb_ready (
   }
 
   exec { "ensure cldb ready":
-    command     => "/MapRSetup/scripts/ensure_cldb_ready.sh",
+    command     => "$::base_dir/scripts/ensure_cldb_ready.sh",
     logoutput   => on_failure,
     unless      => '/usr/bin/maprcli node cldbmaster',
   }

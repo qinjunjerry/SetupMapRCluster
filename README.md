@@ -7,8 +7,6 @@
 
 ### Steps
 
-- Change into the directory
-  `cd /MapRSetup`
 - Set variables (e.g., cluster name, MapR version, etc.) in:
 	- `hiera/common.yaml` for common settings
 	- `hiera/nodes/<nodename>.yaml` for node specific settings

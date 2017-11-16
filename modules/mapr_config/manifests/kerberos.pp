@@ -13,7 +13,6 @@ class mapr_config::kerberos (
   include mapr_config
 
   $hostname = fact('networking.hostname')
-  $inputdir = '/MapRSetup/input'
 
   file_line { 'set-crypto.policy':
     ensure => present,
@@ -41,8 +40,8 @@ class mapr_config::kerberos (
     mode   => '0600',
     # Puppet will use the first source that exists
     source => [
-      "$inputdir/$hostname/mapr.keytab",
-      "$inputdir/mapr.keytab",
+      "$::base_dir/input/$hostname/mapr.keytab",
+      "$::base_dir/input/mapr.keytab",
     ]
   }
 }

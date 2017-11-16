@@ -3,7 +3,7 @@
 version: 5
 
 defaults:
-  datadir: '/MapRSetup/hiera'
+  datadir: "%{facts.base_dir}/hiera"
   data_hash: yaml_data
 
 hierarchy:
