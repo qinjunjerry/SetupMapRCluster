@@ -9,13 +9,16 @@ class mapr_core::cldb_ready (
 
   require mapr_config::configure
 
-  exec { 'kinit mapr':
-    command     => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$cluster_name",
-    logoutput   => on_failure,
-    refreshonly => true,
-    require     => File['/opt/mapr/conf/mapr.keytab'],
+  if $mapr_config::kerberos == true {
+    exec { 'kinit mapr':
+      command     => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$cluster_name",
+      logoutput   => on_failure,
+      refreshonly => true,
+      require     => File['/opt/mapr/conf/mapr.keytab'],
+      before      => Exec['ensure cldb ready'],
+    }
   }
-  ->
+
   exec { "ensure cldb ready":
     command     => "/MapRSetup/scripts/ensure_cldb_ready.sh",
     logoutput   => on_failure,
