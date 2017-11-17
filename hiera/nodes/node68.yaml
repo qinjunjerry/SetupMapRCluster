@@ -17,3 +17,4 @@ classes:
   # ecosystem
   - mapr_httpfs
   - mapr_spark
+  - mapr_drill

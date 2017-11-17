@@ -20,3 +20,4 @@ classes:
   - mapr_spark
   - mapr_spark::env_hdfs
   - mapr_spark::historyserver
+  - mapr_drill
