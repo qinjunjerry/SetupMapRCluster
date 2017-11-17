@@ -11,8 +11,11 @@ class mapr_drill (
   require mapr_user
   require mapr_config::configure
 
+  include mapr_config
 
-  $drill_config = '/opt/mapr/drill/drill-1.10.0/bin/drill-config.sh'
+
+  $drill_home   = '/opt/mapr/drill/drill-1.10.0'
+  $drill_config = "$drill_home/bin/drill-config.sh"
 
   package { 'mapr-drill':
     ensure  => present,
@@ -34,6 +37,41 @@ class mapr_drill (
     line               => '"$JAVA" -version 2>&1 | grep "version" | egrep -e "1\.4|1\.5|1\.6" > /dev/null',
     match              => '^"$JAVA" -version 2>&1 | grep "version" | egrep -e "1.4|1.5|1.6" > /dev/null',
     append_on_no_match => false,
+    require            => Package['mapr-drill'],
+  }
+
+  $cluster_id = regsubst($mapr_config::cluster_name, '\.', '_', 'G')
+  $zk_connect = join ( suffix( split($mapr_config::zk_node_list,','), ":5181" ), ',')
+
+  file { 'drill-override.conf':
+    ensure  => file,
+    path    => "$drill_home/conf/drill-override.conf",
+    content => epp('mapr_drill/drill-override.conf.epp'),
+    require => Package['mapr-drill'],
+  }
+
+  # Bug fix: java.lang.UnsatisfiedLinkError: no jpam in java.library.path
+  file { "$drill_home/lib":
+    ensure  => directory,
+    owner   => 'mapr',
+    group   => 'root',
+    mode    => '0755',
+  }
+  ->
+  file { "$drill_home/lib/libjpam.so":
+    ensure => link,
+    owner  => 'mapr',
+    group  => 'root',
+    mode   => '0644',
+    target => '/opt/mapr/lib/libjpam.so',
+  }
+  ->
+  file_line { 'DRILLBIT_JAVA_OPTS in drill-env.sh':
+    ensure             => 'present',
+    path               => "$drill_home/conf/drill-env.sh",
+    line               => 'export DRILLBIT_JAVA_OPTS="-Djava.library.path=$drill_home/lib/"',
+    match              => '^export\ DRILLBIT_JAVA_OPTS\=',
+    append_on_no_match => true,
     require            => Package['mapr-drill'],
   }
 
