@@ -3,5 +3,5 @@
 
 # mapr cluster nodes
 <% $mapr_pre::hosts.each |$name, $ip| { -%>
-<%= $ip %>    <%= $name %>
+<%= $ip %>    <%= $name %>  <%= $name %>.<%= $domain %>
 <% } -%>

@@ -5,6 +5,7 @@
 
 class mapr_pre (
   $hosts              = $mapr_pre::hosts,
+  $domain             = $mapr_pre::domain,
   $java_version_major = $mapr_pre::java_version_major,
   $java_version_minor = $mapr_pre::java_version_minor,
   $java_url_hash      = $mapr_pre::java_url_hash,
@@ -35,13 +36,13 @@ class mapr_pre (
   exec { 'stop-firewalld':
     command   => "/usr/bin/systemctl stop firewalld",
     logoutput => on_failure,
-    unless    => "/usr/bin/systemctl status firewalld | grep 'inactive (dead)' " 
+    unless    => "/usr/bin/systemctl status firewalld | grep 'inactive (dead)' || /usr/bin/systemctl status firewalld 2>&1 | grep 'Unit firewalld.service could not be found' "
   }
 
   exec { 'disable-firewalld':
     command   => "/usr/bin/systemctl disable firewalld",
     logoutput => on_failure,
-    unless    => "/usr/bin/systemctl status firewalld | grep 'service; disabled;' " 
+    unless    => "/usr/bin/systemctl status firewalld | grep 'service; disabled;' || /usr/bin/systemctl status firewalld 2>&1 | grep 'Unit firewalld.service could not be found' "
   }
 
 
@@ -51,14 +52,14 @@ class mapr_pre (
     path   => "/etc/selinux/config",
     line   => "SELINUX=disabled",
     match  => '^SELINUX\=',
-  } 
+  }
 
 
   ### ntp
   package { 'ntp':
     ensure => installed,
   } ->
-  service { 'ntpd': 
+  service { 'ntpd':
     enable  => true,
     ensure  => "running",
     require => Package['ntp']
@@ -71,7 +72,7 @@ class mapr_pre (
     version_minor => $java_version_minor,
     java_se       => 'jdk',
     url_hash      => $java_url_hash,
-  } 
+  }
 
   ### mapr user, passwd is 'mapr'
   group { 'mapr':
