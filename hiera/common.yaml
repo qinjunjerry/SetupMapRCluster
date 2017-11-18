@@ -26,6 +26,16 @@ mapr_pre::hosts:
   node73: '10.10.70.73'
   node74: '10.10.70.74'
   node75: '10.10.70.75'
+# AWS
+# ip-10-10-70-47 : '10.10.70.47'
+# ip-10-10-70-180: '10.10.70.180'
+# ip-10-10-70-184: '10.10.70.184'
+# ip-10-10-70-205: '10.10.70.205'
+
+mapr_pre::domain: 'local'
+# AWS
+# mapr_pre::domain: 'us-west-1.compute.internal'
+
 
 # For example, the full URL is: http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.rpm
 mapr_pre::java_version_major: '8u152'
@@ -46,15 +56,23 @@ mapr_config::cluster_name  : qinsup.cluster
 mapr_config::cldb_node_list: node67
 mapr_config::zk_node_list  : node67,node68,node69
 mapr_config::historyserver : node69
+# AWS
+#mapr_config::cldb_node_list: ip-10-10-70-47
+#mapr_config::zk_node_list  : ip-10-10-70-47,ip-10-10-70-180,ip-10-10-70-184
+#mapr_config::historyserver : ip-10-10-70-184
 mapr_config::secure        : true
 mapr_config::kerberos      : true
 # Default setttings for all nodes
 # Override by setting this to the correct disk in individual nodes' yaml file
 mapr_config::disk_list     : /dev/sdb
+# AWS
+#mapr_config::disk_list     : /dev/xvdb
 
 # kerberos
 kerberos::default_realm    : SUPPORT.MAPR.COM
 kerberos::kdc_server       : node70
+# AWS
+#kerberos::kdc_server       : ip-10-10-70-205
 
 ### packages to install
 # This provides a convenient way to install packages. No services are started.
