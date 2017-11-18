@@ -2,6 +2,7 @@
 
 classes:
   - bash_profile
+  - epel_release
   - packages
   - mapr_pre
   - mapr_repo
@@ -61,7 +62,6 @@ kerberos::kdc_server       : node70
 packages::toinstall:
   # Needed by MapR
   - perl         # required by nfs auto mount: a perl script is used there
-  - epel-release # required by mapr-metrics
   # For convenience only
   - sysstat   # mpstat
   - net-tools # netstat
