@@ -27,12 +27,9 @@ class kerberos::kdc (
     content => epp("kerberos/kdc.conf.epp"),
   }
   ->
-  package { 'epel-release':
-    ensure  => present,
-  }
-  ->
   package { 'haveged':
     ensure  => present,
+    require => Class['epel_release'],
   }
   ->
   service { 'haveged':
