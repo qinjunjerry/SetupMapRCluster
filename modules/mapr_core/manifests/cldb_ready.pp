@@ -13,8 +13,8 @@ class mapr_core::cldb_ready (
     exec { 'kinit mapr':
       command     => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$cluster_name",
       logoutput   => on_failure,
-      refreshonly => true,
       require     => File['/opt/mapr/conf/mapr.keytab'],
+      unless      => '/usr/bin/maprcli node cldbmaster',
       before      => Exec['ensure cldb ready'],
     }
   }
