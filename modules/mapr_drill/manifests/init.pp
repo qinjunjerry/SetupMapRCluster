@@ -66,11 +66,13 @@ class mapr_drill (
     target => '/opt/mapr/lib/libjpam.so',
   }
   ->
-  file_line { 'DRILLBIT_JAVA_OPTS in drill-env.sh':
+  file_line { 'DRILL_JAVA_LIB_PATH in drill-env.sh':
     ensure             => 'present',
     path               => "$drill_home/conf/drill-env.sh",
-    line               => 'export DRILLBIT_JAVA_OPTS="-Djava.library.path=$drill_home/lib/"',
-    match              => '^export\ DRILLBIT_JAVA_OPTS\=',
+    #line               => "export DRILLBIT_JAVA_OPTS=\"-Djava.library.path=$drill_home/lib/\"",
+    #match              => '^export\ DRILLBIT_JAVA_OPTS\=',
+    line               => "export DRILL_JAVA_LIB_PATH=\"$drill_home/lib\"",
+    match              => '^export\ DRILL_JAVA_LIB_PATH\=',
     append_on_no_match => true,
     require            => Package['mapr-drill'],
   }
