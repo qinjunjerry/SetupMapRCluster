@@ -22,7 +22,7 @@ EOF
 }
 
 mbox_init() {
-	DIR=$(dirname $0)
+	DIR=$(dirname $(readlink -f $0))
 
 	# install puppet repo
 	sudo rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
@@ -40,7 +40,7 @@ mbox_init() {
 }
 
 mbox_setup() {
-	DIR=$(dirname $0)
+	DIR=$(dirname $(readlink -f $0))
 	ENVIRON=production
 	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests
 	# using 'sudo -E' to preserve env variables
