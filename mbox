@@ -36,6 +36,7 @@ mbox_init() {
 	# download external puppet modules
 	cd $DIR
 	sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install
+	cd -
 }
 
 mbox_setup() {
@@ -68,7 +69,7 @@ mbox_restart() {
 }
 
 mbox_up() {
-	mbox_init && mbox_setup && mbox_start
+	mbox_init && mbox_setup
 }
 
 mbox_remove() {
