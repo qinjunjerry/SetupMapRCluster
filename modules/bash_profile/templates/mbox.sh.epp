@@ -1,5 +1,0 @@
-# Add $::base_dir to the path for sh compatible users
-
-if ! echo $PATH | grep -q <%= $::base_dir %> ; then
-  export PATH=$PATH:<%= $::base_dir %>
-fi

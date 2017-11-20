@@ -1,1 +1,0 @@
-class mapr_util () {}

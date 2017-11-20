@@ -1,0 +1,13 @@
+[mapr_core]
+name=MapR Technologies
+baseurl=http://package.mapr.com/releases/v<%= $profile::mapr::repo::core_version %>/redhat/
+enabled=1
+gpgcheck=0
+protect=1
+
+[mapr_ecosystem]
+name=MapR Technologies
+baseurl=http://package.mapr.com/releases/MEP/MEP-<%= $profile::mapr::repo::mep_version %>/redhat
+enabled=1
+gpgcheck=0
+protect=1

@@ -1,0 +1,4 @@
+---
+
+classes:
+  - role::cluster_node

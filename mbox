@@ -9,15 +9,17 @@ Common commands:
 
    init        bootstrap: installs puppet, r10k, and puppet modules
    setup       install, configure and start MapR
+   up          init + setup
 
    start       start mapr-zookeeper and then mapr-warden
    stop        stop mapr-warden and then mapr-zookeeper
    restart     stop + start
 
-   remove      remove mapr packages and /opt/mapr
+   delmapr     remove mapr packages and /opt/mapr
+   delpuppet   remove puppet
 
-   up          init + setup
-   clean       stop + remove
+   clean       stop + delmapr
+   cleanall    stop + delmapr + delpuppet
 EOF
 }
 
@@ -25,13 +27,25 @@ mbox_init() {
 	DIR=$(dirname $(readlink -f $0))
 
 	# install puppet repo
-	sudo rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+	if rpm -qa | grep puppet5-release >/dev/null; then
+		echo "puppet5-release already installed"
+	else
+		sudo rpm -Uvh https://yum.puppetlabs.com/puppet5/puppet5-release-el-7.noarch.rpm
+	fi
 
 	# install puppet agent
-	sudo yum install -y puppet-agent
+	if rpm -qa | grep puppet-agent >/dev/null; then
+		echo "puppet-agent already installed"
+	else
+		sudo yum install -y puppet-agent
+	fi
 
 	# install r10k from Ruby Gems
-	sudo /opt/puppetlabs/puppet/bin/gem install r10k
+	if /opt/puppetlabs/puppet/bin/gem list | grep r10k >/dev/null; then
+		echo "puppet gem r10k already installed"
+	else
+		sudo /opt/puppetlabs/puppet/bin/gem install r10k
+	fi
 
 	# download external puppet modules
 	cd $DIR
@@ -45,7 +59,7 @@ mbox_setup() {
 	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests
 	# using 'sudo -E' to preserve env variables
 	FACTER_base_dir=$DIR sudo -E /opt/puppetlabs/bin/puppet apply --show_diff --graph \
-		--modulepath $DIR/modules/:$DIR/external \
+		--modulepath $DIR/modules:$DIR/external \
 		--hiera_config $DIR/hiera.yaml \
 		--environmentpath=$DIR/environments \
 		--environment=$ENVIRON \
@@ -63,21 +77,31 @@ mbox_stop() {
 }
 
 mbox_restart() {
-	sudo systemctl daemon-reload
-	sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper && \
-	sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
+	mbox_stop && mbox_start
+}
+
+mbox_delmapr() {
+	sudo yum erase -y mapr-*
+	sudo rm -fr /opt/mapr
+}
+
+mbox_delpuppet() {
+	sudo yum erase -y puppet-agent puppet5-release
+	sudo rm -fr /opt/puppetlabs
 }
 
 mbox_up() {
 	mbox_init && mbox_setup
 }
 
-mbox_remove() {
-	sudo yum erase -y mapr-* && sudo rm -fr /opt/mapr
+mbox_clean() {
+	mbox_stop
+	mbox_delmapr
 }
 
-mbox_clean() {
-	mbox_stop && mbox_remove
+mbox_cleanall() {
+	mbox_clean
+	mbox_delpuppet
 }
 
 
@@ -88,7 +112,7 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
-commandList=(help init setup start stop restart remove up clean)
+commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall)
 command=$1
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
     mbox_$command

@@ -1,7 +1,0 @@
----
-
-packages::toinstall:
-  - mapr-client
-  - mapr-hive
-  - mapr-spark
-  - mapr-oozie
