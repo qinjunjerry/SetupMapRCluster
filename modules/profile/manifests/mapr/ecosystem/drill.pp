@@ -43,6 +43,12 @@ class profile::mapr::ecosystem::drill (
   $cluster_id = regsubst($profile::mapr::cluster::cluster_name, '\.', '_', 'G')
   $zk_connect = join ( suffix( split($profile::mapr::cluster::zk_node_list,','), ":5181" ), ',')
 
+
+  file { '/etc/pam.d/drill':
+    ensure  => file,
+    source  => 'puppet:///modules/profile/mapr/ecosystem/drill/drill',
+  }
+  ->
   file { 'drill-override.conf':
     ensure  => file,
     path    => "$drill_home/conf/drill-override.conf",
