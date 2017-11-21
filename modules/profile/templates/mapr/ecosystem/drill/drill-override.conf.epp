@@ -34,6 +34,16 @@ drill.exec: {
     enabled: true,
     packages += "org.apache.drill.exec.rpc.user.security",
     impl: "pam",
-    pam_profiles: ["sudo", "login", "mapr-admin"]
+    pam_profiles: ["drill"]
   }
+  http: {
+    ssl_enabled: true,
+  }
+}
+
+javax.net.ssl {
+  keyStore: "/opt/mapr/conf/ssl_keystore",
+  keyStorePassword: "mapr123",
+  trustStore: "/opt/mapr/conf/ssl_truststore",
+  trustStorePassword: "mapr123"
 }
