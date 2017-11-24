@@ -24,7 +24,7 @@ EOF
 }
 
 # The base dir of mbox
-BASE_DIR=$(BASE_DIRname $(readlink -f $0))
+BASE_DIR=$(dirname $(readlink -f $0))
 # The dir to download external (i.e., 3rd party puppet modules)
 EXTERNAL=$BASE_DIR/external
 
@@ -60,7 +60,7 @@ mbox_init() {
 
 mbox_setup() {
 	ENVIRON=production
-	# adding prefix 'FACTER_' to make $base_BASE_DIR available in puppet manifests
+	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests
 	# using 'sudo -E' to preserve env variables
 	FACTER_base_dir=$BASE_DIR sudo -E /opt/puppetlabs/bin/puppet apply --show_diff --graph \
 		--modulepath $BASE_DIR/modules:$EXTERNAL \
