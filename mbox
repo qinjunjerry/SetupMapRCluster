@@ -25,7 +25,7 @@ EOF
 
 # The base dir of mbox
 BASE_DIR=$(dirname $(readlink -f $0))
-# The dir to download external (i.e., 3rd party puppet modules)
+# The dir to download external (i.e., 3rd party) puppet modules
 EXTERNAL=$BASE_DIR/external
 
 mbox_init() {
@@ -51,7 +51,7 @@ mbox_init() {
 	fi
 
 	# download external puppet modules
-	if ls $EXTERNAL/stdlib 2>&1 >/dev/null; then
+	if ls $EXTERNAL/stdlib >/dev/null 2>&1; then
 		echo "puppet modules stdlib etc. already installed"
 	else
 		sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install --puppetfile $BASE_DIR/Puppetfile --moduledir $EXTERNAL
