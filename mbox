@@ -48,9 +48,11 @@ mbox_init() {
 	fi
 
 	# download external puppet modules
-	cd $DIR
-	sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install
-	cd -
+	if ls $DIR/external/stdlib 2>&1 >/dev/null; then
+		echo "puppet modules stdlib ... already installed"
+	else
+		sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install --puppetfile $DIR/Puppetfile
+	fi
 }
 
 mbox_setup() {
