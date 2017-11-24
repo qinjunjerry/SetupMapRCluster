@@ -23,9 +23,12 @@ Common commands:
 EOF
 }
 
-mbox_init() {
-	DIR=$(dirname $(readlink -f $0))
+# The base dir of mbox
+BASE_DIR=$(BASE_DIRname $(readlink -f $0))
+# The dir to download external (i.e., 3rd party puppet modules)
+EXTERNAL=$BASE_DIR/external
 
+mbox_init() {
 	# install puppet repo
 	if rpm -qa | grep puppet5-release >/dev/null; then
 		echo "puppet5-release already installed"
@@ -48,24 +51,23 @@ mbox_init() {
 	fi
 
 	# download external puppet modules
-	if ls $DIR/external/stdlib 2>&1 >/dev/null; then
-		echo "puppet modules stdlib ... already installed"
+	if ls $EXTERNAL/stdlib 2>&1 >/dev/null; then
+		echo "puppet modules stdlib etc. already installed"
 	else
-		sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install --puppetfile $DIR/Puppetfile
+		sudo /opt/puppetlabs/puppet/bin/r10k puppetfile install --puppetfile $BASE_DIR/Puppetfile --moduledir $EXTERNAL
 	fi
 }
 
 mbox_setup() {
-	DIR=$(dirname $(readlink -f $0))
 	ENVIRON=production
-	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests
+	# adding prefix 'FACTER_' to make $base_BASE_DIR available in puppet manifests
 	# using 'sudo -E' to preserve env variables
-	FACTER_base_dir=$DIR sudo -E /opt/puppetlabs/bin/puppet apply --show_diff --graph \
-		--modulepath $DIR/modules:$DIR/external \
-		--hiera_config $DIR/hiera.yaml \
-		--environmentpath=$DIR/environments \
+	FACTER_base_dir=$BASE_DIR sudo -E /opt/puppetlabs/bin/puppet apply --show_diff --graph \
+		--modulepath $BASE_DIR/modules:$EXTERNAL \
+		--hiera_config $BASE_DIR/hiera.yaml \
+		--environmentpath=$BASE_DIR/environments \
 		--environment=$ENVIRON \
-		$DIR/environments/$ENVIRON/manifests/default.pp
+		$BASE_DIR/environments/$ENVIRON/manifests/default.pp
 }
 
 mbox_start() {
