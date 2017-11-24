@@ -47,6 +47,7 @@ class profile::mapr::ecosystem::spark_hdfs_env (
     command   => "/usr/bin/hadoop fs -put $spark_home/spark-jars.zip /apps/spark",
     logoutput => on_failure,
     unless    => '/usr/bin/hadoop fs -ls /apps/spark/spark-jars.zip',
+    before    => Class['profile::mapr::warden_restart'],
   }
   # Configure Spark with the NodeManager Local Directory Set to MapR-FS:
   #

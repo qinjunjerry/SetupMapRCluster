@@ -27,7 +27,7 @@ class profile::mapr::configure (
 
   $disk_file = '/tmp/disks.txt'
 
-  exec { 'run configure.sh':
+  exec { 'configure.sh':
     command     => join(['/opt/mapr/server/configure.sh',
                          ' ', '-N',  ' ', $profile::mapr::cluster::cluster_name,
                          ' ', '-Z',  ' ', $profile::mapr::cluster::zk_node_list,
