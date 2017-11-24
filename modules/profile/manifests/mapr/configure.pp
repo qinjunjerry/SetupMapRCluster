@@ -43,7 +43,7 @@ class profile::mapr::configure (
     refreshonly => true,
   }
   ~>
-  exec { 'create disks.txt and run disksetup':
+  exec { 'disksetup':
     command   => "echo $profile::mapr::cluster::disk_list > $disk_file && /opt/mapr/server/disksetup -F $disk_file",
     path      => '/usr/bin:/usr/sbin:/bin',
     logoutput => on_failure,

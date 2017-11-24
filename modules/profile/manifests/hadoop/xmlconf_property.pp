@@ -40,15 +40,13 @@ define profile::hadoop::xmlconf_property (
     }
   }
 
-  $filename = basename($file)
-
-  augeas { "update $property_name in ${filename}":
+  augeas { "update $property_name in ${file}":
     incl    => $file,
     lens    => 'Xml.lns',
     changes => $changes,
   } ~>
   # format xml using xmllint after a change
-  exec { "format $property_name in ${filename}":
+  exec { "format $property_name in ${file}":
     command     => "/usr/bin/xmllint --format $file --output $file",
     logoutput   => on_failure,
     refreshonly => true,
