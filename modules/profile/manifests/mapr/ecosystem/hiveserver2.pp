@@ -8,7 +8,8 @@ class profile::mapr::ecosystem::hiveserver2 (
 
   require profile::mapr::configure
 
-  $cfgfile = '/opt/mapr/hive/hive-2.1/conf/hive-site.xml'
+  $version = fact('mapr-hive_version')
+  $cfgfile = "/opt/mapr/hive/hive-$version/conf/hive-site.xml"
 
   package { 'mapr-hiveserver2':
     ensure  => present,

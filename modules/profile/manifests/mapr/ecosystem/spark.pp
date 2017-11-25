@@ -11,18 +11,21 @@ class profile::mapr::ecosystem::spark (
   require profile::mapr::user
   require profile::mapr::configure
 
-  $spark_home = '/opt/mapr/spark/spark-2.1.0'
 
   package { 'mapr-spark':
     ensure  => present,
     notify  => Class['profile::mapr::configure_r'],
   }
-  ->
+
+  $version = fact('mapr-spark_version')
+  $spark_home = "/opt/mapr/spark/spark-$version"
+
   file_line { 'spark.yarn.archive':
     ensure => present,
     path   => "$spark_home/conf/spark-defaults.conf",
     line   => "spark.yarn.archive maprfs:///spark-jars.zip",
     match  => '^spark.yarn.archive',
+    require => Package['mapr-spark']
   }
 
   # Configure Spark with the NodeManager Local Directory Set to MapR-FS:

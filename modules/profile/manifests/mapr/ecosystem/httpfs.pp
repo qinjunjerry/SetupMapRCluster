@@ -8,7 +8,8 @@ class profile::mapr::ecosystem::httpfs (
 
   require profile::mapr::configure
 
-  $file = "/opt/mapr/httpfs/httpfs-1.0/etc/hadoop/httpfs-site.xml"
+  $version = fact('mapr-httpfs_version')
+  $file = "/opt/mapr/httpfs/httpfs-$version/etc/hadoop/httpfs-site.xml"
   $hostname = fact('networking.hostname')
 
   package { 'mapr-httpfs':

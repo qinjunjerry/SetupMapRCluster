@@ -59,6 +59,13 @@ mbox_init() {
 }
 
 mbox_setup() {
+	# update package_version.py based on the mep version in common.yaml
+	mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
+	os_family=`/opt/puppetlabs/bin/facter os.family | tr [:upper:] [:lower:]`
+	fact_file=$BASE_DIR/modules/profile/facts.d/package_version.py
+	sed -e "s/MEP_VERSION/$mep_version/g" -e "s/OS_FAMILY/$os_family/g" $fact_file > /tmp/package_version.py
+	cat /tmp/package_version.py > $fact_file
+
 	ENVIRON=production
 	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests
 	# using 'sudo -E' to preserve env variables

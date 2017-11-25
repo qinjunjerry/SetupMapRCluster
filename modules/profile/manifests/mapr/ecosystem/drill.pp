@@ -14,7 +14,8 @@ class profile::mapr::ecosystem::drill (
   include profile::mapr::cluster
 
 
-  $drill_home   = '/opt/mapr/drill/drill-1.10.0'
+  $version = fact('mapr-drill_version')
+  $drill_home   = "/opt/mapr/drill/drill-$version"
   $drill_config = "$drill_home/bin/drill-config.sh"
 
   package { 'mapr-drill':
