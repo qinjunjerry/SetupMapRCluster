@@ -1,14 +1,14 @@
-# Class: profile::mapr::ecosystem::hue
+# Class: profile::mapr::ecosystem::oozie
 #
-# This module installs/configures MapR hue
+# This module installs/configures MapR oozie
 #
 
-class profile::mapr::ecosystem::hue (
+class profile::mapr::ecosystem::oozie (
 ) {
 
   require profile::mapr::configure
 
-  package { 'mapr-hue':
+  package { 'mapr-oozie':
     ensure  => present,
     notify  => Class['profile::mapr::configure_r']
   }
