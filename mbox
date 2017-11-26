@@ -116,6 +116,16 @@ mbox_cleanall() {
 }
 
 
+mbox_ldir() {
+	declare -a dir_array=(`ls -d /opt/mapr/*/*-*/{logs,conf,etc/hadoop,desktop/conf}`)
+
+	for ((i=0; i<${#dir_array[@]}; i++)); do
+		printf "%2d = %s\n" $i ${dir_array[$i]}
+	done
+
+	#read -p "Select dir: " i
+}
+
 ##### ##### main ##### #####
 
 if [ $# -eq 0 ]; then
@@ -123,7 +133,7 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
-commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall)
+commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall ldir)
 command=$1
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
     mbox_$command
