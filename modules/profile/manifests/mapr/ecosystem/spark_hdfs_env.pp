@@ -13,7 +13,7 @@ class profile::mapr::ecosystem::spark_hdfs_env (
   require profile::mapr::configure
   require profile::mapr::core::cldb_ready
 
-  $version = fact('mapr-spark_version')
+  $version = fact('mapr-spark:version')
   $spark_home = "/opt/mapr/spark/spark-$version"
 
   package { 'zip':

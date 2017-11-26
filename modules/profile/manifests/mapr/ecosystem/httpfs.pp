@@ -8,7 +8,7 @@ class profile::mapr::ecosystem::httpfs (
 
   require profile::mapr::configure
 
-  $version = fact('mapr-httpfs_version')
+  $version = fact('mapr-httpfs:version')
   $file = "/opt/mapr/httpfs/httpfs-$version/etc/hadoop/httpfs-site.xml"
   $hostname = fact('networking.hostname')
 

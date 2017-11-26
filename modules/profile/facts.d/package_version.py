@@ -32,4 +32,4 @@ for line in output.splitlines():
             break
     version = ".".join(vitems)
 
-    print "%-32s = %s" % (package+"_version", version)
+    print "%s=%s" % (package+":version", version)

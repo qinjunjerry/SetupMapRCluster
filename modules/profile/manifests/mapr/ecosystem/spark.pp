@@ -17,7 +17,7 @@ class profile::mapr::ecosystem::spark (
     notify  => Class['profile::mapr::configure_r'],
   }
 
-  $version = fact('mapr-spark_version')
+  $version = fact('mapr-spark:version')
   $spark_home = "/opt/mapr/spark/spark-$version"
 
   file_line { 'spark.yarn.archive':

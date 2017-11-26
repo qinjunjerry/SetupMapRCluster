@@ -9,7 +9,7 @@ class profile::mapr::ecosystem::hivemetastore (
   require profile::mapr::configure
 
 
-  $version = fact('mapr-hive_version')
+  $version = fact('mapr-hive:version')
   $cfgfile = "/opt/mapr/hive/hive-$version/conf/hive-site.xml"
 
   package { 'mapr-hivemetastore':
