@@ -16,10 +16,10 @@ class profile::mapr::sasl (
       owner  => 'mapr',
       group  => 'mapr',
       mode   => '0600';
-    '/opt/mapr/conf/cldb.key'        : source  =>     "$::base_dir/inputfiles/cldb.key";
-    '/opt/mapr/conf/maprserverticket': content =>     "$::base_dir/inputfiles/maprserverticket");
-    '/opt/mapr/conf/ssl_keystore'    : source  =>     "$::base_dir/inputfiles/ssl_keystore",  mode => '0400';
-    '/opt/mapr/conf/ssl_truststore'  : source  =>     "$::base_dir/inputfiles/ssl_truststore",mode => '0444';
+    '/opt/mapr/conf/cldb.key'        : source  => "$::base_dir/inputfiles/cldb.key";
+    '/opt/mapr/conf/maprserverticket': content => "$::base_dir/inputfiles/maprserverticket";
+    '/opt/mapr/conf/ssl_keystore'    : source  => "$::base_dir/inputfiles/ssl_keystore",  mode => '0400';
+    '/opt/mapr/conf/ssl_truststore'  : source  => "$::base_dir/inputfiles/ssl_truststore",mode => '0444';
   }
 
 }
