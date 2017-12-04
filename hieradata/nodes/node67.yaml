@@ -5,6 +5,4 @@ classes:
   - profile::mapr::core::cldb
   - profile::mapr::ecosystem::hiveserver2
   - profile::mapr::ecosystem::hive_hdfs_env
-  # hue needs oozie running on the same node
-  - profile::mapr::ecosystem::oozie
   - profile::mapr::ecosystem::hue

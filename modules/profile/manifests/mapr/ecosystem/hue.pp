@@ -79,7 +79,7 @@ class profile::mapr::ecosystem::hue (
     require  => Package['mapr-hue'],
   }
 
-  $oozie_node=$profile::mapr::cluster::historyserver
+  $oozie_node=$profile::mapr::cluster::oozie_node
   file_line {'oozie_url in hue.ini':
     ensure   => 'present',
     path     => $cfgfile,
