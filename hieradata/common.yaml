@@ -48,6 +48,8 @@ profile::mapr::cluster::cluster_name  : amapr.cluster
 profile::mapr::cluster::cldb_node_list: node67
 profile::mapr::cluster::zk_node_list  : node67,node68,node69
 profile::mapr::cluster::historyserver : node69
+profile::mapr::cluster::oozie_node    : node68
+
 # AWS
 #profile::mapr::cluster::cldb_node_list: ip-10-10-70-47
 #profile::mapr::cluster::zk_node_list  : ip-10-10-70-47,ip-10-10-70-180,ip-10-10-70-184

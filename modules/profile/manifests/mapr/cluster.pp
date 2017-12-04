@@ -8,6 +8,7 @@ class profile::mapr::cluster (
   $cldb_node_list = $profile::mapr::cluster::cldb_node_list,
   $zk_node_list   = $profile::mapr::cluster::zk_node_list,
   $historyserver  = $profile::mapr::cluster::historyserver,
+  $oozie_node     = $profile::mapr::cluster::oozie_node,
   $secure         = $profile::mapr::cluster::secure,
   $kerberos       = $profile::mapr::cluster::kerberos,
   $disk_list      = $profile::mapr::cluster::disk_list,
