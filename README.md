@@ -47,7 +47,4 @@ Include the following into the corresponding module, for example for module prof
  ```
 
 ### TODO
-- Dynamically check package verions, e.g., spark-2.1.0 in order to determine spark_home
-- Generate MapR SASL files without install first
-- Handel reboot in puppet: reboot after selinux change
-
+- Do not hardcode active instance in configuration, e.g. resourcemanager_api_url and webhdfs_url in hue.ini
