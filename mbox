@@ -92,7 +92,7 @@ mbox_restart() {
 }
 
 mbox_delmapr() {
-	sudo yum erase -y mapr-*
+	sudo yum erase -y mapr-\*
 	sudo rm -fr /opt/mapr
 }
 
