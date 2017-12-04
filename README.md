@@ -45,6 +45,17 @@ Include the following into the corresponding module, for example for module prof
     "property_name3": file=>$file, ensure=>"absent";
  }
  ```
+#### How to solve "shell-init: error retrieving current directory ... unhandled exception: boost::filesystem::current_path: No such file or directory"?
+
+You may see the following error when run 'mbox setup'/'mbox up':
+
+    shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+    2017-12-04 16:46:09.627479 FATAL puppetlabs.facter - unhandled exception: boost::filesystem::current_path: No such file or directory
+    terminate called after throwing an instance of 'boost::filesystem::filesystem_error'
+    what():  boost::filesystem::current_path: No such file or directory
+
+The reason is that the working directory where you run mbox has been removed in a different shell session or by a different app. Change to an existing directory should solve the issue.
+
 
 ### TODO
 - Do not hardcode active instance in configuration, e.g. resourcemanager_api_url and webhdfs_url in hue.ini
