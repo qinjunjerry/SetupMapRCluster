@@ -26,6 +26,16 @@ class profile::mapr::ecosystem::hue (
   	require  => Package['mapr-hue'],
   }
 
+  $domain=$profile::mapr::prereq::domain
+  file_line {'resourcemanager_api_url in hue.ini':
+    ensure   => 'present',
+    path     => $cfgfile,
+    line     => "      resourcemanager_api_url=https://node69.$domain:8090",
+    after    => '      # URL of the ResourceManager API',
+    match    => '^\s*resourcemanager_api_url\=',
+    require  => Package['mapr-hue'],
+  }
+
   file_line {'webhdfs_url in hue.ini':
   	ensure   => 'present',
   	path     => $cfgfile,
