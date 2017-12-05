@@ -12,7 +12,7 @@ class profile::mapr::kerberos (
   include profile::kerberos
   include profile::mapr::cluster
 
-  $hostname = fact('networking.hostname')
+  $hostname = fact('networking.fqdn')
 
   file_line { 'set-crypto.policy':
     ensure => present,

@@ -3,5 +3,5 @@
 
 # mapr cluster nodes
 <% $profile::mapr::prereq::hosts.each |$name, $ip| { -%>
-<%= $ip %>    <%= $name %>  <%= $name %>.<%= $profile::mapr::prereq::domain %>
+<%= $ip %>    <%= $name %>.<%= $profile::mapr::prereq::domain %>  <%= $name %>
 <% } -%>

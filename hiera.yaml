@@ -8,7 +8,7 @@ defaults:
 
 hierarchy:
   - name: "per node data"
-    path: "nodes/%{facts.networking.hostname}.yaml"
+    path: "nodes/%{facts.networking.fqdn}.yaml"
 
   - name: "common"
     path: "common.yaml"

@@ -24,6 +24,7 @@ profile::mapr::prereq::hosts:
 # ip-10-10-70-184: '10.10.70.184'
 # ip-10-10-70-205: '10.10.70.205'
 
+# This is used to generate fqdn in /etc/hosts
 profile::mapr::prereq::domain: 'local'
 # AWS
 # mapr_prereq::domain: 'us-west-1.compute.internal'
