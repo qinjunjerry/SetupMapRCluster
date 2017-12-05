@@ -89,34 +89,4 @@ class profile::mapr::ecosystem::hue (
     require  => Package['mapr-hue'],
   }
 
-  file_line {'hadoop.login in /opt/mapr/conf/env.sh':
-    ensure   => 'present',
-    path     => '/opt/mapr/conf/env.sh',
-    line     => 'MAPR_LOGIN_OPTS="-Dhadoop.login=hybrid -Dhttps.protocols=TLSv1.2 ${MAPR_JAAS_CONFIG_OPTS} ${MAPR_ZOOKEEPER_OPTS}"',
-    match    => '^MAPR_LOGIN_OPTS\=',
-    require  => Package['mapr-hue'],
-  }
-
-  profile::hadoop::xmlconf_property {
-    default:
-      file   => '/opt/mapr/hadoop/hadoop-2.7.0/etc/hadoop/yarn-site.xml',
-      notify => Class['profile::mapr::warden_restart'];
-
-    'yarn.resourcemanager.hostname'                  : value => 'maprfs:///';
-    'yarn.resourcemanager.keytab'                    : value => '/opt/mapr/conf/mapr.keytab';
-    'yarn.resourcemanager.principal'                 : value => "mapr/$hostname";
-    'yarn.nodemanager.keytab'                        : value => '/opt/mapr/conf/mapr.keytab';
-    'yarn.nodemanager.principal'                     : value => "mapr/$hostname";
-    'yarn.nodemanager.container-executor.class'      : value => 'org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor';
-    'yarn.nodemanager.linux-container-executor.group': value => 'mapr';
-
-  }
-
-  profile::hadoop::xmlconf_property {
-    default:
-      file   => '/opt/mapr/hadoop/hadoop-2.7.0/etc/hadoop/core-site.xml',
-      notify => Class['profile::mapr::warden_restart'];
-    'hue.kerberos.principal.shortname' : value => 'mapr';
-  }
-
 }
