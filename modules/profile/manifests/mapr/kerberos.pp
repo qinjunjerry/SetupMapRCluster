@@ -40,8 +40,8 @@ class profile::mapr::kerberos (
     mode   => '0600',
     # Puppet will use the first source that exists
     source => [
-      "$::base_dir/inputfiles/$hostname/mapr.keytab",
-      "$::base_dir/inputfiles/mapr.keytab",
+      "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/$hostname/mapr.keytab",
+      "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/mapr.keytab",
     ]
   }
 }

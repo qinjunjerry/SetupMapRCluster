@@ -48,7 +48,7 @@ class profile::kerberos::kdc (
     owner   => 'root',
     group   => 'root',
     mode    => '0600',
-    content => "*/admin@$kerberos::default_realm  *",
+    content => "*/admin@$profile::kerberos::default_realm  *",
   }
   ->
   exec { 'create principal mapr/admin':

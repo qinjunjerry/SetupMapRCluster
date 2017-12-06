@@ -1,8 +1,0 @@
----
-
-classes:
-  - role::cluster_node
-  - profile::mapr::core::cldb
-  - profile::mapr::ecosystem::hiveserver2
-  - profile::mapr::ecosystem::hive_hdfs_env
-  - profile::mapr::ecosystem::hue

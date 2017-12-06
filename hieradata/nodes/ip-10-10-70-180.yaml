@@ -1,20 +1,4 @@
 ---
 
 classes:
-  # mapr core
-  - mapr_core::zookeeper
-
-  - mapr_core::fileserver
-  - mapr_core::nodemanager
-
-  - mapr_core::resourcemanager
-  - mapr_core::webserver
-
-  # security
-  - mapr_config::sasl
-  - mapr_config::kerberos
-
-  # ecosystem
-  - mapr_httpfs
-  - mapr_spark
-  - mapr_drill
+  - role::cluster_node

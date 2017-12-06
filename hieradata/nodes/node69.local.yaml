@@ -1,5 +1,0 @@
----
-
-classes:
-  - role::cluster_node_history
-  - profile::mapr::ecosystem::hivewebhcat

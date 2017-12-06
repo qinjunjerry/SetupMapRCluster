@@ -5,21 +5,21 @@ mbox_help() {
 Usage: $0 command
 
 Common commands:
-   help        shows this help
+   help            shows this help
 
-   init        bootstrap: installs puppet, r10k, and puppet modules
-   setup       install, configure and start MapR
-   up          init + setup
+   init            bootstrap: installs puppet, r10k, and puppet modules
+   setup [cluster] install, configure and start MapR
+   up    [cluster] init + setup
 
-   start       start mapr-zookeeper and then mapr-warden
-   stop        stop mapr-warden and then mapr-zookeeper
-   restart     stop + start
+   start           start mapr-zookeeper and then mapr-warden
+   stop            stop mapr-warden and then mapr-zookeeper
+   restart         stop + start
 
-   delmapr     remove mapr packages and /opt/mapr
-   delpuppet   remove puppet
+   delmapr         remove mapr packages and /opt/mapr
+   delpuppet       remove puppet
 
-   clean       stop + delmapr
-   cleanall    stop + delmapr + delpuppet
+   clean           stop + delmapr
+   cleanall        stop + delmapr + delpuppet
 EOF
 }
 
@@ -59,17 +59,36 @@ mbox_init() {
 }
 
 mbox_setup() {
-	# update package_version.py based on the mep version in common.yaml
-	mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
+	# set cluster fact if given, the fact is used in heira.yaml
+	cluster=$1
+	if [ ! -z $cluster ]; then
+		export FACTER_cluster=$cluster
+	fi
+
+	### update package_version.py based on mep version and os.family
+	# get mep version
+	mep_version=
+	# get mep version from cluster's yaml file
+	if [ ! -z $cluster ]; then
+		mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/clusters/$cluster.yaml | awk '{print $NF}'`
+	fi
+	# if not found, get mep version from common.yaml
+	if [ -z $mep_version ]; then
+		mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
+	fi
+	# get os.family
 	os_family=`/opt/puppetlabs/bin/facter os.family | tr [:upper:] [:lower:]`
+	# update package_version.py
 	fact_file=$BASE_DIR/modules/profile/facts.d/package_version.py
 	sed -e "s/MEP_VERSION/$mep_version/g" -e "s/OS_FAMILY/$os_family/g" $fact_file > /tmp/package_version.py
 	cat /tmp/package_version.py > $fact_file
 
+	# run puppet apply
 	ENVIRON=production
 	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests
 	# using 'sudo -E' to preserve env variables
-	FACTER_base_dir=$BASE_DIR sudo -E /opt/puppetlabs/bin/puppet apply --show_diff --graph \
+	export FACTER_base_dir=$BASE_DIR
+	sudo -E /opt/puppetlabs/bin/puppet apply --show_diff --graph \
 		--modulepath $BASE_DIR/modules:$EXTERNAL \
 		--hiera_config $BASE_DIR/hiera.yaml \
 		--environmentpath=$BASE_DIR/environments \
@@ -102,7 +121,7 @@ mbox_delpuppet() {
 }
 
 mbox_up() {
-	mbox_init && mbox_setup
+	mbox_init && mbox_setup $1
 }
 
 mbox_clean() {
@@ -135,8 +154,9 @@ fi
 
 commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall ldir)
 command=$1
+shift
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
-    mbox_$command
+    mbox_$command $@
 else
 	echo Error: invalid command: $command
 	echo
