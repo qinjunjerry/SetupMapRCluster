@@ -1,0 +1,29 @@
+---
+
+# This is used to generate /etc/hosts
+profile::mapr::prereq::hosts:
+  ip-10-10-70-47 : '10.10.70.47'
+  ip-10-10-70-180: '10.10.70.180'
+  ip-10-10-70-184: '10.10.70.184'
+  ip-10-10-70-205: '10.10.70.205'
+
+# This is used to generate fqdn in /etc/hosts
+mapr_prereq::domain: 'us-west-1.compute.internal'
+
+# MapR versions
+profile::mapr::repo::core_version: 5.2.2
+profile::mapr::repo::mep_version : 3.0.1
+
+# Cluster level settings
+profile::mapr::cluster::cluster_name  : awsmapr.cluster
+profile::mapr::cluster::cldb_node_list: ip-10-10-70-47
+profile::mapr::cluster::zk_node_list  : ip-10-10-70-47,ip-10-10-70-180,ip-10-10-70-184
+profile::mapr::cluster::historyserver : ip-10-10-70-184
+
+profile::mapr::cluster::secure        : true
+profile::mapr::cluster::kerberos      : true
+profile::mapr::cluster::disk_list     : /dev/xvdb
+
+# kerberos
+profile::kerberos::default_realm    : AWS.MAPR.COM
+profile::kerberos::kdc_server       : ip-10-10-70-205

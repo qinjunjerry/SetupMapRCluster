@@ -1,0 +1,5 @@
+---
+
+classes:
+  - profile::redhat::epel
+  - profile::kerberos::kdc
