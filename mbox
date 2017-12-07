@@ -76,12 +76,37 @@ mbox_setup() {
 	if [ -z $mep_version ]; then
 		mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
 	fi
+	if [ -z "$mep_version" ]; then
+		echo Error: mep_version not found.
+		exit 1
+	fi
 	# get os.family
 	os_family=`/opt/puppetlabs/bin/facter os.family | tr [:upper:] [:lower:]`
+	if [ -z "$os_family" ]; then
+		echo Error: os_family not found.
+		exit 1
+	fi
+
 	# update package_version.py
 	fact_file=$BASE_DIR/modules/profile/facts.d/package_version.py
 	sed -e "s/MEP_VERSION/$mep_version/g" -e "s/OS_FAMILY/$os_family/g" $fact_file > /tmp/package_version.py
 	cat /tmp/package_version.py > $fact_file
+
+
+	### add fqdn to /etc/hosts
+	dnsdomain=
+	# get dns domain from cluster's yaml file
+	if [ ! -z $cluster ]; then
+		dnsdomain=`grep ^profile::mapr::prereq::domain $BASE_DIR/hieradata/clusters/$cluster.yaml | awk '{print $NF}'`
+	fi
+	# if not found, get dns domain from common.yaml
+	if [ -z $dnsdomain ]; then
+		dnsdomain=`grep ^profile::mapr::prereq::domain $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
+	fi
+
+	if ! grep -q `hostname`.$dnsdomain /etc/hosts; then
+		echo `hostname -I` `hostname`.$dnsdomain `hostname` >> /etc/hosts
+	fi
 
 	# run puppet apply
 	ENVIRON=production
