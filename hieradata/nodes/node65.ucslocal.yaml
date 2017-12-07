@@ -1,0 +1,6 @@
+---
+
+classes:
+  - role::cluster_node
+  - profile::mapr::ecosystem::hivemetastore
+  - profile::mapr::ecosystem::oozie
