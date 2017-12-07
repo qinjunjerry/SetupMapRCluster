@@ -16,7 +16,7 @@ profile::mapr::prereq::hosts:
   node75: '10.10.70.75'
 
 # This is used to generate fqdn in /etc/hosts
-profile::mapr::prereq::domain: 'ucslocal'
+profile::mapr::prereq::domain: ucslocal
 
 # MapR versions
 profile::mapr::repo::core_version: 5.2.2
