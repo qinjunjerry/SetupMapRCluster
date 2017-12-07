@@ -26,11 +26,11 @@ class profile::mapr::ecosystem::hue (
   	require  => Package['mapr-hue'],
   }
 
-  $domain=$profile::mapr::prereq::domain
+  $domain = $profile::mapr::prereq::domain
   file_line {'resourcemanager_api_url in hue.ini':
     ensure   => 'present',
     path     => $cfgfile,
-    line     => "      resourcemanager_api_url=https://node69.$domain:8090",
+    line     => "      resourcemanager_api_url=https://node66.${domain}:8090",
     after    => '      # URL of the ResourceManager API',
     match    => '^\s*resourcemanager_api_url\=',
     require  => Package['mapr-hue'],
@@ -39,13 +39,13 @@ class profile::mapr::ecosystem::hue (
   file_line {'webhdfs_url in hue.ini':
   	ensure   => 'present',
   	path     => $cfgfile,
-    line     => '      webhdfs_url=http://node69:14000/webhdfs/v1',
+    line     => "      webhdfs_url=https://node66.${domain}:14000/webhdfs/v1",
   	after    => '# Default port is 14000 for HttpFs.',
   	match    => '^\s*webhdfs_url\=',
   	require  => Package['mapr-hue'],
   }
 
-  $hostname = fact('networking.hostname')
+  $hostname = fact('networking.fqdn')
   exec { '/tmp/hue_krb5_ccache':
     command  => "/bin/kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/$hostname",
     creates  => '/tmp/hue_krb5_ccache',
