@@ -23,7 +23,7 @@ class profile::mapr::ecosystem::spark (
   file_line { 'spark.yarn.archive':
     ensure => present,
     path   => "$spark_home/conf/spark-defaults.conf",
-    line   => "spark.yarn.archive maprfs:///spark-jars.zip",
+    line   => "spark.yarn.archive maprfs:///apps/spark/spark-jars.zip",
     match  => '^spark.yarn.archive',
     require => Package['mapr-spark']
   }
