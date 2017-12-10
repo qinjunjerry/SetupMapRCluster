@@ -26,20 +26,13 @@ class profile::mapr::ecosystem::hue (
   	require  => Package['mapr-hue'],
   }
 
-  $domain = $profile::mapr::prereq::domain
-  file_line {'resourcemanager_api_url in hue.ini':
-    ensure   => 'present',
-    path     => $cfgfile,
-    line     => "      resourcemanager_api_url=https://node66.${domain}:8090",
-    after    => '      # URL of the ResourceManager API',
-    match    => '^\s*resourcemanager_api_url\=',
-    require  => Package['mapr-hue'],
-  }
-
+  # This requires that httpfs must run on the Hue node
+  # In case of multiple httpfs, httpfs must setup as active-active instead of active-standby
+  $hostname = fact('networking.fqdn')
   file_line {'webhdfs_url in hue.ini':
   	ensure   => 'present',
   	path     => $cfgfile,
-    line     => "      webhdfs_url=https://node66.${domain}:14000/webhdfs/v1",
+    line     => "      webhdfs_url=https://${hostname}:14000/webhdfs/v1",
   	after    => '# Default port is 14000 for HttpFs.',
   	match    => '^\s*webhdfs_url\=',
   	require  => Package['mapr-hue'],
