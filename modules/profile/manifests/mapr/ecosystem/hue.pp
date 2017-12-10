@@ -38,7 +38,6 @@ class profile::mapr::ecosystem::hue (
   	require  => Package['mapr-hue'],
   }
 
-  $hostname = fact('networking.fqdn')
   exec { '/tmp/hue_krb5_ccache':
     command  => "/bin/kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/$hostname",
     creates  => '/tmp/hue_krb5_ccache',
