@@ -10,7 +10,7 @@ class profile::mapr::ecosystem::httpfs (
 
   $version = fact('mapr-httpfs:version')
   $file = "/opt/mapr/httpfs/httpfs-$version/etc/hadoop/httpfs-site.xml"
-  $hostname = fact('networking.hostname')
+  $hostname = fact('networking.fqdn')
 
   package { 'mapr-httpfs':
     ensure  => present,
@@ -24,5 +24,14 @@ class profile::mapr::ecosystem::httpfs (
     "httpfs.hadoop.authentication.kerberos.keytab"   : value =>"/opt/mapr/conf/mapr.keytab";
     "httpfs.authentication.kerberos.name.rules"      : value =>"DEFAULT";
   }
+  ->
+  file_line { 'httpfs active-active':
+    ensure             => 'present',
+    path               => '/opt/mapr/conf/conf.d/warden.httpfs.conf',
+    line               => 'services=httpfs:3',
+    match              => '^services\=httpfs:1',
+    append_on_no_match => false,
+  }
+
 
 }
