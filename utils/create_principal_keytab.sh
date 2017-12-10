@@ -11,12 +11,14 @@ create_principal() {
 
     if [ "x$passwd" != "x" ]; then
         passwd="-pw $passwd"
+    else
+        passwd="-randkey"
     fi
 
     if kadmin.local -q 'listprincs' | grep -q ${principal}@; then
         echo principal $principal aleady exits
     else
-        kadmin.local -q "addprinc -randkey $passwd $principal"
+        kadmin.local -q "addprinc $passwd $principal"
     fi
 }
 
