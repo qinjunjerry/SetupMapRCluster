@@ -31,6 +31,7 @@ class profile::mapr::ecosystem::httpfs (
     line               => 'services=httpfs:3',
     match              => '^services\=httpfs:1',
     append_on_no_match => false,
+    notify             => Class['profile::mapr::warden_restart'],
   }
 
 
