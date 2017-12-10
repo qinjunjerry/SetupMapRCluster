@@ -25,7 +25,8 @@ class profile::mapr::ecosystem::httpfs (
     "httpfs.authentication.kerberos.name.rules"      : value =>"DEFAULT";
   }
   ->
-  file_line { 'httpfs active-active':
+  # needed by hue to find the active httpfs
+  file_line { 'warden.httpfs.conf: services=httpfs:3':
     ensure             => 'present',
     path               => '/opt/mapr/conf/conf.d/warden.httpfs.conf',
     line               => 'services=httpfs:3',
