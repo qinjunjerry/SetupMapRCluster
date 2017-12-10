@@ -24,7 +24,7 @@ profile::mapr::repo::mep_version : 3.0.1
 
 # Cluster level settings
 profile::mapr::cluster::cluster_name  : ucsmapr.cluster
-profile::mapr::cluster::cldb_node_list: node67
+profile::mapr::cluster::cldb_node_list: node67,node68,node69
 profile::mapr::cluster::zk_node_list  : node67,node68,node69
 profile::mapr::cluster::historyserver : node69
 profile::mapr::cluster::oozie_node    : node68
