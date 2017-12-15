@@ -58,56 +58,61 @@ mbox_init() {
 	fi
 }
 
+get_cluster_setting() {
+	cluster=$1
+	property=$2
+
+	value=
+	if [ -f $BASE_DIR/hieradata/$cluster/cluster.yaml ]; then
+		value=`grep ^$property $BASE_DIR/hieradata/$cluster/cluster.yaml | awk '{print $NF}'`
+	fi
+	# if not found, get it from default.yaml
+	if [ -z $value ]; then
+		value=`grep ^$property $BASE_DIR/hieradata/default.yaml | awk '{print $NF}'`
+	fi
+	return $value
+}
+
 mbox_setup() {
 	# set cluster fact if given, the fact is used in heira.yaml
-	cluster=$1
-	if [ ! -z $cluster ]; then
+	if [ -f /opt/mapr/conf/mapr-clusters.conf ]; then
+		cluster=`cat /opt/mapr/conf/mapr-clusters.conf | head -1 | awk '{print $1}'`
+		echo "INFO: got cluster from /opt/mapr/conf/mapr-clusters.conf"
+	else
+		cluster=$1
+	fi
+
+	if [ -z $cluster ]; then
+		# this is used to setup nodes like KDC
+		echo "WARN: cluster name not given."
+	else
 		export FACTER_cluster=$cluster
-	fi
 
-	### update package_version.py based on mep version and os.family
-	# get mep version
-	mep_version=
-	# get mep version from cluster's yaml file
-	if [ ! -z $cluster ]; then
-		mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/clusters/$cluster.yaml | awk '{print $NF}'`
-	fi
-	# if not found, get mep version from common.yaml
-	if [ -z $mep_version ]; then
-		mep_version=`grep ^profile::mapr::repo::mep_version $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
-	fi
-	if [ -z "$mep_version" ]; then
-		echo Error: mep_version not found.
-		exit 1
-	fi
-	# get os.family
-	os_family=`/opt/puppetlabs/bin/facter os.family | tr [:upper:] [:lower:]`
-	if [ -z "$os_family" ]; then
-		echo Error: os_family not found.
-		exit 1
-	fi
+		### create external facter script package_version.py based on mep version and os.family
+		# get mep version
+		mep_version=get_cluster_setting $cluster profile::mapr::repo::mep_version
+		if [ -z "$mep_version" ]; then
+			echo Error: mep_version not found.
+			exit 1
+		fi
+		# get os.family
+		os_family=`/opt/puppetlabs/bin/facter os.family | tr [:upper:] [:lower:]`
+		if [ -z "$os_family" ]; then
+			echo Error: os_family not found.
+			exit 1
+		fi
+		# create external facter script package_version.py
+		version_script=$BASE_DIR/utils/package_version.py
+		fact_script=$BASE_DIR/modules/profile/facts.d/package_version.py
+		sed -e "s/MEP_VERSION/$mep_version/g" -e "s/OS_FAMILY/$os_family/g" $version_script > $fact_script
+		chmod +x $fact_script
 
-	# update package_version.py
-	fact_file=$BASE_DIR/modules/profile/facts.d/package_version.py
-	sed -e "s/MEP_VERSION/$mep_version/g" -e "s/OS_FAMILY/$os_family/g" $fact_file > /tmp/package_version.py
-	cat /tmp/package_version.py > $fact_file
-
-
-	### add fqdn to /etc/hosts
-	dnsdomain=
-	# get dns domain from cluster's yaml file
-	if [ ! -z $cluster ]; then
-		dnsdomain=`grep ^profile::mapr::prereq::domain $BASE_DIR/hieradata/clusters/$cluster.yaml | awk '{print $NF}'`
+		### get dns domain and add fqdn to /etc/hosts
+		dnsdomain=get_cluster_setting $cluster profile::mapr::prereq::domain
+		if ! grep -q `hostname`.$dnsdomain /etc/hosts; then
+			echo `hostname -I` `hostname`.$dnsdomain `hostname` >> /etc/hosts
+		fi
 	fi
-	# if not found, get dns domain from common.yaml
-	if [ -z $dnsdomain ]; then
-		dnsdomain=`grep ^profile::mapr::prereq::domain $BASE_DIR/hieradata/common.yaml | awk '{print $NF}'`
-	fi
-
-	if ! grep -q `hostname`.$dnsdomain /etc/hosts; then
-		echo `hostname -I` `hostname`.$dnsdomain `hostname` >> /etc/hosts
-	fi
-
 	# run puppet apply
 	ENVIRON=production
 	# adding prefix 'FACTER_' to make $base_dir available in puppet manifests

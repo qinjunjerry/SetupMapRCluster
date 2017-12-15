@@ -7,11 +7,14 @@ defaults:
   data_hash: yaml_data
 
 hierarchy:
-  - name: "per node config"
-    path: "nodes/%{facts.networking.fqdn}.yaml"
+  - name: "per cluster node config"
+    path: "%{facts.cluster}/%{facts.networking.fqdn}.yaml"
 
   - name: "per cluster config"
-    path: "clusters/%{facts.cluster}.yaml"
+    path: "%{facts.cluster}/cluster.yaml"
 
-  - name: "common config"
-    path: "common.yaml"
+  - name: "per node config, e.g. KDC"
+    path: "nodes/%{facts.networking.fqdn}.yaml"
+
+  - name: "default config"
+    path: "default.yaml"

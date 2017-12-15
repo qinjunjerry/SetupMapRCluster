@@ -1,0 +1,70 @@
+---
+
+##### Common config #####
+
+classes:
+  - profile::bash
+  - profile::packages
+
+# For example, the full URL is: http://download.oracle.com/otn-pub/java/jdk/8u152-b16/aa0333dd3019491ca4f6ddbe78cdb6d0/jdk-8u152-linux-x64.rpm
+profile::mapr::prereq::java_version_major: '8u152'
+profile::mapr::prereq::java_version_minor: 'b16'
+profile::mapr::prereq::java_url_hash     : 'aa0333dd3019491ca4f6ddbe78cdb6d0'
+
+# For version 8u144
+#profile::mapr::prereq::java_version_major: '8u144'
+#profile::mapr::prereq::java_version_minor: 'b01'
+#profile::mapr::prereq::java_url_hash     : '090f390dda5b47b9b721c7dfaa008135'
+
+### packages to install
+# This provides a convenient way to install packages. No services are started, nor
+# configuration is adapted.
+# ntp (need start service) & java (might need oracle jdk) are handled in mapr_prereq
+profile::packages::toinstall:
+  - sysstat   # provides mpstat
+  - net-tools # provides netstat
+  - lsof
+  - vim
+
+# kerberos
+profile::kerberos::default_realm    : MAPR.COM
+profile::kerberos::kdc_server       : node70
+
+
+##### Default cluster config #####
+
+# This is used to generate /etc/hosts
+profile::mapr::prereq::hosts:
+  node64: '10.10.70.64'
+  node65: '10.10.70.65'
+  node66: '10.10.70.66'
+  node67: '10.10.70.67'
+  node68: '10.10.70.68'
+  node69: '10.10.70.69'
+  node70: '10.10.70.70'
+  node71: '10.10.70.71'
+  node72: '10.10.70.72'
+  node73: '10.10.70.73'
+  node74: '10.10.70.74'
+  node75: '10.10.70.75'
+
+# This is used to generate fqdn in /etc/hosts
+profile::mapr::prereq::domain: ucslocal
+
+# MapR versions
+profile::mapr::repo::core_version: 5.2.2
+profile::mapr::repo::mep_version : 3.0.1
+
+# Cluster name and nodes
+profile::mapr::cluster::cluster_name  : ucsmapr.cluster
+profile::mapr::cluster::cldb_node_list: node67,node68,node69
+profile::mapr::cluster::zk_node_list  : node67,node68,node69
+profile::mapr::cluster::historyserver : node69
+profile::mapr::cluster::oozie_node    : node68
+
+profile::mapr::cluster::secure        : true
+profile::mapr::cluster::kerberos      : true
+
+# Default setttings for all nodes
+# Override by re-setting this in the individual node yaml files
+profile::mapr::cluster::disk_list     : /dev/sdb
