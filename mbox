@@ -77,14 +77,15 @@ mbox_setup() {
 	# set cluster fact if given, the fact is used in heira.yaml
 	if [ -f /opt/mapr/conf/mapr-clusters.conf ]; then
 		cluster=`cat /opt/mapr/conf/mapr-clusters.conf | head -1 | awk '{print $1}'`
-		echo "INFO: got cluster from /opt/mapr/conf/mapr-clusters.conf"
+		echo "INFO: cluster=$cluster, from /opt/mapr/conf/mapr-clusters.conf"
 	else
 		cluster=$1
+		echo "INFO: cluster=$cluster, from command line"
 	fi
 
 	if [ -z $cluster ]; then
 		# this is used to setup nodes like KDC
-		echo "WARN: cluster name not given."
+		echo "INFO: setup non-cluster node"
 	else
 		export FACTER_cluster=$cluster
 
@@ -92,13 +93,13 @@ mbox_setup() {
 		# get mep version
 		mep_version=get_cluster_setting $cluster profile::mapr::repo::mep_version
 		if [ -z "$mep_version" ]; then
-			echo Error: mep_version not found.
+			echo "Error: mep_version not found. Exit now."
 			exit 1
 		fi
 		# get os.family
 		os_family=`/opt/puppetlabs/bin/facter os.family | tr [:upper:] [:lower:]`
 		if [ -z "$os_family" ]; then
-			echo Error: os_family not found.
+			echo "Error: os_family not found. Exit now."
 			exit 1
 		fi
 		# create external facter script package_version.py
