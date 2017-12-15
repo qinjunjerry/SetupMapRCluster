@@ -48,6 +48,13 @@ profile::mapr::prereq::hosts:
   node74: '10.10.70.74'
   node75: '10.10.70.75'
 
+  node87: '10.10.72.87'
+  node88: '10.10.72.88'
+  node89: '10.10.72.89'
+  node90: '10.10.72.90'
+  node91: '10.10.72.91'
+  node92: '10.10.72.92'
+
 # This is used to generate fqdn in /etc/hosts
 profile::mapr::prereq::domain: ucslocal
 
@@ -59,8 +66,8 @@ profile::mapr::repo::mep_version : 3.0.1
 profile::mapr::cluster::cluster_name  : ucsmapr.cluster
 profile::mapr::cluster::cldb_node_list: node67,node68,node69
 profile::mapr::cluster::zk_node_list  : node67,node68,node69
-profile::mapr::cluster::historyserver : node69
 profile::mapr::cluster::oozie_node    : node68
+profile::mapr::cluster::historyserver : node69
 
 profile::mapr::cluster::secure        : true
 profile::mapr::cluster::kerberos      : true

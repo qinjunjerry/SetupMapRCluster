@@ -1,0 +1,12 @@
+---
+
+# MapR versions
+profile::mapr::repo::core_version: 5.2.2
+profile::mapr::repo::mep_version : 3.0.2
+
+# Cluster level settings
+profile::mapr::cluster::cluster_name  : junmapr.cluster
+profile::mapr::cluster::cldb_node_list: node71,node72
+profile::mapr::cluster::zk_node_list  : node71,node72,node73
+profile::mapr::cluster::oozie_node    : node73
+profile::mapr::cluster::historyserver : node74

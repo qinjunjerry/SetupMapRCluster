@@ -1,5 +1,4 @@
 ---
 
 classes:
-  - profile::redhat::epel
-  - profile::kerberos::kdc
+  - role::kerberos_kdc
