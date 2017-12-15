@@ -1,13 +1,14 @@
 #!/bin/sh
 
 if [ $# -lt 2 ]; then
-    echo Usage: $0 cluster_name dns_domain
+    echo Usage: $0 cluster dnsdomain
     exit 1
 fi
 
 CLUSTER_NAME=$1
 CERT_NAME=*.$2
 
+mkdir -p $CLUSTER_NAME/
 
 if [ -e cldb.key -o -e maprserverticket -o -e ssl_keystore -o -e ssl_truststore ]; then
 	echo At least one of cldb.key, maprserverticket, ssl_keystore, and ssl_truststore exists, exiting now.
@@ -20,14 +21,14 @@ if [ `pwd` = '/opt/mapr/conf' ]; then
 fi
 
 # cldb.key
-/opt/mapr/bin/maprcli security genkey -keyfile cldb.key
+/opt/mapr/bin/maprcli security genkey -keyfile $CLUSTER_NAME/cldb.key
 
 # maprserverticket
-/opt/mapr/bin/maprcli security genticket -inkeyfile cldb.key -ticketfile maprserverticket -cluster $CLUSTER_NAME -maprusername mapr -mapruid 5000 -maprgid 5000
+/opt/mapr/bin/maprcli security genticket -inkeyfile $CLUSTER_NAME/cldb.key -ticketfile $CLUSTER_NAME/maprserverticket -cluster $CLUSTER_NAME -maprusername mapr -mapruid 5000 -maprgid 5000
 
 ### generate ssl key/truststore
-sslKeyStore=ssl_keystore
-sslTrustStore=ssl_truststore
+sslKeyStore=$CLUSTER_NAME/ssl_keystore
+sslTrustStore=$CLUSTER_NAME/ssl_truststore
 
 storePass=mapr123
 storeFormat=JKS

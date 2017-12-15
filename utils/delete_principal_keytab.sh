@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -lt 3 ]; then
-    echo Usage: $0 cluster domain node [node ...]
+    echo Usage: $0 cluster dnsdomain node [node ...]
     exit 1
 fi
 
@@ -29,6 +29,6 @@ for node in $*; do
     delete_principal mapr/$node
     delete_principal HTTP/$node
 
-    rm -fr $node
+    rm -fr $CLUSTER_NAME/$node
 done
 

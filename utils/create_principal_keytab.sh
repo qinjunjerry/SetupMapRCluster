@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -lt 3 ]; then
-    echo Usage: $0 cluster domain node [node ...]
+    echo Usage: $0 cluster dnsdomain node [node ...]
     exit 1
 fi
 
@@ -35,10 +35,11 @@ for node in $*; do
     create_principal mapr/$node
     create_principal HTTP/$node
 
-    rm -fr $node
-    mkdir $node
-    kadmin.local -q "ktadd -norandkey -k $node/mapr.keytab mapr/$CLUSTER_NAME"
-    kadmin.local -q "ktadd -norandkey -k $node/mapr.keytab mapr/$node"
-    kadmin.local -q "ktadd -norandkey -k $node/mapr.keytab HTTP/$node"
+    keytab_dir=$CLUSTER_NAME/$node
+    rm -fr $keytab_dir
+    mkdir -p $keytab_dir
+    kadmin.local -q "ktadd -norandkey -k $keytab_dir/mapr.keytab mapr/$CLUSTER_NAME"
+    kadmin.local -q "ktadd -norandkey -k $keytab_dir/mapr.keytab mapr/$node"
+    kadmin.local -q "ktadd -norandkey -k $keytab_dir/mapr.keytab HTTP/$node"
 done
 
