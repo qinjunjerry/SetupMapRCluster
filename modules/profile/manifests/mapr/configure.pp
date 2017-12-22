@@ -49,15 +49,30 @@ class profile::mapr::configure (
     logoutput => on_failure,
     creates   => '/opt/mapr/conf/disktab',
   }
-  ~>
-  service { 'mapr-zookeeper':
-    enable      => true,
-    ensure      => running,
+
+  if defined('Class::profile::mapr::core::zookeeper') {
+
+    service { 'mapr-zookeeper':
+      enable      => true,
+      ensure      => running,
+      require     => Exec['disksetup'],
+    }
+    ~>
+    service { 'mapr-warden':
+      enable      => true,
+      ensure      => running,
+    }
+
+  } else {
+
+    service { 'mapr-warden':
+      enable      => true,
+      ensure      => running,
+      require     => Exec['disksetup'],
+    }
+
   }
-  ~>
-  service { 'mapr-warden':
-    enable      => true,
-    ensure      => running,
-  }
+
+
 
 }
