@@ -25,54 +25,22 @@ class profile::mapr::configure (
     default => ""
   }
 
-  $disk_file = '/tmp/disks.txt'
-
   exec { 'configure.sh':
     command     => join(['/opt/mapr/server/configure.sh',
                          ' ', '-N',  ' ', $profile::mapr::cluster::cluster_name,
                          ' ', '-Z',  ' ', $profile::mapr::cluster::zk_node_list,
                          ' ', '-C',  ' ', $profile::mapr::cluster::cldb_node_list,
                          ' ', '-HS', ' ', $profile::mapr::cluster::historyserver,
+                         ' ', '-D',  ' ', $profile::mapr::cluster::disk_list,
+                         ' ', '-disk-opts', ' ', 'F',
                          ' ', $secure_opt,
                          ' ', $kerberos_opt,
                          ' ', '-nocerts',
-                         ' ', '-no-autostart',
+#                        ' ', '-no-autostart',
                          ' ', '-f',
                        ]),
     logoutput   => on_failure,
     refreshonly => true,
   }
-  ~>
-  exec { 'disksetup':
-    command   => "echo $profile::mapr::cluster::disk_list > $disk_file && /opt/mapr/server/disksetup -F $disk_file",
-    path      => '/usr/bin:/usr/sbin:/bin',
-    logoutput => on_failure,
-    creates   => '/opt/mapr/conf/disktab',
-  }
-
-  if defined('Class::profile::mapr::core::zookeeper') {
-
-    service { 'mapr-zookeeper':
-      enable      => true,
-      ensure      => running,
-      require     => Exec['disksetup'],
-    }
-    ~>
-    service { 'mapr-warden':
-      enable      => true,
-      ensure      => running,
-    }
-
-  } else {
-
-    service { 'mapr-warden':
-      enable      => true,
-      ensure      => running,
-      require     => Exec['disksetup'],
-    }
-
-  }
-
-
 
 }
