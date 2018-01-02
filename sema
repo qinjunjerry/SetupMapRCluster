@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mbox_help() {
+sema_help() {
   cat << EOF
 Usage: $0 command
 
@@ -23,12 +23,12 @@ Common commands:
 EOF
 }
 
-# The base dir of mbox
+# The base dir of sema
 BASE_DIR=$(dirname $(readlink -f $0))
 # The dir to download external (i.e., 3rd party) puppet modules
 EXTERNAL=$BASE_DIR/external
 
-mbox_init() {
+sema_init() {
     # install puppet repo
     if rpm -qa | grep puppet5-release >/dev/null; then
         echo "puppet5-release already installed"
@@ -73,7 +73,7 @@ get_cluster_setting() {
     echo $value
 }
 
-mbox_setup() {
+sema_setup() {
     # set cluster fact if given, the fact is used in heira.yaml
     if [ -f /opt/mapr/conf/mapr-clusters.conf ]; then
         cluster=`cat /opt/mapr/conf/mapr-clusters.conf | head -1 | awk '{print $1}'`
@@ -127,46 +127,53 @@ mbox_setup() {
         $BASE_DIR/environments/$ENVIRON/manifests/default.pp
 }
 
-mbox_start() {
+sema_start() {
     sudo systemctl daemon-reload
-    sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
+    if rpm -qa | grep -q mapr-zookeeper; then
+        sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
+    else
+        sudo systemctl start mapr-warden
+    fi
 }
 
-mbox_stop() {
+sema_stop() {
     sudo systemctl daemon-reload
-    sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
+    if rpm -qa | grep -q mapr-zookeeper; then
+        sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
+    else
+        sudo systemctl stop mapr-zookeeper
 }
 
-mbox_restart() {
-    mbox_stop && mbox_start
+sema_restart() {
+    sema_stop && sema_start
 }
 
-mbox_delmapr() {
+sema_delmapr() {
     sudo yum erase -y mapr-\*
     sudo rm -fr /opt/mapr
 }
 
-mbox_delpuppet() {
+sema_delpuppet() {
     sudo yum erase -y puppet-agent puppet5-release
     sudo rm -fr /opt/puppetlabs
 }
 
-mbox_up() {
-    mbox_init && mbox_setup $1
+sema_up() {
+    sema_init && sema_setup $1
 }
 
-mbox_clean() {
-    mbox_stop
-    mbox_delmapr
+sema_clean() {
+    sema_stop
+    sema_delmapr
 }
 
-mbox_cleanall() {
-    mbox_clean
-    mbox_delpuppet
+sema_cleanall() {
+    sema_clean
+    sema_delpuppet
 }
 
 
-mbox_ldir() {
+sema_ldir() {
     declare -a dir_array=(`ls -d /opt/mapr/*/*-*/{logs,conf,etc/hadoop,desktop/conf} 2>/dev/null`)
 
     for ((i=0; i<${#dir_array[@]}; i++)); do
@@ -179,7 +186,7 @@ mbox_ldir() {
 ##### ##### main ##### #####
 
 if [ $# -eq 0 ]; then
-    mbox_help
+    sema_help
     exit 1
 fi
 
@@ -187,9 +194,9 @@ commandList=(help init setup up start stop restart delmapr delpuppet clean clean
 command=$1
 shift
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
-    mbox_$command $@
+    sema_$command $@
 else
     echo Error: invalid command: $command
     echo
-    mbox_help
+    sema_help
 fi
