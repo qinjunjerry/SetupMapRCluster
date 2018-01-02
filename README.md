@@ -66,5 +66,5 @@ The reason is that the working directory where you run sema has been removed in 
 - To setup a kerberized cluster, this tool uses node70 as the KDC. This works only in our UCS env. To do the setup in a cloud env, one can setup a simliar node like node70 with this tool, referring to hieradata/nodes/node70.ucslocal.yaml.
 
 ### TODO
-- Add more ecosystem component and their configurations
+- Add more ecosystem components and their configurations
 
