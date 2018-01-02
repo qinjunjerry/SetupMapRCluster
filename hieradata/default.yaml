@@ -60,7 +60,7 @@ profile::mapr::prereq::domain: ucslocal
 
 # MapR versions
 profile::mapr::repo::core_version: 5.2.2
-profile::mapr::repo::mep_version : 3.0.1
+profile::mapr::repo::mep_version : 3.0.2
 
 # Cluster name and nodes
 profile::mapr::cluster::cluster_name  : ucsmapr.cluster

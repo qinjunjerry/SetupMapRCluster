@@ -38,37 +38,39 @@ class profile::mapr::ecosystem::hue (
   	require  => Package['mapr-hue'],
   }
 
-  exec { '/tmp/hue_krb5_ccache':
-    command  => "/bin/kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/$hostname",
-    creates  => '/tmp/hue_krb5_ccache',
-    require  => Package['mapr-hue'],
-  }
+  if $profile::mapr::cluster::kerberos == true {
+    exec { '/tmp/hue_krb5_ccache':
+      command  => "/bin/kinit -k -t /opt/mapr/conf/mapr.keytab -c /tmp/hue_krb5_ccache mapr/$hostname",
+      creates  => '/tmp/hue_krb5_ccache',
+      require  => Package['mapr-hue'],
+    }
 
-  file_line {'hue_keytab in hue.ini':
-    ensure   => 'present',
-    path     => $cfgfile,
-    line     => '    hue_keytab=/opt/mapr/conf/mapr.keytab',
-    after    => "# Path to Hue's Kerberos keytab file",
-    match    => '^\s*hue_keytab\=',
-    require  => Package['mapr-hue'],
-  }
+    file_line {'hue_keytab in hue.ini':
+      ensure   => 'present',
+      path     => $cfgfile,
+      line     => '    hue_keytab=/opt/mapr/conf/mapr.keytab',
+      after    => "# Path to Hue's Kerberos keytab file",
+      match    => '^\s*hue_keytab\=',
+      require  => Package['mapr-hue'],
+    }
 
-  file_line {'hue_principal in hue.ini':
-    ensure   => 'present',
-    path     => $cfgfile,
-    line     => "    hue_principal=mapr/$hostname",
-    after    => "# Kerberos principal name for Hue",
-    match    => '^\s*hue_principal\=',
-    require  => Package['mapr-hue'],
-  }
+    file_line {'hue_principal in hue.ini':
+      ensure   => 'present',
+      path     => $cfgfile,
+      line     => "    hue_principal=mapr/$hostname",
+      after    => "# Kerberos principal name for Hue",
+      match    => '^\s*hue_principal\=',
+      require  => Package['mapr-hue'],
+    }
 
-  file_line {'kinit_path in hue.ini':
-    ensure   => 'present',
-    path     => $cfgfile,
-    line     => '    kinit_path=/bin/kinit',
-    after    => '# Path to kini',
-    match    => '^\s*kinit_path\=',
-    require  => Package['mapr-hue'],
+    file_line {'kinit_path in hue.ini':
+      ensure   => 'present',
+      path     => $cfgfile,
+      line     => '    kinit_path=/bin/kinit',
+      after    => '# Path to kini',
+      match    => '^\s*kinit_path\=',
+      require  => Package['mapr-hue'],
+    }
   }
 
   $oozie_node=$profile::mapr::cluster::oozie_node

@@ -1,7 +1,7 @@
 ---
 
 classes:
-  - role::cluster_node_history
+  - role::cluster_node_history_sec
 
   - profile::mapr::core::zookeeper
 

@@ -1,0 +1,13 @@
+---
+
+# MapR versions
+profile::mapr::repo::core_version: 5.2.1
+profile::mapr::repo::mep_version : 3.0.0
+
+# Cluster level settings
+profile::mapr::cluster::cluster_name  : m521m300.cluster
+profile::mapr::cluster::cldb_node_list: node87,node88
+profile::mapr::cluster::zk_node_list  : node87,node88,node89
+profile::mapr::cluster::oozie_node    : node89
+profile::mapr::cluster::historyserver : node89
+

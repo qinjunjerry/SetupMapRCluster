@@ -1,7 +1,7 @@
 ---
 
 classes:
-  - role::cluster_node
+  - role::cluster_node_sec
 
   - profile::mapr::core::zookeeper
   - profile::mapr::core::resourcemanager
