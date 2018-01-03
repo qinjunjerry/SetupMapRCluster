@@ -29,10 +29,14 @@ class profile::mapr::ecosystem::hue (
   # This requires that httpfs must run on the Hue node
   # In case of multiple httpfs, httpfs must setup as active-active instead of active-standby
   $hostname = fact('networking.fqdn')
+  $protocol = $profile::mapr::cluster::secure ? {
+    true    => 'https',
+    default => 'http'
+  }
   file_line {'webhdfs_url in hue.ini':
   	ensure   => 'present',
   	path     => $cfgfile,
-    line     => "      webhdfs_url=https://${hostname}:14000/webhdfs/v1",
+    line     => "      webhdfs_url=${protocol}://${hostname}:14000/webhdfs/v1",
   	after    => '# Default port is 14000 for HttpFs.',
   	match    => '^\s*webhdfs_url\=',
   	require  => Package['mapr-hue'],

@@ -15,17 +15,19 @@ class profile::mapr::ecosystem::httpfs (
   package { 'mapr-httpfs':
     ensure  => present,
   }
-  ->
-  profile::hadoop::xmlconf_property {
-  	default: file=>$file;
-    "httpfs.authentication.type"                     : value =>"kerberos";
-    "httpfs.hadoop.authentication.type"              : value =>"kerberos";
-    "httpfs.hadoop.authentication.kerberos.principal": value =>"mapr/$hostname";
-    "httpfs.hadoop.authentication.kerberos.keytab"   : value =>"/opt/mapr/conf/mapr.keytab";
-    "httpfs.authentication.kerberos.name.rules"      : value =>"DEFAULT";
+
+  if $profile::mapr::cluster::kerberos == true {
+    profile::hadoop::xmlconf_property {
+    	default: file=>$file, require=>Package['mapr-httpfs'];
+      "httpfs.authentication.type"                     : value =>"kerberos";
+      "httpfs.hadoop.authentication.type"              : value =>"kerberos";
+      "httpfs.hadoop.authentication.kerberos.principal": value =>"mapr/$hostname";
+      "httpfs.hadoop.authentication.kerberos.keytab"   : value =>"/opt/mapr/conf/mapr.keytab";
+      "httpfs.authentication.kerberos.name.rules"      : value =>"DEFAULT";
+    }
   }
-  ->
-  # needed by hue to find the active httpfs
+
+  # Needed by hue to find the active httpfs
   file_line { 'warden.httpfs.conf: services=httpfs:3':
     ensure             => 'present',
     path               => '/opt/mapr/conf/conf.d/warden.httpfs.conf',
@@ -33,6 +35,7 @@ class profile::mapr::ecosystem::httpfs (
     match              => '^services\=httpfs:1',
     append_on_no_match => false,
     notify             => Class['profile::mapr::warden_restart'],
+    require            => Package['mapr-httpfs'],
   }
 
 

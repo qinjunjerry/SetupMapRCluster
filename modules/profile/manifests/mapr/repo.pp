@@ -20,5 +20,11 @@ class profile::mapr::repo (
     ensure  => present,
     content => epp('profile/mapr/repo/mapr.repo.epp'),
   }
+  ~>
+  exec { 'yum clean all':
+    command     => '/usr/bin/yum clean all',
+    logoutput   => on_failure,
+    refreshonly => true,
+  }
 
 }

@@ -85,7 +85,7 @@ sema_setup() {
 
     if [ -z $cluster ]; then
         # this is used to setup nodes like KDC
-        echo "INFO: setup non-cluster node"
+        echo "INFO: setup non-cluster node. Specify 'cluster' at command line to setup a cluster node."
     else
         export FACTER_cluster=$cluster
 
@@ -142,6 +142,7 @@ sema_stop() {
         sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
     else
         sudo systemctl stop mapr-zookeeper
+    fi
 }
 
 sema_restart() {

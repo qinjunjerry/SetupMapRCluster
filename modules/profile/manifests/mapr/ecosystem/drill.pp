@@ -50,11 +50,55 @@ class profile::mapr::ecosystem::drill (
     source  => 'puppet:///modules/profile/mapr/ecosystem/drill/drill',
   }
   ->
-  file { 'drill-override.conf':
-    ensure  => file,
-    path    => "$drill_home/conf/drill-override.conf",
-    content => epp('profile/mapr/ecosystem/drill/drill-override.conf.epp'),
-    require => Package['mapr-drill'],
+##file { 'drill-override.conf':
+##  ensure  => file,
+##  path    => "$drill_home/conf/drill-override.conf",
+##  content => epp('profile/mapr/ecosystem/drill/drill-override.conf.epp'),
+##  require => Package['mapr-drill'],
+##}
+  hocon_setting {
+    default:
+        ensure  => present,
+        path    => "$drill_home/conf/drill-override.conf";
+    'drill.exec.cluster-id':
+        value   => "${cluster_id}-drillbits";
+    'drill.exec.zk.connect':
+        value   => $zk_connect;
+    'drill.exec.impersonation.enabled':
+        value   => true;
+    'drill.exec.impersonation.max_chained_user_hops':
+        value   => 3;
+    'drill.exec.security.auth.mechanisms':
+        value   => ['MAPRSASL', 'PLAIN'];
+    'drill.exec.security.user.auth.enabled':
+        value   => true;
+    'drill.exec.security.user.auth.packages':
+        value   => 'org.apache.drill.exec.rpc.user.security',
+        type    => 'array_element';
+    'drill.exec.security.user.auth.impl':
+        value   => 'pam';
+    'drill.exec.security.user.auth.pam_profiles':
+        value   => ['drill'],
+        type    => 'array';
+  }
+
+  if $profile::mapr::cluster::kerberos == true {
+    hocon_setting {
+      default:
+          ensure  => present,
+          require => Package['mapr-drill'],
+          path    => "$drill_home/conf/drill-override.conf";
+      'drill.exec.http.ssl_enabled':
+          value   => true;
+      'drill.exec.javax.net.ssl.keyStore':
+          value   => '/opt/mapr/conf/ssl_keystore';
+      'drill.exec.javax.net.ssl.keyStorePassword':
+          value   => 'mapr123';
+      'drill.exec.javax.net.ssl.trustStore':
+          value   => '/opt/mapr/conf/ssl_truststore';
+      'drill.exec.javax.net.ssl.trustStorePassword':
+          value   => 'mapr123';
+    }
   }
 
   # Bug fix: java.lang.UnsatisfiedLinkError: no jpam in java.library.path

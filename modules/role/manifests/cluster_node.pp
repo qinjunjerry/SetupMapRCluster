@@ -9,6 +9,9 @@ class role::cluster_node {
   include profile::mapr::core::nodemanager
   include profile::mapr::core::rm_nm_common
 
+  include profile::mapr::sasl
+  include profile::mapr::kerberos
+
   include profile::mapr::ecosystem::httpfs
   include profile::mapr::ecosystem::spark
   include profile::mapr::ecosystem::drill
