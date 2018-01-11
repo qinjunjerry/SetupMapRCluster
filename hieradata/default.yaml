@@ -55,6 +55,8 @@ profile::mapr::prereq::hosts:
   node91: '10.10.72.91'
   node92: '10.10.72.92'
 
+  artifactory.devops.lab: '10.10.1.23'
+
 # This is used to generate fqdn in /etc/hosts
 profile::mapr::prereq::domain: ucslocal
 
