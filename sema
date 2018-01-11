@@ -143,6 +143,8 @@ sema_stop() {
     else
         sudo systemctl stop mapr-zookeeper
     fi
+    echo "[VERIFY] check running mapr processes ..."
+    ps -fu mapr
 }
 
 sema_restart() {
@@ -152,6 +154,8 @@ sema_restart() {
 sema_delmapr() {
     sudo yum erase -y mapr-\*
     sudo rm -fr /opt/mapr
+    echo "[VERIFY] check installed mapr packages ..."
+    rpm -qa | grep mapr
 }
 
 sema_delpuppet() {
@@ -166,6 +170,8 @@ sema_up() {
 sema_clean() {
     sema_stop
     sema_delmapr
+    echo "[VERIFY] check running mapr processes ..."
+    ps -fu mapr
 }
 
 sema_cleanall() {
