@@ -36,6 +36,8 @@ class profile::mapr::configure (
                          ' ', $secure_opt,
                          ' ', $kerberos_opt,
                          ' ', '-nocerts',
+                         # to reduce memory requirement
+                         ' ', '--isvm',
 #                        ' ', '-no-autostart',
                          ' ', '-f',
                        ]),
