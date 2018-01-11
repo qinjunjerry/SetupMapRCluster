@@ -1,7 +1,7 @@
 ---
 
 classes:
-  - role::cluster_node_history_sec
+  - role::cluster_node_history
 
   - profile::mapr::core::resourcemanager
   - profile::mapr::ecosystem::hivewebhcat
