@@ -148,7 +148,8 @@ sema_stop() {
 }
 
 sema_restart() {
-    sema_stop && sema_start
+    sema_stop
+    sema_start
 }
 
 sema_delmapr() {
