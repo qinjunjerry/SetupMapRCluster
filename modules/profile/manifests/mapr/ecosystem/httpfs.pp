@@ -35,7 +35,7 @@ class profile::mapr::ecosystem::httpfs (
     match              => '^services\=httpfs:1',
     append_on_no_match => false,
     notify             => Class['profile::mapr::warden_restart'],
-    require            => Package['mapr-httpfs'],
+    require            => [Package['mapr-httpfs'], Exec['Run configure.sh -R']]
   }
 
 
