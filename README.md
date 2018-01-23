@@ -16,9 +16,10 @@ This tool development is in progress. Not all ecosystem components have been add
   - You can set variables in `hieradata/default.yaml` directly if you manage **only one** cluster with this tool
 - For each node in your cluster, create `hieradata/<clustername>/<nodefqdn>.yaml`, add the profiles/roles you want to have on that node
 - For a secure cluster, generate the needed files on node70 (10.10.70.70):
+  - Add your cluster nodes into /etc/hosts on node70
   - `cd /root/intputfiles`
   - For MapR SASL secured cluster, generate cldb key files:
-    - `/root/MapRSetup/utils/create_cldb_keyfile.sh <clustername> <dnsdomain>`
+    - `/root/MapRSetup/utils/create_cldb_keyfile.sh <clustername> <dnsdomain> node1 node2 ...`
   - For Kerberos secured cluster, generate kerberos keytab files
       - `cd /root/intputfiles`
       - `/root/MapRSetup/utils/create_principal_keytab.sh <clustername> <dnsdomain> node1 node2 ...`
