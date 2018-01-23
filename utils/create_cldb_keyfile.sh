@@ -9,6 +9,7 @@ CLUSTER_NAME=$1
 DNS_DOMAIN=$2
 shift
 shift
+nodes=$*
 
 mkdir -p $CLUSTER_NAME/
 
@@ -40,7 +41,7 @@ fi
 storePass=mapr123
 storeFormat=JKS
 
-for node in $*; do
+for node in $nodes; do
 
   CERT_NAME=$node.$DNS_DOMAIN
 
@@ -49,12 +50,12 @@ for node in $*; do
   sslKeyStore=$CLUSTER_NAME/$CERT_NAME/ssl_keystore
   sslTrustStore=$CLUSTER_NAME/$CERT_NAME/ssl_truststore
 
-  IP_ADDR=`hostname -i`
+  IP_ADDR=`cat /etc/hosts | grep -w $node | awk '{print $1}'`
 
   # ssl_keystore
   # create self signed certificate with private key
   echo "Creating 10 year self signed certificate with subjectDN=CN=$CERT_NAME"
-  $KEYTOOL -genkeypair -sigalg SHA512withRSA -keyalg RSA -alias $CLUSTER_NAME -dname CN=$CERT_NAME -validity 3650 \
+  $KEYTOOL -genkeypair -sigalg SHA512withRSA -keyalg RSA -alias $node.$CLUSTER_NAME -dname CN=$CERT_NAME -validity 3650 \
          -ext "san=dns:$node,ip:$IP_ADDR" \
          -storepass $storePass -keypass $storePass \
          -keystore $sslKeyStore -storetype $storeFormat
@@ -68,17 +69,25 @@ for node in $*; do
   tmpfile=$sslTrustStore.tmp
   rm -f $tmpfile
   $KEYTOOL -exportcert -keystore $sslKeyStore -file $tmpfile \
-         -alias $CLUSTER_NAME -storepass $storePass -storetype $storeFormat
+         -alias $node.$CLUSTER_NAME -storepass $storePass -storetype $storeFormat
   if [ $? -ne 0 ]; then
       echo "Keytool command to extract certificate from key store failed"
       exit 1
   fi
   $KEYTOOL -importcert -keystore $sslTrustStore -file $tmpfile \
-          -alias $CLUSTER_NAME -storepass $storePass -noprompt
+          -alias $node.$CLUSTER_NAME -storepass $storePass -noprompt
   if [ $? -ne 0 ]; then
       echo "Keytool command to create trust store failed"
       exit 1
   fi
   rm -f $tmpfile
 
+done
+
+### merge individual truststore into one
+read -r -a node_array <<< "$nodes"
+mv $CLUSTER_NAME/${node_array[0]}.$DNS_DOMAIN/ssl_truststore $CLUSTER_NAME/
+for node in ${node_array[@]:1}; do
+    /opt/mapr/server/manageSSLKeys.sh merge $CLUSTER_NAME/$node.$DNS_DOMAIN/ssl_truststore $CLUSTER_NAME/ssl_truststore
+    rm $CLUSTER_NAME/$node.$DNS_DOMAIN/ssl_truststore
 done
