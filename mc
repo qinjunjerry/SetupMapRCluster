@@ -144,12 +144,15 @@ sema_stop() {
         sudo systemctl stop mapr-zookeeper
     fi
     echo "[VERIFY] check running mapr processes ..."
-    ps -fu mapr
+    if ps -fu mapr; then
+        false
+    else
+        true
+    fi
 }
 
 sema_restart() {
-    sema_stop
-    sema_start
+    sema_stop && sema_start
 }
 
 sema_delmapr() {
@@ -169,15 +172,17 @@ sema_up() {
 }
 
 sema_clean() {
-    sema_stop
-    sema_delmapr
+    sema_stop && sema_delmapr
     echo "[VERIFY] check running mapr processes ..."
-    ps -fu mapr
+    if ps -fu mapr; then
+        false
+    else
+        true
+    fi
 }
 
 sema_cleanall() {
-    sema_clean
-    sema_delpuppet
+    sema_clean && sema_delpuppet
 }
 
 
