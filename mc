@@ -23,7 +23,7 @@ Common commands:
 EOF
 }
 
-# The base dir of sema
+# The base dir of mc
 BASE_DIR=$(dirname $(readlink -f $0))
 # The dir to download external (i.e., 3rd party) puppet modules
 EXTERNAL=$BASE_DIR/external

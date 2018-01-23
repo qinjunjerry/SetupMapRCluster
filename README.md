@@ -4,7 +4,7 @@
 
 This tool facilitates the setup of MapR clusters using Puppet. Starting from a fresh installed OS. It downloads & installs puppet and then runs 'puppet apply' (aka. puppet master-less mode) to do the setup. There is no need for any puppet infrastructure in place in advance.
 
-The purpose is to provide a tool such that one can setup & configure an unsecure or MapR-SASL/Kerberos secured MapR cluster in the way he/she wants in a few steps. And once the configuration has been added into puppet hiera, the same/similar cluster can be setup with one command `sema up`.
+The purpose is to provide a tool such that one can setup & configure an unsecure or MapR-SASL/Kerberos secured MapR cluster in the way he/she wants in a few steps. And once the configuration has been added into puppet hiera, the same/similar cluster can be setup with one command `mc up`.
 
 This tool development is in progress. Not all ecosystem components have been added. You are welcome to contribute via pull requests :)
 
@@ -25,11 +25,11 @@ This tool development is in progress. Not all ecosystem components have been add
   - Copy `node70:/root/intputfiles/<clustername>` to `inputfiles/`
 - Copy the entire prepared directory to each individual node
 - To install puppet and puppet modules, run under `root` or an account which can sudo to root:
-  `sema init`
+  `mc init`
 - To install configure and start the MapR cluster, run under `root` or an account which can sudo to root:
-  `sema setup`
+  `mc setup`
 - Or combine both steps above with:
-  `sema up`
+  `mc up`
 
 ### FAQ
 
@@ -52,14 +52,14 @@ Include the following into the corresponding module, for example for module prof
  ```
 #### How to solve "shell-init: error retrieving current directory ... unhandled exception: boost::filesystem::current_path: No such file or directory"?
 
-You may see the following error when run 'sema setup'/'sema up':
+You may see the following error when run 'mc setup'/'mc up':
 
     shell-init: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
     2017-12-04 16:46:09.627479 FATAL puppetlabs.facter - unhandled exception: boost::filesystem::current_path: No such file or directory
     terminate called after throwing an instance of 'boost::filesystem::filesystem_error'
     what():  boost::filesystem::current_path: No such file or directory
 
-The reason is that the working directory where you run sema has been removed in a different shell session or by a different app. Change to any existing directory should solve the issue.
+The reason is that the working directory where you run mc has been removed in a different shell session or by a different app. Change to any existing directory should solve the issue.
 
 ### Limitations
 - This tool now supports only CentOS/RedHat.
