@@ -141,7 +141,7 @@ sema_stop() {
     if rpm -qa | grep -q mapr-zookeeper; then
         sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
     else
-        sudo systemctl stop mapr-zookeeper
+        sudo systemctl stop mapr-warden
     fi
     echo "[VERIFY] check running mapr processes ..."
     if ps -fu mapr; then
