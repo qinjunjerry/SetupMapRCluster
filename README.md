@@ -15,14 +15,16 @@ This tool development is in progress. Not all ecosystem components have been add
 - Review the variables in `hieradata/default.yaml` (e.g., cluster name, MapR core and MEP version, etc.) and override them in `hieradata/<clustername>/cluster.yaml`
   - You can set variables in `hieradata/default.yaml` directly if you manage **only one** cluster with this tool
 - For each node in your cluster, create `hieradata/<clustername>/<nodefqdn>.yaml`, add the profiles/roles you want to have on that node
-- For a secure cluster, generate the needed files on node70 (10.10.70.70):
+- For a secure cluster, generate the needed files and database on node70 (10.10.70.70):
   - Add your cluster nodes into /etc/hosts on node70
   - `cd /root/intputfiles`
   - For MapR SASL secured cluster, generate cldb key files:
-    - `/root/MapRSetup/utils/create_cldb_keyfile.sh <clustername> <dnsdomain> node1 node2 ...`
+    - `/root/SetupMapRCluster/utils/create_cldb_keyfile.sh <clustername> <dnsdomain> node1 node2 ...`
   - For Kerberos secured cluster, generate kerberos keytab files
       - `cd /root/intputfiles`
-      - `/root/MapRSetup/utils/create_principal_keytab.sh <clustername> <dnsdomain> node1 node2 ...`
+      - `/root/SetupMapRCluster/utils/create_principal_keytab.sh <clustername> <dnsdomain> node1 node2 ...`
+  - To use the mysql server on node70 for hive metastore, run:
+    - `/root/SetupMapRCluster/utils/create_hive_meta.sh <clustername> <hivemeta_node>`
   - Copy `node70:/root/intputfiles/<clustername>` to `inputfiles/`
 - Copy the entire prepared directory to each individual node
 - To install puppet and puppet modules, run under `root` or an account which can sudo to root:
