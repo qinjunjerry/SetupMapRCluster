@@ -6,7 +6,7 @@ class profile::bash (
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    content => epp('profile/bash/mc.sh.epp'),
+    content => epp('profile/bash/mapr.sh.epp'),
   }
 
 }
