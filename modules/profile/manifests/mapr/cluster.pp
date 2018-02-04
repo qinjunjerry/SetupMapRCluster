@@ -12,6 +12,10 @@ class profile::mapr::cluster (
   $secure         = $profile::mapr::cluster::secure,
   $kerberos       = $profile::mapr::cluster::kerberos,
   $disk_list      = $profile::mapr::cluster::disk_list,
+
+  $mysql_node     = $profile::mapr::cluster::mysql_node,
+  $hive_meta_node = $profile::mapr::cluster::hive_meta_node,
+
 ) {
 
 }
