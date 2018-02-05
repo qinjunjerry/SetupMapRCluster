@@ -87,4 +87,18 @@ class profile::mapr::prereq (
     password   => '$6$lF68yer5CX$hGkROyp0TLcgNPHKCgXKb2Ckr27YV/7.Y.63dTjAHCCnaXYZXpelFXUZE5w.nbh4ugiMXXq5gtDwimd418ryV1',
   }
 
+  ### hive user, passwd is 'mapr'
+  ### This is needed by beeline to connect to a kerberized hive server2
+  group { 'hive':
+    ensure => present,
+    gid    => 5001,
+  } ->
+  user { 'hive':
+    ensure     => present,
+    managehome => true,
+    uid        => 5001,
+    gid        => 'hive',
+    password   => '$6$lF68yer5CX$hGkROyp0TLcgNPHKCgXKb2Ckr27YV/7.Y.63dTjAHCCnaXYZXpelFXUZE5w.nbh4ugiMXXq5gtDwimd418ryV1',
+  }
+
 }
