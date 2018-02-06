@@ -9,7 +9,12 @@ define profile::hadoop::xmlconf_property (
   $ensure      = 'present',
 ) {
 
-  $property_name = $title
+  if '@' in $title {
+    # title is form of 'property@namespace' in order to be unique
+    $property_name = split($title,'@')[0]
+  } else {
+    $property_name = $title
+  }
 
   case $ensure {
 

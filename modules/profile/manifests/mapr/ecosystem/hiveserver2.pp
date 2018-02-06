@@ -28,7 +28,7 @@ class profile::mapr::ecosystem::hiveserver2 (
       notify => Class['profile::mapr::warden_restart'];
 
     "hive.server2.enable.doAs"                   : value =>"true";
-    "hive.metastore.execute.setugi"              : value =>"true";
+    "hive.metastore.execute.setugi@hs2"          : value =>"true";
   }
 
   # Needed when using mysql for hive metastore
@@ -38,7 +38,7 @@ class profile::mapr::ecosystem::hiveserver2 (
       file   => $cfgfile,
       notify => Class['profile::mapr::warden_restart'];
 
-    "hive.metastore.uris" : value => "thrift://$hive_meta_node:9083";
+    "hive.metastore.uris@hs2" : value => "thrift://$hive_meta_node:9083";
   }
 
   # Configure Hive Server2 to use kerberos
@@ -51,10 +51,10 @@ class profile::mapr::ecosystem::hiveserver2 (
     "hive.server2.authentication"                   : value => 'KERBEROS';
     "hive.server2.authentication.kerberos.keytab"   : value => '/opt/mapr/conf/mapr.keytab';
     "hive.server2.authentication.kerberos.principal": value => "mapr/$hostname@$::profile::kerberos::default_realm";
-    "hive.metastore.kerberos.principal"             : value => "mapr/$hive_meta_node@$::profile::kerberos::default_realm";
+    "hive.metastore.kerberos.principal@hs2"         : value => "mapr/$hive_meta_node@$::profile::kerberos::default_realm";
   }
   ->
-  file_line { 'MAPR_HIVE_LOGIN_OPTS in /opt/mapr/conf/env.sh':
+  file_line { 'MAPR_HIVE_LOGIN_OPTS in /opt/mapr/conf/env.sh@hs2':
     ensure   => 'present',
     path     => '/opt/mapr/conf/env.sh',
     line     => '    MAPR_HIVE_LOGIN_OPTS="-Dhadoop.login=hybrid"',
@@ -62,7 +62,7 @@ class profile::mapr::ecosystem::hiveserver2 (
     notify   => Class['profile::mapr::warden_restart'],
   }
   ->
-  file_line { 'MAPR_HIVE_SERVER_LOGIN_OPTS in /opt/mapr/conf/env.sh':
+  file_line { 'MAPR_HIVE_SERVER_LOGIN_OPTS in /opt/mapr/conf/env.sh@hs2':
     ensure   => 'present',
     path     => '/opt/mapr/conf/env.sh',
     line     => '    MAPR_HIVE_SERVER_LOGIN_OPTS="-Dhadoop.login=hybrid"',
@@ -70,7 +70,7 @@ class profile::mapr::ecosystem::hiveserver2 (
     notify   => Class['profile::mapr::warden_restart'],
   }
   ->
-  file_line { "HADOOP_OPTS in /opt/mapr/hive/hive-$version/bin/ext/beeline.sh":
+  file_line { "HADOOP_OPTS in /opt/mapr/hive/hive-$version/bin/ext/beeline.sh@hs2":
     ensure   => 'present',
     path     => "/opt/mapr/hive/hive-$version/bin/ext/beeline.sh",
     line     => '  export HADOOP_OPTS="$HADOOP_OPTS ${KERBEROS_LOGIN_OPTS}"',

@@ -50,11 +50,11 @@ class profile::mapr::ecosystem::spark (
     default:
       file   => $hive_cfgfile;
 
-    "hive.metastore.execute.setugi "     : value => 'true';
-    "hive.metastore.uris "               : value => "thrift://$hive_meta_node:9083";
-    "hive.metastore.kerberos.principal " : value => "mapr/$hive_meta_node@$::profile::kerberos::default_realm";
-    "spark.yarn.dist.files"             : value => "$hive_cfgfile";
-    "spark.sql.hive.metastore.version"  : value => '1.2.1';
+    "hive.metastore.execute.setugi@spark"     : value => 'true';
+    "hive.metastore.uris@spark"               : value => "thrift://$hive_meta_node:9083";
+    "hive.metastore.kerberos.principal@spark" : value => "mapr/$hive_meta_node@$::profile::kerberos::default_realm";
+    "spark.yarn.dist.files"                   : value => "$hive_cfgfile";
+    "spark.sql.hive.metastore.version"        : value => '1.2.1';
   }
 
 }
