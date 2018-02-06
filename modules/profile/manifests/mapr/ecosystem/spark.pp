@@ -12,6 +12,11 @@ class profile::mapr::ecosystem::spark (
   require profile::mapr::configure
 
 
+  include profile::mapr::cluster
+  include profile::kerberos
+  $hive_meta_node = $profile::mapr::cluster::hive_meta_node
+
+
   package { 'mapr-spark':
     ensure  => present,
     notify  => Class['profile::mapr::configure_r'],
@@ -38,5 +43,18 @@ class profile::mapr::ecosystem::spark (
   #   <name>yarn.nodemanager.local-dirs</name>
   #   <value>/mapr/my.cluster.com/var/mapr/local/${mapr.host}/spark</value>
   # </property>
+
+  # To integrate Spark-SQL with Hive
+  $hive_cfgfile = "$spark_home/conf/hive-site.xml"
+  profile::hadoop::xmlconf_property {
+    default:
+      file   => $hive_cfgfile;
+
+    "hive.metastore.execute.setugi "     : value => 'true';
+    "hive.metastore.uris "               : value => "thrift://$hive_meta_node:9083";
+    "hive.metastore.kerberos.principal " : value => "mapr/$hive_meta_node@$::profile::kerberos::default_realm";
+    "spark.yarn.dist.files"             : value => "$hive_cfgfile";
+    "spark.sql.hive.metastore.version"  : value => '1.2.1';
+  }
 
 }
