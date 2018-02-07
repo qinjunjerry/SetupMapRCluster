@@ -157,7 +157,7 @@ sema_restart() {
 
 sema_delmapr() {
     sudo yum erase -y mapr-\*
-    sudo rm -fr /opt/mapr
+    sudo rm -fr /opt/mapr /etc/yum.repos.d/mapr.repo
     echo "[VERIFY] check installed mapr packages ..."
     rpm -qa | grep mapr
 }
