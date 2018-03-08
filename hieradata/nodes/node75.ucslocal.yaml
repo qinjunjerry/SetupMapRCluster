@@ -1,0 +1,13 @@
+---
+
+classes:
+  - role::client_node
+  - profile::mapr::core::posix_fuse
+
+
+# Cluster level settings
+profile::mapr::client::cluster_name  : ucsmapr.cluster
+profile::mapr::client::cldb_node_list: node67,node68,node69
+profile::mapr::client::zk_node_list  : node67,node68,node69
+profile::mapr::client::historyserver : node69
+profile::mapr::client::secure        : false
