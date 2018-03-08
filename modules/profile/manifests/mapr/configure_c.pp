@@ -5,19 +5,19 @@
 
 class profile::mapr::configure_c (
 ) {
+  include profile::mapr::client
 
-  require profile::mapr::sasl
-  require profile::mapr::kerberos
-
-  include profile::mapr::cluster
-
+  $secure_opt = $profile::mapr::client::secure ? {
+    true    => "-secure",
+    default => ""
+  }
   # run configure_mapr.sh -c
   exec { 'Run configure.sh -c':
     command     => join(['/usr/bin/sudo /opt/mapr/server/configure.sh',
-                         ' ', '-N', ' ', $profile::mapr::cluster::cluster_name,
-                         ' ', '-Z', ' ', $profile::mapr::cluster::zk_node_list,
-                         ' ', '-C', ' ', $profile::mapr::cluster::cldb_node_list,
-                         ' ', $profile::mapr::cluster::secure,
+                         ' ', '-N', ' ', $profile::mapr::client::cluster_name,
+                         ' ', '-Z', ' ', $profile::mapr::client::zk_node_list,
+                         ' ', '-C', ' ', $profile::mapr::client::cldb_node_list,
+                         ' ', $secure_opt,
                          ' ', '-c'
                        ]),
     refreshonly => true,
