@@ -9,4 +9,4 @@ classes:
   - profile::mapr::core::resourcemanager
 
   - profile::mapr::ecosystem::hivemetastore
-  - profile::mapr::ecosystem::oozie
+# - profile::mapr::ecosystem::oozie
