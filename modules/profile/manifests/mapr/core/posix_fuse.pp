@@ -13,6 +13,14 @@ class profile::mapr::core::posix_fuse (
   package { 'mapr-posix-client-basic':
     ensure  => present,
     notify  => Class['profile::mapr::configure_c'],
+    require => Class['profile::mapr::client'],
   }
-
+  ->
+  file { '/mapr' :
+  	ensure => directory,
+  }
+  ->
+  service { 'mapr-posix-client-basic':
+  	ensure => running,
+  }
 }
