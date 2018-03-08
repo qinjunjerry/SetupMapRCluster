@@ -18,4 +18,6 @@ class role::cluster_node {
 
   include profile::mapr::warden_restart
 
+  include profile::mapr::configure
+
 }
