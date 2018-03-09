@@ -7,6 +7,7 @@ class profile::mapr::core::rm_nm_common (
 ) {
 
   include profile::kerberos
+  include profile::mapr::cluster
 
   # Needed by Hive/Hue impersonation
   # https://maprdocs.mapr.com/52/Hive/HiveUserImpersonation-Enable.html

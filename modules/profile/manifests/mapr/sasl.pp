@@ -6,10 +6,10 @@
 class profile::mapr::sasl (
 ) {
 
+  include profile::mapr::cluster
+
   if $profile::mapr::cluster::secure == true {
     require profile::mapr::core::core
-
-    include profile::mapr::cluster
 
     $hostname = fact('networking.fqdn')
 

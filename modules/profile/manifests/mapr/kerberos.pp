@@ -6,12 +6,13 @@
 class profile::mapr::kerberos (
 ) {
 
+  include profile::mapr::cluster
+
   if $profile::mapr::cluster::kerberos == true {
     require profile::mapr::prereq
     require profile::mapr::sasl
 
     include profile::kerberos
-    include profile::mapr::cluster
 
     $hostname = fact('networking.fqdn')
 
