@@ -3,6 +3,8 @@
 classes:
   - role::client_node
   - profile::mapr::core::posix_fuse
+  - profile::mapr::ecosystem::spark
+  #TODO: cp from cluster node: /opt/mapr/hadoop/hadoop-2.7.0//share/hadoop/yarn/hadoop-yarn-server-web-proxy-*.jar
 
 
 # Cluster level settings

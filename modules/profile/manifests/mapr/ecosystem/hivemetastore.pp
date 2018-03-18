@@ -66,6 +66,7 @@ class profile::mapr::ecosystem::hivemetastore (
   }
 
   # Configure Hive metastore to use kerberos
+  #TODO: check security flag
   ->
   profile::hadoop::xmlconf_property {
     default:
