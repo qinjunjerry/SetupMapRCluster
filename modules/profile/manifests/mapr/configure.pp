@@ -25,6 +25,17 @@ class profile::mapr::configure (
     default => ""
   }
 
+  if $profile::mapr::cluster::secure == true {
+    file_line { 'fix configure.sh for secure oozie':
+      ensure             => 'present',
+      path               => '/opt/mapr/server/configure.sh',
+      line               => "      cmd=\"\$oozieDir/bin/oozie-setup.sh -hadoop \"\$hadoopVersion\" \"\${hadoopBase}/hadoop-\${hadoopVersion}\" $secure_opt\"",
+      match              => '\s+cmd\="\$oozieDir/bin/oozie-setup.sh -hadoop "\$hadoopVersion" "\${hadoopBase}/hadoop-\${hadoopVersion}""$',
+      append_on_no_match => false,
+      before             => Exec['configure.sh'],
+    }
+  }
+
   exec { 'configure.sh':
     command     => join(['/opt/mapr/server/configure.sh',
                          ' ', '-N',  ' ', $profile::mapr::cluster::cluster_name,
@@ -38,6 +49,7 @@ class profile::mapr::configure (
                          ' ', '-nocerts',
                          # to reduce memory requirement
                          ' ', '--isvm',
+                         ' ', '-noDB',
 #                        ' ', '-no-autostart',
                          ' ', '-f',
                        ]),
