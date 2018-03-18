@@ -8,5 +8,12 @@ profile::mapr::repo::mep_version : 4.0.0
 profile::mapr::cluster::cluster_name  : qinmapr.cluster
 profile::mapr::cluster::cldb_node_list: node64
 profile::mapr::cluster::zk_node_list  : node64,node65,node66
-profile::mapr::cluster::oozie_node    : node65
 profile::mapr::cluster::historyserver : node66
+
+#profile::mapr::cluster::secure        : false
+#profile::mapr::cluster::kerberos      : false
+
+profile::mapr::cluster::hive_meta_node: node65
+profile::mapr::cluster::mysql_node    : node70
+
+profile::mapr::cluster::oozie_node    : node65
