@@ -45,20 +45,10 @@ class profile::mapr::ecosystem::spark_hdfs_env (
   }
   ->
   exec { 'upload spark-jars.zip':
-    command   => "/usr/bin/hadoop fs -put $spark_home/spark-jars.zip /apps/spark",
+    command   => "/usr/bin/hadoop fs -put $spark_home/spark-jars.zip /apps",
     logoutput => on_failure,
-    unless    => '/usr/bin/hadoop fs -ls /apps/spark/spark-jars.zip',
+    unless    => '/usr/bin/hadoop fs -ls /apps/spark-jars.zip',
     before    => Class['profile::mapr::warden_restart'],
   }
-  # Configure Spark with the NodeManager Local Directory Set to MapR-FS:
-  #
-  # sudo -u mapr maprcli volume create -name mapr.$(hostname -f).local.spark \
-  # -path /var/mapr/local/$(hostname -f)/spark -replication 1 -localvolumehost $(hostname -f)
-  #
-  # yarn-site.xml
-  # <property>
-  #   <name>yarn.nodemanager.local-dirs</name>
-  #   <value>/mapr/my.cluster.com/var/mapr/local/${mapr.host}/spark</value>
-  # </property>
 
 }
