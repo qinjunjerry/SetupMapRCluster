@@ -28,23 +28,13 @@ class profile::mapr::ecosystem::spark (
   file_line { 'spark.yarn.archive':
     ensure => present,
     path   => "$spark_home/conf/spark-defaults.conf",
-    line   => "spark.yarn.archive maprfs:///apps/spark/spark-jars.zip",
+    line   => "spark.yarn.archive maprfs:///apps/spark-jars.zip",
     match  => '^spark.yarn.archive',
     require => Package['mapr-spark']
   }
 
-  # Configure Spark with the NodeManager Local Directory Set to MapR-FS:
-  #
-  # sudo -u mapr maprcli volume create -name mapr.$(hostname -f).local.spark \
-  # -path /var/mapr/local/$(hostname -f)/spark -replication 1 -localvolumehost $(hostname -f)
-  #
-  # yarn-site.xml
-  # <property>
-  #   <name>yarn.nodemanager.local-dirs</name>
-  #   <value>/mapr/my.cluster.com/var/mapr/local/${mapr.host}/spark</value>
-  # </property>
-
   # To integrate Spark-SQL with Hive
+  # TODO: check security flag
   $hive_cfgfile = "$spark_home/conf/hive-site.xml"
   profile::hadoop::xmlconf_property {
     default:
