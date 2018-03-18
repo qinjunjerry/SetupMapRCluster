@@ -13,3 +13,5 @@ profile::mapr::cluster::historyserver : node69
 profile::mapr::cluster::mysql_node    : node70
 profile::mapr::cluster::hive_meta_node: node68.ucslocal
 
+#profile::mapr::cluster::secure        : false
+#profile::mapr::cluster::kerberos      : false
