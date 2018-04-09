@@ -15,4 +15,8 @@ class profile::mapr::ecosystem::spark_historyserver (
     ensure  => present,
     notify  => Class['profile::mapr::configure_r'],
   }
+
+  #TODO: add log4j.logger.org.spark_project.jetty.io.IdleTimeout=DEBUG
+  # to capture incoming connection
+
 }
