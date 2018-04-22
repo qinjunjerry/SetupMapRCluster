@@ -36,8 +36,8 @@ for node in $*; do
     create_principal HTTP/$node
 
     keytab_dir=$CLUSTER_NAME/$node
-    rm -fr $keytab_dir
     mkdir -p $keytab_dir
+    rm -f $keytab_dir/mapr.keytab
     kadmin.local -q "ktadd -norandkey -k $keytab_dir/mapr.keytab mapr/$CLUSTER_NAME"
     kadmin.local -q "ktadd -norandkey -k $keytab_dir/mapr.keytab mapr/$node"
     kadmin.local -q "ktadd -norandkey -k $keytab_dir/mapr.keytab HTTP/$node"
