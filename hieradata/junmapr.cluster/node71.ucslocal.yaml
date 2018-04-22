@@ -10,3 +10,7 @@ classes:
   - profile::mapr::ecosystem::hue
 
 
+  - profile::mapr::ecosystem::collectd
+  - profile::mapr::ecosystem::grafana
+  - profile::mapr::configure_r_ot
+  - profile::mapr::warden_restart2
