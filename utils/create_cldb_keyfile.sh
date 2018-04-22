@@ -55,7 +55,15 @@ for node in $nodes; do
   # ssl_keystore
   # create self signed certificate with private key
   echo "Creating 10 year self signed certificate with subjectDN=CN=$CERT_NAME"
-  $KEYTOOL -genkeypair -sigalg SHA512withRSA -keyalg RSA -alias $node.$CLUSTER_NAME -dname CN=$CERT_NAME -validity 3650 \
+
+  ###
+  # We need use $CLUSTER_NAME as an alias in ssl_keystore because
+  # 1. /opt/mapr/grafana/grafana-4.4.2/bin/configure.sh (in MapR 6) expects $CLUSTER_NAME as an alias in ssl_keystore
+  # 2. /opt/mapr/hue/hue-3.12.0/bin/secure.sh expects $CLUSTER_NAME as alias in ssl_keystore
+  #
+  # We need use $node.$CLUSTER_NAME as the alias in ssl_truststore as we need merge all truststore into one
+  #
+  $KEYTOOL -genkeypair -sigalg SHA512withRSA -keyalg RSA -alias $CLUSTER_NAME -dname CN=$CERT_NAME -validity 3650 \
          -ext "san=dns:$node,ip:$IP_ADDR" \
          -storepass $storePass -keypass $storePass \
          -keystore $sslKeyStore -storetype $storeFormat
@@ -69,7 +77,7 @@ for node in $nodes; do
   tmpfile=$sslTrustStore.tmp
   rm -f $tmpfile
   $KEYTOOL -exportcert -keystore $sslKeyStore -file $tmpfile \
-         -alias $node.$CLUSTER_NAME -storepass $storePass -storetype $storeFormat
+         -alias $CLUSTER_NAME -storepass $storePass -storetype $storeFormat
   if [ $? -ne 0 ]; then
       echo "Keytool command to extract certificate from key store failed"
       exit 1
