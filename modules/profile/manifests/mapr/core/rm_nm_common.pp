@@ -47,6 +47,10 @@ class profile::mapr::core::rm_nm_common (
       'yarn.nodemanager.container-executor.class'      : value => 'org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor';
       'yarn.nodemanager.linux-container-executor.group': value => 'mapr';
 
+      'yarn.log-aggregation-enable'                    : value => 'true';
+      # two days
+      'yarn.log-aggregation.retain-seconds'            : value => '172800';
+
     }
 
     file_line {'MAPR_LOGIN_OPTS in /opt/mapr/conf/env.sh':
