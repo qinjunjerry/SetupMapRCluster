@@ -20,6 +20,7 @@ class profile::mapr::cluster (
   $oozie_node     = $profile::mapr::cluster::oozie_node,
 
   $opentsdb_node  = $profile::mapr::cluster::opentsdb_node,
+  $elastic_node   = $profile::mapr::cluster::elastic_node,
 
 ) {
 
