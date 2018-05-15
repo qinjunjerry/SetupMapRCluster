@@ -50,6 +50,8 @@ class profile::mapr::core::rm_nm_common (
       'yarn.log-aggregation-enable'                    : value => 'true';
       # two days
       'yarn.log-aggregation.retain-seconds'            : value => '172800';
+      # clean up local NM dir after 12 hours
+      'yarn.nodemanager.delete.debug-delay-sec'        : value => '43200';
 
     }
 
