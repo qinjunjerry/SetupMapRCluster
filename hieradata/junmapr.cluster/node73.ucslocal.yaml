@@ -9,6 +9,5 @@ classes:
   - profile::mapr::ecosystem::hivemetastore
  #- profile::mapr::ecosystem::oozie
 
-  - profile::mapr::ecosystem::collectd
   - profile::mapr::configure_r_ot
   - profile::mapr::warden_restart2
