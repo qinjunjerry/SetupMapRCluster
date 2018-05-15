@@ -16,12 +16,17 @@ class profile::mapr::kerberos (
 
     $hostname = fact('networking.fqdn')
 
-    file_line { 'set-crypto.policy':
-      ensure => present,
-      path   => "/usr/java/default/jre/lib/security/java.security",
-      line   => "crypto.policy=unlimited",
-      match  => '^crypto.policy\=',
-    }
+
+    # crypto.policy was introduced in 8u151 as 'limited' by default, then was changed to 'unlimited' by default in 8u161
+    # See the release notes:
+    # http://www.oracle.com/technetwork/java/javase/8u151-relnotes-3850493.html
+    # http://www.oracle.com/technetwork/java/javase/8u161-relnotes-4021379.html
+    #file_line { 'set-crypto.policy':
+    #  ensure => present,
+    #  path   => "/usr/java/default/jre/lib/security/java.security",
+    #  line   => "crypto.policy=unlimited",
+    #  match  => '^crypto.policy\=',
+    #}
 
     package { 'krb5-workstation':
       ensure => installed,
