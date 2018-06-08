@@ -13,7 +13,7 @@ profile::mapr::cluster::historyserver : node66
 #profile::mapr::cluster::secure        : false
 #profile::mapr::cluster::kerberos      : false
 
-profile::mapr::cluster::hive_meta_node: node65
+profile::mapr::cluster::hive_meta_node: node65.ucslocal
 profile::mapr::cluster::mysql_node    : node70
 
 profile::mapr::cluster::oozie_node    : node65
