@@ -42,20 +42,32 @@ else:
         if containerInfo["NameContainer"] == 'true':
             factor = jsonout['data'][0]['NameSpaceReplication']
 
-        print "ContainerId:%d Epoch:%d Size:%s nameContainer:%s" % (containerInfo["ContainerId"], containerInfo["Epoch"], containerInfo["TotalSizeMB"],containerInfo["NameContainer"]),
+        print "ContainerId:%-6d Epoch:%-3d Size:%-9s nameContainer:%5s" % (containerInfo["ContainerId"], \
+            containerInfo["Epoch"], containerInfo["TotalSizeMB"],containerInfo["NameContainer"]),
 
         allok = True
         for serverType in ["ActiveServers", "InactiveServers", "UnusedServers"]:
 
+            key = ""
+            num = 0
+
             if 'IP:Port' in containerInfo[serverType]:
                 key = 'IP:Port'
-                num = len(containerInfo[serverType][key])
             elif 'IP' in containerInfo[serverType]:
                 key = 'IP'
-                num = len(containerInfo[serverType][key])
-            else:
-                key = ""
-                num = 0
+
+            if key == "": 
+                print "%s:%d" % (serverType, 0),
+                continue
+
+            ipports = containerInfo[serverType][key]
+            if not isinstance(containerInfo[serverType][key], list):
+                # ipports is a string when replication factor is 1, or when there is only one ip-port
+                # here we change make sure ipports is a list
+                ipports = [ ipports ]
+
+            num = len(ipports)
+            print "%s:%d" % (serverType, num),
 
             if (serverType == 'ActiveServers' and num == factor) or \
                 (serverType == 'InactiveServers' and num == 0) or \
@@ -63,11 +75,8 @@ else:
                 allok = True and allok
             else:
                 allok = False
-                print "%s:%d" % (serverType, num),
-
-                if key != "":
-                    for item in containerInfo[serverType][key]:
-                        print item,
+                for item in ipports:
+                    print item,
 
         if allok: 
             print 'ALLOK'
