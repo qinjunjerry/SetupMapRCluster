@@ -14,6 +14,7 @@ class profile::mapr::core::nm_local_dirs (
   exec { 'check license':
     command   => '/usr/bin/maprcli license apps | grep NFS',
     logoutput => on_failure,
+    unless    => '/usr/bin/mount | grep localhost:/mapr',
   }
   ->
   exec { 'create nodemanger local volume':
@@ -30,7 +31,7 @@ class profile::mapr::core::nm_local_dirs (
   exec { 'mount maprfs':
     command   => '/usr/bin/mount -o hard,nolock localhost:/mapr /mapr',
     logoutput => on_failure,
-    unless    => '/usr/bin/df -h | grep localhost:/mapr',
+    unless    => '/usr/bin/mount | grep localhost:/mapr',
     before    => Class['profile::mapr::warden_restart'],
   }
   ->
