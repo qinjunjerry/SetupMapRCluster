@@ -12,3 +12,6 @@ classes:
   - profile::mapr::ecosystem::opentsdb
   - profile::mapr::configure_r_ot
   - profile::mapr::warden_restart2
+
+  - profile::mapr::ecosystem::kafka
+  - profile::mapr::ecosystem::kafka_connect_jdbc
