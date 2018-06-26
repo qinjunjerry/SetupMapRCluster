@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sema_help() {
+mc_help() {
   cat << EOF
 Usage: $0 command
 
@@ -28,7 +28,7 @@ BASE_DIR=$(dirname $(readlink -f $0))
 # The dir to download external (i.e., 3rd party) puppet modules
 EXTERNAL=$BASE_DIR/external
 
-sema_init() {
+mc_init() {
     # install puppet repo
     if rpm -qa | grep puppet5-release >/dev/null; then
         echo "puppet5-release already installed"
@@ -73,7 +73,7 @@ get_cluster_setting() {
     echo $value
 }
 
-sema_setup() {
+mc_setup() {
     # set cluster fact if given, the fact is used in heira.yaml
     if [ -f /opt/mapr/conf/mapr-clusters.conf ]; then
         cluster=`cat /opt/mapr/conf/mapr-clusters.conf | head -1 | awk '{print $1}'`
@@ -127,7 +127,7 @@ sema_setup() {
         $BASE_DIR/environments/$ENVIRON/manifests/default.pp
 }
 
-sema_start() {
+mc_start() {
     sudo systemctl daemon-reload
     if rpm -qa | grep -q mapr-zookeeper; then
         sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
@@ -136,7 +136,7 @@ sema_start() {
     fi
 }
 
-sema_stop() {
+mc_stop() {
     sudo systemctl daemon-reload
     if rpm -qa | grep -q mapr-zookeeper; then
         sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
@@ -151,28 +151,28 @@ sema_stop() {
     fi
 }
 
-sema_restart() {
-    sema_stop && sema_start
+mc_restart() {
+    mc_stop && mc_start
 }
 
-sema_delmapr() {
+mc_delmapr() {
     sudo yum erase -y mapr-\*
     sudo rm -fr /opt/mapr /etc/yum.repos.d/mapr.repo
     echo "[VERIFY] check installed mapr packages ..."
     rpm -qa | grep mapr
 }
 
-sema_delpuppet() {
+mc_delpuppet() {
     sudo yum erase -y puppet-agent puppet5-release
     sudo rm -fr /opt/puppetlabs
 }
 
-sema_up() {
-    sema_init && sema_setup $1
+mc_up() {
+    mc_init && mc_setup $1
 }
 
-sema_clean() {
-    sema_stop && sema_delmapr
+mc_clean() {
+    mc_stop && mc_delmapr
     echo "[VERIFY] check running mapr processes ..."
     if ps -fu mapr; then
         false
@@ -181,12 +181,12 @@ sema_clean() {
     fi
 }
 
-sema_cleanall() {
-    sema_clean && sema_delpuppet
+mc_cleanall() {
+    mc_clean && mc_delpuppet
 }
 
 
-sema_ldir() {
+mc_ldir() {
     declare -a dir_array=(`ls -d /opt/mapr/*/*-*/{logs,conf,etc/hadoop,desktop/conf} 2>/dev/null`)
 
     for ((i=0; i<${#dir_array[@]}; i++)); do
@@ -199,7 +199,7 @@ sema_ldir() {
 ##### ##### main ##### #####
 
 if [ $# -eq 0 ]; then
-    sema_help
+    mc_help
     exit 1
 fi
 
@@ -207,9 +207,9 @@ commandList=(help init setup up start stop restart delmapr delpuppet clean clean
 command=$1
 shift
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
-    sema_$command $@
+    mc_$command $@
 else
     echo Error: invalid command: $command
     echo
-    sema_help
+    mc_help
 fi
