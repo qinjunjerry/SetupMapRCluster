@@ -77,4 +77,4 @@ profile::mapr::cluster::kerberos      : true
 
 # Default setttings for all nodes
 # Override by re-setting this in the individual node yaml files
-profile::mapr::cluster::disk_list     : /dev/sdb
+profile::mapr::cluster::disk_list     : ['/dev/sdb']
