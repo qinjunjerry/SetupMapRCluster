@@ -14,3 +14,4 @@ profile::mapr::cluster::mysql_node    : node70
 profile::mapr::cluster::hive_meta_node: node73.ucslocal
 
 profile::mapr::cluster::opentsdb_node : node72
+profile::mapr::cluster::elastic_node  : node74
