@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -lt 2 ]; then
-    echo Usage: $0 cluster hivemeta_node
+    echo Usage: $0 cluster hivemeta_node_fqdn
     exit 1
 fi
 
