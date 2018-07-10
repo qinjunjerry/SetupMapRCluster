@@ -7,6 +7,9 @@ class profile::mapr::configure (
 ) {
   include profile::mapr::cluster
 
+  $disklist_file = "/tmp/disklist.txt"
+  $hostname = fact('networking.hostname')
+
   if $profile::mapr::cluster::secure == true {
     require profile::mapr::sasl
 
@@ -42,19 +45,48 @@ class profile::mapr::configure (
                          ' ', '-Z',  ' ', $profile::mapr::cluster::zk_node_list,
                          ' ', '-C',  ' ', $profile::mapr::cluster::cldb_node_list,
                          ' ', '-HS', ' ', $profile::mapr::cluster::historyserver,
-                         ' ', '-D',  ' ', $profile::mapr::cluster::disk_list,
-                         ' ', '-disk-opts', ' ', 'F',
+#                        ' ', '-D',  ' ', $profile::mapr::cluster::disk_list,
+#                        ' ', '-disk-opts', ' ', 'F',
                          ' ', $secure_opt,
                          ' ', $kerberos_opt,
                          ' ', '-nocerts',
                          # to reduce memory requirement
                          ' ', '--isvm',
                          ' ', '-noDB',
-#                        ' ', '-no-autostart',
+                         ' ', '-no-autostart',
                          ' ', '-f',
                        ]),
     logoutput   => on_failure,
-    refreshonly => true,
-  }
+}
+-> 
+file { $disklist_file:
+  ensure  => present,
+  content => epp('profile/mapr/core/tmp_disklist.epp'),
+}
+->
+exec { 'disksetup':
+  command   => "/opt/mapr/server/disksetup -F $disklist_file",
+  path      => '/usr/bin:/usr/sbin:/bin',
+  logoutput => on_failure,
+  creates   => '/opt/mapr/conf/disktab',
+}
 
+  if $hostname in split($profile::mapr::cluster::zk_node_list, ',') {
+    service { 'mapr-zookeeper':
+      enable      => true,
+      ensure      => running,
+      require     => Exec['disksetup'],
+    }
+    ->
+    service { 'mapr-warden':
+      enable      => true,
+      ensure      => running,
+    }
+  } else {
+    service { 'mapr-warden':
+      enable      => true,
+      ensure      => running,
+      require     => Exec['disksetup'],
+    }
+  }
 }
