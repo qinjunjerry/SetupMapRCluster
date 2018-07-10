@@ -32,9 +32,11 @@ if [ ! -e "${KEYTOOL:-}" ]; then
 fi
 
 # cldb.key
+echo generating cldb.key ...
 /opt/mapr/bin/maprcli security genkey -keyfile $CLUSTER_NAME/cldb.key
 
 # maprserverticket
+echo generating maprserverticket ...
 /opt/mapr/bin/maprcli security genticket -inkeyfile $CLUSTER_NAME/cldb.key -ticketfile $CLUSTER_NAME/maprserverticket -cluster $CLUSTER_NAME -maprusername mapr -mapruid 5000 -maprgid 5000
 
 ### generate ssl key/truststore
@@ -63,6 +65,7 @@ for node in $nodes; do
   #
   # We need use $node.$CLUSTER_NAME as the alias in ssl_truststore as we need merge all truststore into one
   #
+  echo generating $node ssl_keystore ...
   $KEYTOOL -genkeypair -sigalg SHA512withRSA -keyalg RSA -alias $CLUSTER_NAME -dname CN=$CERT_NAME -validity 3650 \
          -ext "san=dns:$node,ip:$IP_ADDR" \
          -storepass $storePass -keypass $storePass \
@@ -76,6 +79,7 @@ for node in $nodes; do
   # extract self signed certificate into trust store
   tmpfile=$sslTrustStore.tmp
   rm -f $tmpfile
+  echo extracting $node ssl_truststore ...
   $KEYTOOL -exportcert -keystore $sslKeyStore -file $tmpfile \
          -alias $CLUSTER_NAME -storepass $storePass -storetype $storeFormat
   if [ $? -ne 0 ]; then
@@ -93,6 +97,7 @@ for node in $nodes; do
 done
 
 ### merge individual truststore into one
+echo merging all truststore into one ...
 read -r -a node_array <<< "$nodes"
 mv $CLUSTER_NAME/${node_array[0]}.$DNS_DOMAIN/ssl_truststore $CLUSTER_NAME/
 for node in ${node_array[@]:1}; do
