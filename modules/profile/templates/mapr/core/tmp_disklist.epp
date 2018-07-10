@@ -1,0 +1,4 @@
+# mapr disk list
+<% $profile::mapr::cluster::disk_list.each |$disk| { -%>
+<%= $disk %>
+<% } -%>
