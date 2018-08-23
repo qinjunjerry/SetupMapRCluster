@@ -142,13 +142,21 @@ mc_stop() {
         sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
     else
         sudo systemctl stop mapr-warden
+    fi   
+    if ps -fu mapr >/dev/null; then
+        echo "Sleep 10 sec ..."
+        sleep 10s
+        echo "Force kill the remaining proceses"
+        ps -fu mapr --no-header| grep -v bash | awk '{print $2}' | xargs kill -9
     fi
+
     echo "[VERIFY] check running mapr processes ..."
     if ps -fu mapr; then
         false
     else
         true
     fi
+
 }
 
 mc_restart() {
