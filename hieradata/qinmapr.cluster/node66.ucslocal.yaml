@@ -9,6 +9,9 @@ classes:
 
 # - profile::mapr::ecosystem::hivewebhcat
 
+  # available since MEP 4.0
+  - profile::mapr::ecosystem::spark_thriftserver
+
   - profile::mapr::configure_r_ot
   - profile::mapr::warden_restart2
 

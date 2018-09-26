@@ -7,6 +7,4 @@ class role::cluster_node_history {
 
   include profile::mapr::ecosystem::spark_hdfs_env
   include profile::mapr::ecosystem::spark_historyserver
-  include profile::mapr::ecosystem::spark_thriftserver
-
 }
