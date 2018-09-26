@@ -2,7 +2,7 @@
 
 # MapR versions
 profile::mapr::repo::core_version: 5.2.2
-profile::mapr::repo::mep_version : 3.0.2
+profile::mapr::repo::mep_version : 3.0.3
 
 # Cluster level settings
 profile::mapr::cluster::cluster_name  : junmapr.cluster
