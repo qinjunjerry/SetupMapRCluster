@@ -6,25 +6,10 @@ classes:
   - profile::bash
   - profile::packages
 
-# For example, the full URL is: http://download.oracle.com/otn-pub/java/jdk/8u172-b11/a58eab1ec242421181065cdc37240b08/jdk-8u172-linux-x64.rpm
-profile::mapr::prereq::java_version_major: '8u172'
-profile::mapr::prereq::java_version_minor: 'b11'
-profile::mapr::prereq::java_url_hash     : 'a58eab1ec242421181065cdc37240b08'
-
-# For version 8u162
-#profile::mapr::prereq::java_version_major: '8u162'
-#profile::mapr::prereq::java_version_minor: 'b12'
-#profile::mapr::prereq::java_url_hash     : '0da788060d494f5095bf8624735fa2f1'
-
-# For version 8u152
-#profile::mapr::prereq::java_version_major: '8u152'
-#profile::mapr::prereq::java_version_minor: 'b16'
-#profile::mapr::prereq::java_url_hash     : 'aa0333dd3019491ca4f6ddbe78cdb6d0'
-
-# For version 8u144
-#profile::mapr::prereq::java_version_major: '8u144'
-#profile::mapr::prereq::java_version_minor: 'b01'
-#profile::mapr::prereq::java_url_hash     : '090f390dda5b47b9b721c7dfaa008135'
+# For example, the full URL is: http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.rpm
+profile::mapr::prereq::java_version_major: '8u181'
+profile::mapr::prereq::java_version_minor: 'b13'
+profile::mapr::prereq::java_url_hash     : '96a7b8442fe848ef90c96a2fad6ed6d1'
 
 ### packages to install
 # This provides a convenient way to install packages. No services are started, nor
