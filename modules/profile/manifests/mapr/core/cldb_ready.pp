@@ -11,10 +11,10 @@ class profile::mapr::core::cldb_ready (
   include profile::mapr::cluster
 
   if $profile::mapr::cluster::kerberos == true {
-    # Calling 'maprlogin kerberos' is necessary in case there was an outdated ticket in which case 
+    # 'remove maprticket' is necessary in case there was an outdated ticket in which case 
     # 'maprcli node cldbmaster' does not generate a new one
-    exec { 'kinit mapr && maprlogin end':
-      command     => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$profile::mapr::cluster::cluster_name && maprlogin end",
+    exec { 'kinit mapr && rm maprticket':
+      command     => "/bin/kinit -kt /opt/mapr/conf/mapr.keytab mapr/$profile::mapr::cluster::cluster_name && rm -f /tmp/maprticket_`id -u`",
       logoutput   => on_failure,
       require     => File['/opt/mapr/conf/mapr.keytab'],
       unless      => '/usr/bin/maprcli node cldbmaster',
