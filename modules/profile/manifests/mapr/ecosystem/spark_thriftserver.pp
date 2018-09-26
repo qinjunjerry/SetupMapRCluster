@@ -1,6 +1,6 @@
 # Class: mapr_spark_thriftserver
 #
-# This module installs/configures MapR spark thriftserver
+# This module installs/configures MapR spark thriftserver (available starting MEP 4.0)
 #
 
 class profile::mapr::ecosystem::spark_thriftserver (
