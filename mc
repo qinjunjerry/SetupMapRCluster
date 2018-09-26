@@ -47,7 +47,9 @@ mc_init() {
     if /opt/puppetlabs/puppet/bin/gem list | grep r10k >/dev/null; then
         echo "puppet gem r10k already installed"
     else
-        sudo /opt/puppetlabs/puppet/bin/gem install r10k
+        # limit to version 2.6.4
+        # r10k 3.0.0 has a bug: https://tickets.puppetlabs.com/browse/RK-327
+        sudo /opt/puppetlabs/puppet/bin/gem install r10k -v 2.6.4
     fi
 
     # download external puppet modules
