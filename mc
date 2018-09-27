@@ -20,6 +20,9 @@ Common commands:
 
    clean           stop + delmapr
    cleanall        stop + delmapr + delpuppet
+
+   pi              run MapReduce pi job
+   sparkpi         run SparkPi job
 EOF
 }
 
@@ -47,9 +50,11 @@ mc_init() {
     if /opt/puppetlabs/puppet/bin/gem list | grep r10k >/dev/null; then
         echo "puppet gem r10k already installed"
     else
-        # limit to version 2.6.4
+        # Limit to version 2.6.4
         # r10k 3.0.0 has a bug: https://tickets.puppetlabs.com/browse/RK-327
-        sudo /opt/puppetlabs/puppet/bin/gem install r10k -v 2.6.4
+        # sudo /opt/puppetlabs/puppet/bin/gem install r10k -v 2.6.4
+        # Update on Sep 27, 2018: this bug is fixed in r10k 3.0.1
+        sudo /opt/puppetlabs/puppet/bin/gem install r10k
     fi
 
     # download external puppet modules
@@ -206,6 +211,20 @@ mc_ldir() {
     #read -p "Select dir: " i
 }
 
+
+mc_pi() {    
+    exec_cmd "sudo -u mapr hadoop jar /opt/mapr/hadoop/hadoop-2.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.0-mapr-*.jar pi 10 100"
+}
+
+mc_sparkpi() {
+    exec_cmd "sudo -u mapr /opt/mapr/spark/spark-*/bin/run-example --master yarn --deploy-mode client SparkPi 10"
+}
+
+exec_cmd() {
+    echo Run: $1
+    eval "$1"
+}
+
 ##### ##### main ##### #####
 
 if [ $# -eq 0 ]; then
@@ -213,7 +232,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall ldir)
+commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall ldir pi sparkpi)
 command=$1
 shift
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
