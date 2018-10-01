@@ -57,19 +57,19 @@ class profile::mapr::configure (
                          ' ', '-f',
                        ]),
     logoutput   => on_failure,
-}
--> 
-file { $disklist_file:
-  ensure  => present,
-  content => epp('profile/mapr/core/tmp_disklist.epp'),
-}
-->
-exec { 'disksetup':
-  command   => "/opt/mapr/server/disksetup -F $disklist_file",
-  path      => '/usr/bin:/usr/sbin:/bin',
-  logoutput => on_failure,
-  creates   => '/opt/mapr/conf/disktab',
-}
+  }
+  -> 
+  file { $disklist_file:
+    ensure  => present,
+    content => epp('profile/mapr/core/tmp_disklist.epp'),
+  }
+  ->
+  exec { 'disksetup':
+    command   => "/opt/mapr/server/disksetup -F $disklist_file",
+    path      => '/usr/bin:/usr/sbin:/bin',
+    logoutput => on_failure,
+    creates   => '/opt/mapr/conf/disktab',
+  }
 
   if $hostname in split($profile::mapr::cluster::zk_node_list, ',') {
     service { 'mapr-zookeeper':
