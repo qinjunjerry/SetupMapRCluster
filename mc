@@ -202,7 +202,7 @@ mc_cleanall() {
 
 
 mc_ldir() {
-    declare -a dir_array=(`ls -d /opt/mapr/*/*-*/{logs,conf,etc/hadoop,desktop/conf} 2>/dev/null`)
+    declare -a dir_array=(`ls -d /opt/mapr/*/*-*/{logs,conf,etc/hadoop,etc/conf,desktop/conf,var/log} 2>/dev/null`)
 
     for ((i=0; i<${#dir_array[@]}; i++)); do
         printf "%2d = %s\n" $i ${dir_array[$i]}
@@ -223,6 +223,21 @@ mc_sparkpi() {
 exec_cmd() {
     echo Run: $1
     eval "$1"
+}
+
+mc_clean_data() {
+    rm -fr /opt/mapr/zkdata/version-2
+    rm -f /opt/mapr/conf/disktab
+    rm -f /opt/mapr/pid/*.pid
+}
+
+mc_backup_ids() {
+    dir=/root/cluster.backup.`date +%Y-%m-%d`
+    mkdir -p $dir
+    cp /opt/mapr/hostname       $dir
+    cp /opt/mapr/hostid         $dir
+    cp /opt/mapr/conf/clusterid $dir
+    cp /opt/mapr/conf/disktab   $dir
 }
 
 ##### ##### main ##### #####
