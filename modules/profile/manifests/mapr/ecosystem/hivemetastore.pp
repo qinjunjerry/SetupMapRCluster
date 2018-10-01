@@ -62,7 +62,7 @@ class profile::mapr::ecosystem::hivemetastore (
   exec { 'initSchema':
     command   => "/opt/mapr/hive/hive-$version/bin/schematool -dbType mysql -initSchema",
     logoutput => on_failure,
-    unless    => "/opt/mapr/hive/hive-2.1/bin/schematool -dbType mysql -info",
+    unless    => "/opt/mapr/hive/hive-$version/bin/schematool -dbType mysql -info",
   }
 
   # Configure Hive metastore to use kerberos
