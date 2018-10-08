@@ -1,0 +1,20 @@
+---
+
+# MapR versions
+profile::mapr::repo::core_version: 6.1.0
+profile::mapr::repo::mep_version : 6.0.0
+
+# Cluster level settings
+profile::mapr::cluster::cluster_name  : m610.cluster
+profile::mapr::cluster::cldb_node_list: node67,node68
+profile::mapr::cluster::zk_node_list  : node67,node68,node69
+profile::mapr::cluster::oozie_node    : node68
+profile::mapr::cluster::historyserver : node69
+profile::mapr::cluster::mysql_node    : node70
+profile::mapr::cluster::hive_meta_node: node68.ucslocal
+
+#profile::mapr::cluster::secure        : false
+#profile::mapr::cluster::kerberos      : false
+
+profile::mapr::cluster::opentsdb_node : node68
+profile::mapr::cluster::elastic_node  : node69

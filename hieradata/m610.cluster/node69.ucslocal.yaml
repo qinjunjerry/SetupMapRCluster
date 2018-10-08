@@ -1,0 +1,16 @@
+---
+
+classes:
+  - role::cluster_node_history
+
+  - profile::mapr::core::zookeeper
+
+  - profile::mapr::core::resourcemanager
+
+  - profile::mapr::ecosystem::hbase
+  - profile::mapr::ecosystem::hivewebhcat
+
+  - profile::mapr::ecosystem::elasticsearch
+  - profile::mapr::ecosystem::kibana
+  - profile::mapr::configure_r_ot
+  - profile::mapr::warden_restart2
