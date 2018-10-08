@@ -1,9 +1,9 @@
-# Class: profile::mapr::configure_r_ot
+# Class: profile::mapr::configure_r_ot_eskey
 #
-# This module runs configure.sh -R -OT
+# This module runs configure.sh -R -OT -genESKeys
 #
 
-class profile::mapr::configure_r_ot (
+class profile::mapr::configure_r_ot_eskey (
 ) {
 
   include profile::mapr::cluster
