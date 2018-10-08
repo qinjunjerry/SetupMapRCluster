@@ -12,6 +12,11 @@ META_DB=`echo $CLUSTER | tr . _`
 META_NODE_SHORT=`echo $2 | cut -d. -f 1`
 
 
+
+# 'CREATE USER IF NOT EXISTS' is supported only starting with MySQL 5.7.6
+# CREATE USER IF NOT EXISTS hive@$META_NODE IDENTIFIED BY 'password'; \
+# CREATE USER IF NOT EXISTS hive@$META_NODE_SHORT IDENTIFIED BY 'password'; \
+
 echo "\
 FLUSH PRIVILEGES; \
 CREATE USER hive@$META_NODE IDENTIFIED BY 'password'; \
