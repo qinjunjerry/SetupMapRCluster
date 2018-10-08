@@ -29,6 +29,28 @@ class profile::mapr::sasl (
             "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/$hostname/ssl_truststore",
             "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/ssl_truststore",
       ];
+
+      # p12 files
+      '/opt/mapr/conf/ssl_keystore.p12'    : mode   => '0400', source => [
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/$hostname/ssl_keystore.p12",
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/ssl_keystore.p12",
+      ];
+      '/opt/mapr/conf/ssl_truststore.p12'  : mode   => '0444', source => [
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/$hostname/ssl_truststore.p12",
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/ssl_truststore.p12",
+      ];
+
+      # pem files
+      '/opt/mapr/conf/ssl_keystore.pem'    : mode   => '0400', source => [
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/$hostname/ssl_keystore.pem",
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/ssl_keystore.pem",
+      ];
+      '/opt/mapr/conf/ssl_truststore.pem'  : mode   => '0444', source => [
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/$hostname/ssl_truststore.pem",
+            "$::base_dir/inputfiles/$profile::mapr::cluster::cluster_name/ssl_truststore.pem",
+      ];
+
+
     }
   }
 
