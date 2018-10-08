@@ -39,7 +39,7 @@ class profile::mapr::configure (
     }
   }
 
-  exec { 'configure.sh':
+  exec { 'Run configure.sh':
     command     => join(['/opt/mapr/server/configure.sh',
                          ' ', '-N',  ' ', $profile::mapr::cluster::cluster_name,
                          ' ', '-Z',  ' ', $profile::mapr::cluster::zk_node_list,
