@@ -63,11 +63,12 @@ for node in $nodes; do
   # 1. /opt/mapr/grafana/grafana-4.4.2/bin/configure.sh (in MapR 6) expects $CLUSTER_NAME as an alias in ssl_keystore
   # 2. /opt/mapr/hue/hue-3.12.0/bin/secure.sh expects $CLUSTER_NAME as alias in ssl_keystore
   #
-  # We need use $node.$CLUSTER_NAME as the alias in ssl_truststore as we need merge all truststore into one
+  # We need use $node.$DNS_DOMAIN as the alias in ssl_truststore as we may need merge all truststores from multiple 
+  # clusters into one
   #
   echo generating $node ssl_keystore ...
   $KEYTOOL -genkeypair -sigalg SHA512withRSA -keyalg RSA -alias $CLUSTER_NAME -dname CN=$CERT_NAME -validity 3650 \
-         -ext "san=dns:$node,ip:$IP_ADDR" \
+         -ext "san=dns:$node,dns:$node.$DNS_DOMAIN,ip:$IP_ADDR" \
          -storepass $storePass -keypass $storePass \
          -keystore $sslKeyStore -storetype $storeFormat
   if [ $? -ne 0 ]; then
@@ -87,12 +88,28 @@ for node in $nodes; do
       exit 1
   fi
   $KEYTOOL -importcert -keystore $sslTrustStore -file $tmpfile \
-          -alias $node.$CLUSTER_NAME -storepass $storePass -noprompt
+          -alias $node.$DNS_DOMAIN -storepass $storePass -noprompt
   if [ $? -ne 0 ]; then
       echo "Keytool command to create trust store failed"
       exit 1
   fi
   rm -f $tmpfile
+
+  # convert keystore from jks to p12
+  $KEYTOOL -importkeystore -srckeystore $sslKeyStore -destkeystore ${sslKeyStore}.p12 \
+            -srcstorepass $storePass -deststorepass $storePass -srcalias $CLUSTER_NAME \
+            -srcstoretype $storeFormat -deststoretype pkcs12 
+  if [ $? -ne 0 ]; then
+      echo "Keytool command to create pkcs12 key store failed"
+      exit 1
+  fi
+
+  # convert keystore from p12 to pem
+  openssl pkcs12 -in ${sslKeyStore}.p12 -out ${sslKeyStore}.pem -passin pass:$storePass -passout pass:$storePass
+  if [ $? -ne 0 ]; then
+      echo "openssl command to create PEM key store failed"
+      exit 1
+  fi
 
 done
 
@@ -104,3 +121,20 @@ for node in ${node_array[@]:1}; do
     /opt/mapr/server/manageSSLKeys.sh merge $CLUSTER_NAME/$node.$DNS_DOMAIN/ssl_truststore $CLUSTER_NAME/ssl_truststore
     rm $CLUSTER_NAME/$node.$DNS_DOMAIN/ssl_truststore
 done
+
+# convert truststore from jks to p12
+$KEYTOOL -importkeystore -srckeystore $CLUSTER_NAME/ssl_truststore -destkeystore $CLUSTER_NAME/ssl_truststore.p12 \
+          -srcstorepass $storePass -deststorepass $storePass \
+          -srcstoretype $storeFormat -deststoretype pkcs12 
+if [ $? -ne 0 ]; then
+    echo "Keytool command to create pkcs12 trust store failed"
+    exit 1
+fi
+
+# convert truststore from p12 to pem
+openssl pkcs12 -in $CLUSTER_NAME/ssl_truststore.p12 -out $CLUSTER_NAME/ssl_truststore.pem -passin pass:$storePass -passout pass:$storePass
+if [ $? -ne 0 ]; then
+    echo "openssl command to create PEM trust store failed"
+    exit 1
+fi
+
