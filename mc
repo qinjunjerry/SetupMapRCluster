@@ -213,11 +213,11 @@ mc_ldir() {
 
 
 mc_pi() {    
-    exec_cmd "sudo -u mapr hadoop jar /opt/mapr/hadoop/hadoop-2.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.0-mapr-*.jar pi 10 100"
+    exec_cmd "sudo -u mapr hadoop jar /opt/mapr/hadoop/hadoop-2.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.0-mapr-*.jar pi -Dfs.mapr.trace=debug 10 100"
 }
 
 mc_sparkpi() {
-    exec_cmd "sudo -u mapr /opt/mapr/spark/spark-*/bin/run-example --master yarn --deploy-mode client SparkPi 10"
+    exec_cmd "sudo -u mapr /opt/mapr/spark/spark-*/bin/run-example --master yarn --deploy-mode client --verbose SparkPi 10"
 }
 
 exec_cmd() {
