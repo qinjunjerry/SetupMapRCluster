@@ -26,11 +26,12 @@ class profile::mapr::ecosystem::spark (
   $spark_home = "/opt/mapr/spark/spark-$version"
 
   file_line { 'spark.yarn.archive':
-    ensure => present,
-    path   => "$spark_home/conf/spark-defaults.conf",
-    line   => "spark.yarn.archive maprfs:///apps/spark-jars.zip",
-    match  => '^spark.yarn.archive',
-    require => Package['mapr-spark']
+    ensure  => present,
+    path    => "$spark_home/conf/spark-defaults.conf",
+    line    => "spark.yarn.archive maprfs:///apps/spark-jars.zip",
+    match   => '^spark.yarn.archive',
+    # require configure_r: in MapR 6.1, spark-defaults.conf is created only after configure.sh -R
+    require => [Package['mapr-spark'], Class['profile::mapr::configure_r']]
   }
 
   # To integrate Spark-SQL with Hive
