@@ -35,7 +35,7 @@ class profile::mapr::configure (
       line               => "      cmd=\"\$oozieDir/bin/oozie-setup.sh -hadoop \"\$hadoopVersion\" \"\${hadoopBase}/hadoop-\${hadoopVersion}\" $secure_opt\"",
       match              => '\s+cmd\="\$oozieDir/bin/oozie-setup.sh -hadoop "\$hadoopVersion" "\${hadoopBase}/hadoop-\${hadoopVersion}""$',
       append_on_no_match => false,
-      before             => Exec['configure.sh'],
+      before             => Exec['Run configure.sh'],
     }
   }
 
