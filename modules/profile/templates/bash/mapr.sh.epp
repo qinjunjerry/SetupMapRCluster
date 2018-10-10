@@ -24,6 +24,11 @@ function todir() {
         # when app == 'mapr'
         app_home=$MAPR_HOME
     else
+        # find app if only first few letters are given
+        if [ $(find $MAPR_HOME -maxdepth 1 -type d -name "$app*" | wc -l) -eq 1 ]; then
+            app=$(basename $(find $MAPR_HOME -maxdepth 1 -type d -name "$app*"))
+        fi
+
         # consider app under /opt/mapr
         if [ ! -e ${MAPR_HOME}/$app ]; then
             echo "Unknown app: $app"
