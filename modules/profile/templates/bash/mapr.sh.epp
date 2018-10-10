@@ -1,5 +1,96 @@
 # Add base_dir to the path for sh compatible users
+# Note: base_dir is a puppet fact which is passed over via 'mc setup'
 
 if ! echo $PATH | grep -q <%= $::base_dir %> ; then
   export PATH=$PATH:<%= $::base_dir %>
 fi
+
+# function todir():
+function todir() {
+    app=$1  # app name, e.g., hadoop, hive, spark, etc.
+    type=$2 # dir type, e.g., conf|cfg, log|logs
+
+    if [ -z "$app" ]; then
+        echo "Usage: todir <app> [logs|conf]"
+        return
+    fi
+
+    MAPR_HOME=/opt/mapr
+
+    app_home=
+    dir=
+
+    if [ $app == 'mapr' ]; then
+        # when app == 'mapr'
+        app_home=$MAPR_HOME
+    else
+        # consider app under /opt/mapr
+        if [ ! -e ${MAPR_HOME}/$app ]; then
+            echo "Unknown app: $app"
+            return
+        fi
+
+        ver_file=${MAPR_HOME}/$app/${app}version
+        if [ -e $ver_file ]; then
+            ver=$(cat $ver_file)
+            app_ver=${app}-${ver}
+        else
+            app_ver=$(ls -v ${MAPR_HOME}/$app | grep "${app}-" | tail -1 )
+        fi
+
+        app_home=$MAPR_HOME/$app/${app_ver}
+    fi
+
+    if [ ! -e "$app_home" ]; then
+        echo "Directory \'$app_home\' not found"
+        return
+    fi
+
+    if [ -z "$type" ]; then
+        echo "Entering into: $app_home"
+        cd $app_home
+        return
+    fi
+
+
+    dir=
+    case $type in
+        log|logs)
+            if [ -d $app_home/logs ]; then
+                dir=$app_home/logs
+            elif [ -d $app_home/log ]; then
+                dir=$app_home/log
+            elif [ -d $app_home/var/log/$app ]; then
+                dir=$app_home/var/log/$app
+            elif [ -d $app_home/var/log ]; then
+                dir=$app_home/var/log
+            fi
+            ;;
+        conf|cfg)
+            if [ -d $app_home/conf ]; then
+                dir=$app_home/conf
+            elif [ -d $app_home/cfg ]; then
+                dir=$app_home/etc/cfg
+            elif [ -d $app_home/config ]; then
+                dir=$app_home/etc/config
+            elif [ -d $app_home/etc/conf ]; then
+                dir=$app_home/etc/conf
+            elif [ -d $app_home/etc/conf ]; then
+                dir=$app_home/etc/conf
+            elif [ -d $app_home/etc/$app ]; then
+                dir=$app_home/etc/$app
+            elif [ -d $app_home/desktop/conf ]; then
+                dir=$app_home/desktop/conf
+            fi
+            ;;
+        *)
+            echo "Unknown directory type, expect 'logs', 'conf', etc."
+    esac
+
+    if [ -z $dir ]; then
+        echo "Unknown directory"
+    else
+        echo "Entering into: $dir"
+        cd $dir
+    fi
+}
