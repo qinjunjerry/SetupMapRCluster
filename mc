@@ -200,24 +200,16 @@ mc_cleanall() {
     mc_clean && mc_delpuppet
 }
 
-
-mc_ldir() {
-    declare -a dir_array=(`ls -d /opt/mapr/*/*-*/{logs,conf,etc/hadoop,etc/conf,desktop/conf,var/log} 2>/dev/null`)
-
-    for ((i=0; i<${#dir_array[@]}; i++)); do
-        printf "%2d = %s\n" $i ${dir_array[$i]}
-    done
-
-    #read -p "Select dir: " i
-}
-
-
 mc_pi() {    
     exec_cmd "sudo -u mapr hadoop jar /opt/mapr/hadoop/hadoop-2.7.0/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.0-mapr-*.jar pi -Dfs.mapr.trace=debug 10 100"
 }
 
 mc_sparkpi() {
     exec_cmd "sudo -u mapr /opt/mapr/spark/spark-*/bin/run-example --master yarn --deploy-mode client --verbose SparkPi 10"
+}
+
+mc_sparkhive() {
+    exec_cmd "/opt/mapr/spark/spark-*/bin/run-example --master yarn --deploy-mode client --verbose sql.hive.SparkHiveExample"
 }
 
 exec_cmd() {
@@ -247,7 +239,7 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall ldir pi sparkpi)
+commandList=(help init setup up start stop restart delmapr delpuppet clean cleanall pi sparkpi sparkhive)
 command=$1
 shift
 if [[ " ${commandList[*]} " == *" $command "* ]]; then
