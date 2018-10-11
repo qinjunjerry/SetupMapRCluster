@@ -12,7 +12,13 @@ class profile::mapr::ecosystem::hiveserver2 (
 
   $version = fact('mapr-hive:version')
   $cfgfile = "/opt/mapr/hive/hive-$version/conf/hive-site.xml"
-  $hive_meta_node = $profile::mapr::cluster::hive_meta_node
+
+  # append domain name to hostname if not already done
+  $hive_meta_node = $profile::mapr::cluster::hive_meta_node =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::hive_meta_node,
+    default => "${profile::mapr::cluster::hive_meta_node}.${profile::mapr::prereq::domain}" 
+  }
+
   $hostname = fact('networking.fqdn')
 
   package { 'mapr-hiveserver2':

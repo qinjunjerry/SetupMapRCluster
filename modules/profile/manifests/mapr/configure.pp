@@ -39,12 +39,30 @@ class profile::mapr::configure (
     }
   }
 
+  # append domain name to each hostname if not already done
+  $zk_node_list = join ( 
+      split($profile::mapr::cluster::zk_node_list,',').map |$item| { 
+          if $item =~ /.+\..+/ { "$item" } else { "${item}.${profile::mapr::prereq::domain}" }
+      },
+  ',')
+
+  $cldb_node_list = join ( 
+      split($profile::mapr::cluster::cldb_node_list,',').map |$item| { 
+          if $item =~ /.+\..+/ { "$item" } else { "${item}.${profile::mapr::prereq::domain}" }
+      },
+  ',')
+
+  $historyserver = $profile::mapr::cluster::historyserver =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::historyserver,
+    default => "${profile::mapr::cluster::historyserver}.${profile::mapr::prereq::domain}" 
+  }
+
   exec { 'Run configure.sh':
     command     => join(['/opt/mapr/server/configure.sh',
                          ' ', '-N',  ' ', $profile::mapr::cluster::cluster_name,
-                         ' ', '-Z',  ' ', $profile::mapr::cluster::zk_node_list,
-                         ' ', '-C',  ' ', $profile::mapr::cluster::cldb_node_list,
-                         ' ', '-HS', ' ', $profile::mapr::cluster::historyserver,
+                         ' ', '-Z',  ' ', $zk_node_list,
+                         ' ', '-C',  ' ', $cldb_node_list,
+                         ' ', '-HS', ' ', $historyserver,
 #                        ' ', '-D',  ' ', $profile::mapr::cluster::disk_list,
 #                        ' ', '-disk-opts', ' ', 'F',
                          ' ', $secure_opt,

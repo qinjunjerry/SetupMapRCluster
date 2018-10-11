@@ -14,8 +14,18 @@ class profile::mapr::ecosystem::hivemetastore (
   $version = fact('mapr-hive:version')
   $cfgfile = "/opt/mapr/hive/hive-$version/conf/hive-site.xml"
 
-  $mysql_node     = $profile::mapr::cluster::mysql_node
-  $hive_meta_node = $profile::mapr::cluster::hive_meta_node
+  # append domain name to hostname if not already done
+  $mysql_node = $profile::mapr::cluster::mysql_node =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::mysql_node,
+    default => "${profile::mapr::cluster::mysql_node}.${profile::mapr::prereq::domain}" 
+  }
+  
+  # append domain name to hostname if not already done
+  $hive_meta_node = $profile::mapr::cluster::hive_meta_node =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::hive_meta_node,
+    default => "${profile::mapr::cluster::hive_meta_node}.${profile::mapr::prereq::domain}" 
+  }
+
   $metastore_db   = regsubst($profile::mapr::cluster::cluster_name, '\.', '_', 'G')
   $hostname = fact('networking.fqdn')
 

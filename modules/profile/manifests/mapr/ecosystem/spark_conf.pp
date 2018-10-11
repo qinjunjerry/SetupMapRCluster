@@ -16,7 +16,12 @@ class profile::mapr::ecosystem::spark_conf (
 
   include profile::mapr::cluster
   include profile::kerberos
-  $hive_meta_node = $profile::mapr::cluster::hive_meta_node
+
+  # append domain name to hostname if not already done
+  $hive_meta_node = $profile::mapr::cluster::hive_meta_node =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::hive_meta_node,
+    default => "${profile::mapr::cluster::hive_meta_node}.${profile::mapr::prereq::domain}" 
+  }
 
   $version = fact('mapr-spark:version')
   $spark_home = "/opt/mapr/spark/spark-$version"

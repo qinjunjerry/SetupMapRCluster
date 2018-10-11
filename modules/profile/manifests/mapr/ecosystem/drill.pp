@@ -42,8 +42,12 @@ class profile::mapr::ecosystem::drill (
   }
 
   $cluster_id = regsubst($profile::mapr::cluster::cluster_name, '\.', '_', 'G')
-  # append domain to each hostname if not already done
-  $zk_connect = join ( suffix( split($profile::mapr::cluster::zk_node_list,',').map |$item| { if $item =~ /.+\..+/ {$item} else { "${item}.${profile::mapr::prereq::domain}"} }, ":5181" ), ',')
+  # append domain name to each hostname if not already done
+  $zk_connect = join ( suffix( 
+        split($profile::mapr::cluster::zk_node_list,',').map |$item| { 
+          if $item =~ /.+\..+/ {$item} else { "${item}.${profile::mapr::prereq::domain}" 
+        } 
+      }, ":5181" ), ',')
 
 
   file { '/etc/pam.d/drill':

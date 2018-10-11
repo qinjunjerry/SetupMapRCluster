@@ -11,12 +11,27 @@ class profile::mapr::configure_c (
     true    => "-secure",
     default => ""
   }
+
+  # append domain name to each hostname if not already done
+  $zk_node_list = join ( 
+      split($profile::mapr::cluster::zk_node_list,',').map |$item| { 
+          if $item =~ /.+\..+/ { "$item" } else { "${item}.${profile::mapr::prereq::domain}" }
+      },
+  ',')
+
+  $cldb_node_list = join ( 
+      split($profile::mapr::cluster::cldb_node_list,',').map |$item| { 
+          if $item =~ /.+\..+/ { "$item" } else { "${item}.${profile::mapr::prereq::domain}" }
+      },
+  ',')
+
+
   # run configure_mapr.sh -c
   exec { 'Run configure.sh -c':
     command     => join(['/usr/bin/sudo /opt/mapr/server/configure.sh',
                          ' ', '-N', ' ', $profile::mapr::client::cluster_name,
-                         ' ', '-Z', ' ', $profile::mapr::client::zk_node_list,
-                         ' ', '-C', ' ', $profile::mapr::client::cldb_node_list,
+                         ' ', '-Z', ' ', $zk_node_list,
+                         ' ', '-C', ' ', $cldb_node_list,
                          ' ', $secure_opt,
                          ' ', '-c'
                        ]),

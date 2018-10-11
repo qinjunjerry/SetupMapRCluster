@@ -14,11 +14,8 @@ class profile::mapr::ecosystem::spark (
   require profile::mapr::user
   require profile::mapr::configure
 
-
   include profile::mapr::cluster
   include profile::kerberos
-  $hive_meta_node = $profile::mapr::cluster::hive_meta_node
-
 
   package { 'mapr-spark':
     ensure  => present,

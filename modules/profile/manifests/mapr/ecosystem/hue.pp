@@ -77,7 +77,12 @@ class profile::mapr::ecosystem::hue (
     }
   }
 
-  $oozie_node=$profile::mapr::cluster::oozie_node
+  # append domain name to hostname if not already done
+  $oozie_node = $profile::mapr::cluster::oozie_node =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::oozie_node,
+    default => "${profile::mapr::cluster::oozie_node}.${profile::mapr::prereq::domain}" 
+  }
+  
   file_line {'oozie_url in hue.ini':
     ensure   => 'present',
     path     => $cfgfile,
