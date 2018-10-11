@@ -31,7 +31,7 @@ class profile::mapr::ecosystem::hivemetastore (
       file   => $cfgfile,
       notify => Class['profile::mapr::warden_restart'];
 
-    "hive.metastore.execute.setugi"    : value =>"true";
+    "hive.metastore.execute.setugi"    : value =>"false";
   }
 
   # Configure MySQL for hive metastore

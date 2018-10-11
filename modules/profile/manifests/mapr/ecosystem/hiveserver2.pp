@@ -28,7 +28,7 @@ class profile::mapr::ecosystem::hiveserver2 (
       notify => Class['profile::mapr::warden_restart'];
 
     "hive.server2.enable.doAs"                   : value =>"true";
-    "hive.metastore.execute.setugi@hs2"          : value =>"true";
+    "hive.metastore.execute.setugi@hs2"          : value =>"false";
   }
 
   # Needed when using mysql for hive metastore

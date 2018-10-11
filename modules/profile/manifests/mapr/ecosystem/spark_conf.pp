@@ -49,7 +49,7 @@ class profile::mapr::ecosystem::spark_conf (
     default:
       file   => $hive_cfgfile;
 
-    "hive.metastore.execute.setugi@spark"     : value => 'true';
+    "hive.metastore.execute.setugi@spark"     : value => 'false';
     "hive.metastore.uris@spark"               : value => "thrift://$hive_meta_node:9083";
     "hive.metastore.kerberos.principal@spark" : value => "mapr/$hive_meta_node@$::profile::kerberos::default_realm";
   }
