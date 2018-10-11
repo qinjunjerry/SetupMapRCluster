@@ -80,9 +80,9 @@ class profile::mapr::ecosystem::hue (
   # append domain name to hostname if not already done
   $oozie_node = $profile::mapr::cluster::oozie_node =~ /.+\..+/ ? {
     true    => $profile::mapr::cluster::oozie_node,
-    default => "${profile::mapr::cluster::oozie_node}.${profile::mapr::prereq::domain}" 
+    default => "${profile::mapr::cluster::oozie_node}.${profile::mapr::prereq::domain}"
   }
-  
+
   file_line {'oozie_url in hue.ini':
     ensure   => 'present',
     path     => $cfgfile,
@@ -91,5 +91,21 @@ class profile::mapr::ecosystem::hue (
     match    => '^\s*oozie_url\=',
     require  => Package['mapr-hue'],
   }
+
+  # append domain name to hostname if not already done
+  $hive_server2_node = $profile::mapr::cluster::hive_server2_node =~ /.+\..+/ ? {
+    true    => $profile::mapr::cluster::hive_server2_node,
+    default => "${profile::mapr::cluster::hive_server2_node}.${profile::mapr::prereq::domain}"
+  }
+
+  file_line {'hive_server_host in hue.ini':
+    ensure   => 'present',
+    path     => $cfgfile,
+    line     => "  hive_server_host=${hive_server2_node}",
+    after    => '# If Kerberos security is enabled, use fully-qualified domain name',
+    match    => '^\s*hive_server_host\=',
+    require  => Package['mapr-hue'],
+  }
+
 
 }
