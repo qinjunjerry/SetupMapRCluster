@@ -60,6 +60,11 @@ function todir() {
 
     dir=
     case $type in
+        bin)
+            if [ -d $app_home/bin ]; then
+                dir=$app_home/bin
+            fi
+            ;;
         log|logs)
             if [ -d $app_home/logs ]; then
                 dir=$app_home/logs
@@ -78,18 +83,17 @@ function todir() {
                 dir=$app_home/etc/cfg
             elif [ -d $app_home/config ]; then
                 dir=$app_home/etc/config
-            elif [ -d $app_home/etc/conf ]; then
-                dir=$app_home/etc/conf
-            elif [ -d $app_home/etc/conf ]; then
-                dir=$app_home/etc/conf
             elif [ -d $app_home/etc/$app ]; then
                 dir=$app_home/etc/$app
+            elif [ -d $app_home/etc/conf ]; then
+                dir=$app_home/etc/conf
             elif [ -d $app_home/desktop/conf ]; then
                 dir=$app_home/desktop/conf
             fi
             ;;
         *)
-            echo "Unknown directory type, expect 'logs', 'conf', etc."
+            echo "Unknown directory type, expect 'log', 'conf', 'bin', etc."
+            return
     esac
 
     if [ -z $dir ]; then
