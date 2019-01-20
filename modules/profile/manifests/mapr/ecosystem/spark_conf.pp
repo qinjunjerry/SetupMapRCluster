@@ -18,6 +18,7 @@ class profile::mapr::ecosystem::spark_conf (
   include profile::kerberos
 
   # append domain name to hostname if not already done
+  # Note: this need puppet-agent 5.5.7 or later (certainly 5.3.3 is not working)
   $hive_meta_node = $profile::mapr::cluster::hive_meta_node =~ /.+\..+/ ? {
     true    => $profile::mapr::cluster::hive_meta_node,
     default => "${profile::mapr::cluster::hive_meta_node}.${profile::mapr::prereq::domain}" 
