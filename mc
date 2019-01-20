@@ -184,7 +184,6 @@ mc_delmapr() {
     sudo rm -fr /opt/mapr /etc/yum.repos.d/mapr.repo
     echo "[VERIFY] check installed mapr packages ..."
     rpm -qa | grep mapr
-    echo "Don't forget to delete (and re-create) hivemeta database and user using scripts under 'utils/'!"
 }
 
 mc_delpuppet() {
@@ -205,6 +204,7 @@ mc_clean() {
     else
         true
     fi
+    echo "Don't forget to delete (and re-create) hivemeta database and user using scripts under 'utils/'!"
 }
 
 mc_cleanall() {
