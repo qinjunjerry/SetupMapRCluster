@@ -1,0 +1,18 @@
+---
+
+classes:
+  - role::cluster_node_core
+  - profile::mapr::ecosystem::spark
+  - profile::mapr::ecosystem::spark_conf
+
+  - profile::mapr::core::zookeeper
+  - profile::mapr::core::cldb
+
+  - profile::mapr::core::resourcemanager
+
+  - profile::mapr::ecosystem::hivemetastore
+  - profile::mapr::ecosystem::oozie
+
+# - profile::mapr::ecosystem::opentsdb
+# - profile::mapr::configure_r_ot
+# - profile::mapr::warden_restart2

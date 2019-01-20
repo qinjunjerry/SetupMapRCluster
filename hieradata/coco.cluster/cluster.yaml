@@ -1,0 +1,23 @@
+---
+
+# MapR versions
+profile::mapr::repo::core_version: 6.0.1
+profile::mapr::repo::mep_version : 5.0.0
+
+# Cluster level settings
+profile::mapr::cluster::cluster_name     : coco.cluster
+profile::mapr::cluster::cldb_node_list   : node64,node65
+profile::mapr::cluster::zk_node_list     : node64,node65,node66
+profile::mapr::cluster::historyserver    : node66
+
+#profile::mapr::cluster::secure          : false
+#profile::mapr::cluster::kerberos        : false
+
+profile::mapr::cluster::hive_meta_node   : node65
+profile::mapr::cluster::hive_server2_node: node64
+profile::mapr::cluster::mysql_node       : node70
+
+profile::mapr::cluster::oozie_node       : node65
+
+profile::mapr::cluster::opentsdb_node    : node65
+profile::mapr::cluster::elastic_node     : node66

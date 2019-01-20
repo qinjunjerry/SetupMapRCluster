@@ -1,0 +1,19 @@
+---
+
+classes:
+  - role::cluster_node_core
+  - profile::mapr::ecosystem::spark
+  - profile::mapr::ecosystem::spark_conf
+
+  - profile::mapr::core::zookeeper
+  - profile::mapr::core::cldb
+
+  - profile::mapr::core::webserver
+
+  - profile::mapr::ecosystem::hiveserver2
+  - profile::mapr::ecosystem::hive_hdfs_env
+# - profile::mapr::ecosystem::hue
+
+# - profile::mapr::ecosystem::grafana
+# - profile::mapr::configure_r_ot
+# - profile::mapr::warden_restart2

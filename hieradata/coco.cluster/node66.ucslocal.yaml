@@ -1,0 +1,24 @@
+---
+
+classes:
+  - role::cluster_node_core
+  - profile::mapr::core::historyserver
+  - profile::mapr::ecosystem::spark
+  - profile::mapr::ecosystem::spark_conf
+  - profile::mapr::ecosystem::spark_hdfs_env
+  - profile::mapr::ecosystem::spark_historyserver
+
+  - profile::mapr::core::zookeeper
+
+  - profile::mapr::core::resourcemanager
+
+# - profile::mapr::ecosystem::hivewebhcat
+
+# # available since MEP 4.0
+# - profile::mapr::ecosystem::spark_thriftserver
+
+# - profile::mapr::configure_r_ot
+# - profile::mapr::warden_restart2
+
+# - profile::mapr::ecosystem::elasticsearch
+# - profile::mapr::ecosystem::kibana

@@ -1,0 +1,18 @@
+---
+
+# MapR versions
+profile::mapr::repo::core_version: 5.2.2
+profile::mapr::repo::mep_version : 3.0.4
+
+# Cluster level settings
+profile::mapr::cluster::cluster_name     : kiwi.cluster
+profile::mapr::cluster::cldb_node_list   : node71,node72
+profile::mapr::cluster::zk_node_list     : node71,node72,node73
+profile::mapr::cluster::oozie_node       : node72
+profile::mapr::cluster::historyserver    : node73
+profile::mapr::cluster::mysql_node       : node70
+profile::mapr::cluster::hive_meta_node   : node72
+profile::mapr::cluster::hive_server2_node: node71
+
+profile::mapr::cluster::opentsdb_node    : node72
+profile::mapr::cluster::elastic_node     : node73
