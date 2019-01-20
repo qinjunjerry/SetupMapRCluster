@@ -11,7 +11,7 @@ function todir() {
     type=$2 # dir type, e.g., conf|cfg, log|logs
 
     if [ -z "$app" ]; then
-        echo "Usage: todir <app> [logs|conf]"
+        echo "Usage: todir <app> [conf|log|bin|...]"
         return
     fi
 
@@ -29,9 +29,9 @@ function todir() {
             app=$(basename $(find $MAPR_HOME -maxdepth 1 -type d -name "$app*"))
         fi
 
-        # consider app under /opt/mapr
+        # check app under /opt/mapr
         if [ ! -e ${MAPR_HOME}/$app ]; then
-            echo "Unknown app: $app"
+            echo "No such app: $app, not installed here?"
             return
         fi
 
@@ -60,11 +60,6 @@ function todir() {
 
     dir=
     case $type in
-        bin)
-            if [ -d $app_home/bin ]; then
-                dir=$app_home/bin
-            fi
-            ;;
         log|logs)
             if [ -d $app_home/logs ]; then
                 dir=$app_home/logs
@@ -92,14 +87,18 @@ function todir() {
             fi
             ;;
         *)
-            echo "Unknown directory type, expect 'log', 'conf', 'bin', etc."
-            return
+            if [ -d $app_home/$type ]; then
+                dir=$app_home/$type
+            fi
     esac
 
     if [ -z $dir ]; then
-        echo "Unknown directory"
-    else
-        echo "Entering into: $dir"
-        cd $dir
+        echo "No such directory"
+        # go to app home instead
+        dir=$app_home
     fi
+
+    echo "Entering into: $dir"
+    cd $dir
+    
 }
