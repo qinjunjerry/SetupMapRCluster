@@ -11,6 +11,4 @@ class role::cluster_node {
   include profile::mapr::ecosystem::spark
   include profile::mapr::ecosystem::spark_conf
 
-  include profile::mapr::ecosystem::drill
-
 }
