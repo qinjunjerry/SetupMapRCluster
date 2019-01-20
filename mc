@@ -136,38 +136,47 @@ mc_setup() {
 
 mc_start() {
     sudo systemctl daemon-reload
-    if rpm -qa | grep -q mapr-zookeeper; then
-        sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
+    if [ -n "$1" ]; then
+        sudo systemctl start $1
     else
-        sudo systemctl start mapr-warden
+        if rpm -qa | grep -q mapr-zookeeper; then
+            sudo systemctl start mapr-zookeeper && sudo systemctl start mapr-warden
+        else
+            sudo systemctl start mapr-warden
+        fi
     fi
 }
 
 mc_stop() {
     sudo systemctl daemon-reload
-    if rpm -qa | grep -q mapr-zookeeper; then
-        sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
-    else
-        sudo systemctl stop mapr-warden
-    fi   
-    if ps -fu mapr >/dev/null; then
-        echo "Sleep 10 sec ..."
-        sleep 10s
-        echo "Force kill the remaining proceses"
-        ps -fu mapr --no-header| grep -v bash | awk '{print $2}' | xargs kill -9
-    fi
 
-    echo "[VERIFY] check running mapr processes ..."
-    if ps -fu mapr; then
-        false
+    if [ -n "$1" ]; then
+        sudo systemctl stop $1
     else
-        true
+        if rpm -qa | grep -q mapr-zookeeper; then
+            sudo systemctl stop mapr-warden && sudo systemctl stop mapr-zookeeper
+        else
+            sudo systemctl stop mapr-warden
+        fi   
+        if ps -fu mapr >/dev/null; then
+            echo "Sleep 10 sec ..."
+            sleep 10s
+            echo "Force kill the remaining proceses"
+            ps -fu mapr --no-header| grep -v bash | awk '{print $2}' | xargs kill -9
+        fi
+
+        echo "[VERIFY] check running mapr processes ..."
+        if ps -fu mapr; then
+            false
+        else
+            true
+        fi
     fi
 
 }
 
 mc_restart() {
-    mc_stop && mc_start
+    mc_stop $@ && mc_start $@
 }
 
 mc_delmapr() {
@@ -175,11 +184,13 @@ mc_delmapr() {
     sudo rm -fr /opt/mapr /etc/yum.repos.d/mapr.repo
     echo "[VERIFY] check installed mapr packages ..."
     rpm -qa | grep mapr
+    echo "Don't forget to delete (and re-create) hivemeta database and user using scripts under 'utils/'!"
 }
 
 mc_delpuppet() {
     sudo yum erase -y puppet-agent puppet5-release
     sudo rm -fr /opt/puppetlabs
+    sudo rm -fr $BASE_DIR/external
 }
 
 mc_up() {
