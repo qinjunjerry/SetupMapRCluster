@@ -5,3 +5,5 @@ mod 'puppet-archive', '3.2.0'
 mod 'puppetlabs-java', '3.1.0'
 
 mod 'puppetlabs-hocon', '1.0.1'
+
+mod 'puppetlabs-haproxy', '2.2.0'
