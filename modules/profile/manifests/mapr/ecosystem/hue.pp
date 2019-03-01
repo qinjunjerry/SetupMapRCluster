@@ -28,6 +28,7 @@ class profile::mapr::ecosystem::hue (
 
   # This requires that httpfs must run on the Hue node
   # In case of multiple httpfs, httpfs must setup as active-active instead of active-standby
+  # In a secure MapR 5.x cluster, this still should be 'http' as server.xml in httpfs does not have SSLEnabled="true"
   $hostname = fact('networking.fqdn')
   $protocol = $profile::mapr::cluster::secure ? {
     true    => 'https',
