@@ -16,3 +16,5 @@ classes:
   - profile::mapr::ecosystem::grafana
   - profile::mapr::configure_r_ot
   - profile::mapr::warden_restart2
+
+  - profile::mapr::ecosystem::drill_on_yarn
