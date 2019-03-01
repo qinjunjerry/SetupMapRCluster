@@ -29,7 +29,12 @@ for line in output.splitlines():
         if len(item) <= 2:
             vitems.append(item)
         else:
+            # ignore build number which like: 201901301208
             break
-    version = ".".join(vitems)
+    # Starting with MEP-6.1.0, versions can contains 4 numbers like '2.3.2.0' in 
+    #      mapr-spark-2.3.2.0.201901301208-1.noarch
+    # but the version directory contains still 3 numbers. Let us take only the 
+    # first 3 numbers.
+    version = ".".join(vitems[0:3])
 
     print "%s=%s" % (package+":version", version)
