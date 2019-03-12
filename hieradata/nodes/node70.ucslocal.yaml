@@ -3,3 +3,4 @@
 classes:
   - role::kerberos_kdc
   - role::mysql_server
+  - role::nfs_server
