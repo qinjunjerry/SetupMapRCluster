@@ -4,7 +4,7 @@ class role::cluster_node_core {
 
   include profile::mapr::core::core
   include profile::mapr::core::fileserver
-  include profile::mapr::core::nfs
+  # include profile::mapr::core::nfs
 
   include profile::mapr::core::nodemanager
   include profile::mapr::core::rm_nm_common
