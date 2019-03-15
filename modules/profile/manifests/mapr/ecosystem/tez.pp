@@ -74,10 +74,17 @@ class profile::mapr::ecosystem::tez (
       notify  => Class['profile::mapr::configure_r'];
 
     "hive.execution.engine"  : value => "tez";
-    "hive.exec.pre.hooks"    : value => 'org.apache.hadoop.hive.ql.hooks.ATSHook';
-    "hive.exec.post.hooks"   : value => 'org.apache.hadoop.hive.ql.hooks.ATSHook';
   }
+  
+  if versioncmp($version, '0.9') < 0 {
+	  profile::hadoop::xmlconf_property {
+	    default:
+	      file   => $hive_cfgfile,
+	      notify  => Class['profile::mapr::configure_r'];
 
-
+	    "hive.exec.pre.hooks"    : value => 'org.apache.hadoop.hive.ql.hooks.ATSHook';
+	    "hive.exec.post.hooks"   : value => 'org.apache.hadoop.hive.ql.hooks.ATSHook';
+	  }
+	}
 
 }
