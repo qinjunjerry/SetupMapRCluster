@@ -100,13 +100,15 @@ class profile::mapr::ecosystem::drill_on_yarn (
     require            => Package['mapr-drill-yarn'],
   }
 
-  file_line { 'fix bug: java version detection':
-    ensure             => 'present',
-    path               => $drill_config,
-    line               => '"$JAVA" -version 2>&1 | grep "version" | egrep -e "1\.4|1\.5|1\.6" > /dev/null',
-    match              => '^"$JAVA" -version 2>&1 | grep "version" | egrep -e "1.4|1.5|1.6" > /dev/null',
-    append_on_no_match => false,
-    require            => Package['mapr-drill-yarn'],
+  if versioncmp($version, '1.14.0') < 0 {
+    file_line { 'fix bug: java version detection':
+      ensure             => 'present',
+      path               => $drill_config,
+      line               => '"$JAVA" -version 2>&1 | grep "version" | egrep -e "1\.4|1\.5|1\.6" > /dev/null',
+      match              => '^"$JAVA" -version 2>&1 | grep "version" | egrep -e "1.4|1.5|1.6" > /dev/null',
+      append_on_no_match => false,
+      require            => Package['mapr-drill-yarn'],
+    }
   }
 
   $cluster_id = regsubst($profile::mapr::cluster::cluster_name, '\.', '_', 'G')
