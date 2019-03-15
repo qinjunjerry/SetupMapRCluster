@@ -7,6 +7,7 @@ class profile::mapr::ecosystem::oozie_examples (
 ) {
 
   require profile::mapr::ecosystem::oozie
+  require profile::mapr::core::cldb_ready
 
   $version = fact('mapr-oozie:version')
 
