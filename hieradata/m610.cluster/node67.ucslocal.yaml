@@ -10,6 +10,8 @@ classes:
 
   - profile::mapr::ecosystem::hbase
   - profile::mapr::ecosystem::hiveserver2
+  - profile::mapr::ecosystem::tez
+
   - profile::mapr::ecosystem::hive_hdfs_env
   - profile::mapr::ecosystem::hue
 
