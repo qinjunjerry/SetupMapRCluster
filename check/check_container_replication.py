@@ -69,7 +69,15 @@ else:
             num = len(ipports)
             print "%s:%d" % (serverType, num),
 
-            if (serverType == 'ActiveServers' and num == factor) or \
+            valid=True
+            if serverType == 'ActiveServers':
+                for ipport in ipports:
+                    if not ipport.endswith('VALID'): 
+                        valid=False
+                        break
+
+
+            if (serverType == 'ActiveServers' and num == factor and valid) or \
                 (serverType == 'InactiveServers' and num == 0) or \
                 (serverType == 'UnusedServers' and num == 0):
                 allok = True and allok
