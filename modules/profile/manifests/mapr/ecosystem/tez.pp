@@ -42,7 +42,7 @@ class profile::mapr::ecosystem::tez (
   ->
  file { $hive_envfile:
     ensure  => 'present',
-    replace => 'no', # this is the important property
+    replace => 'no', # this is an important property
     content => "",
     mode    => '0644',
   }
@@ -76,7 +76,7 @@ class profile::mapr::ecosystem::tez (
     "hive.execution.engine"  : value => "tez";
   }
   
-  if versioncmp($version, '0.9') < 0 {
+  if versioncmp($version, '0.9') >= 0 {
 	  profile::hadoop::xmlconf_property {
 	    default:
 	      file   => $hive_cfgfile,
