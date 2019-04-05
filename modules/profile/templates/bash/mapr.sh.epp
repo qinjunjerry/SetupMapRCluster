@@ -5,13 +5,16 @@ if ! echo $PATH | grep -q <%= $::base_dir %> ; then
   export PATH=$PATH:<%= $::base_dir %>
 fi
 
-# function todir():
-function todir() {
+# function fd(): find directory 
+function fd() {
     app=$1  # app name, e.g., hadoop, hive, spark, etc.
     type=$2 # dir type, e.g., conf|cfg, log|logs
 
     if [ -z "$app" ]; then
-        echo "Usage: todir <app> [conf|log|bin|...]"
+        echo "Usage: fd <app> [conf|log|bin|...]"
+        echo "Options:"
+        echo "    app: hadoop, hive, spark, etc."
+        echo "    dir: conf|cfg, log|logs, bin, etc."
         return
     fi
 
@@ -98,13 +101,34 @@ function todir() {
         dir=$app_home
     fi
 
+     echo $dir
+ 
+}
+
+# function sd(): switch directory
+function sd() {
+    app=$1  # app name, e.g., hadoop, hive, spark, etc.
+    type=$2 # dir type, e.g., conf|cfg, log|logs
+
+    if [ -z "$app" ]; then
+        echo "Usage: sd <app> [conf|log|bin|...]"
+        echo "Options:"
+        echo "    app: hadoop, hive, spark, etc."
+        echo "    dir: conf|cfg, log|logs, bin, etc."
+        return
+    fi
+    dir=`fd $app $type`
     echo "Entering into: $dir"
     cd $dir
-    
 }
 
 # function catxml(): print only names and values from hadoop xml config files
 function catxml() {
+    if [ -z "$1" ]; then
+        echo "Usage: catxml <hadoop xml conf file>"
+        return
+    fi
+
     xmlfile=$1
-    cat $xmlfile | grep -E "name|value" | sed ':a;N;$!ba;s|</name>\n\s*<value>| = |g'
+    cat yarn-site.xml | grep -E "name|value" | sed ':a;N;$!ba;s|</name>\n\s*<value>|=|g' | sed -E 's|\s*<name>(.*)</value>|\1;|g'
 }
