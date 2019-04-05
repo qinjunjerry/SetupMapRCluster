@@ -102,3 +102,9 @@ function todir() {
     cd $dir
     
 }
+
+# function catxml(): print only names and values from hadoop xml config files
+function catxml() {
+    xmlfile=$1
+    cat $xmlfile | grep -E "name|value" | sed ':a;N;$!ba;s|</name>\n\s*<value>| = |g'
+}
