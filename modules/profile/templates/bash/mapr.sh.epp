@@ -15,7 +15,7 @@ function fd() {
         echo "Options:"
         echo "    app: hadoop, hive, spark, etc."
         echo "    dir: conf|cfg, log|logs, bin, etc."
-        return
+        return 1
     fi
 
     MAPR_HOME=/opt/mapr
@@ -35,7 +35,7 @@ function fd() {
         # check app under /opt/mapr
         if [ ! -e ${MAPR_HOME}/$app ]; then
             echo "No such app: $app, not installed here?"
-            return
+            return 1
         fi
 
         ver_file=${MAPR_HOME}/$app/${app}version
@@ -51,13 +51,12 @@ function fd() {
 
     if [ ! -e "$app_home" ]; then
         echo "Directory \'$app_home\' not found"
-        return
+        return 1
     fi
 
     if [ -z "$type" ]; then
-        echo "Entering into: $app_home"
-        cd $app_home
-        return
+        echo $app_home
+        return 0
     fi
 
 
@@ -96,30 +95,23 @@ function fd() {
     esac
 
     if [ -z $dir ]; then
-        echo "No such directory"
-        # go to app home instead
+        # No such directory, go to app home instead
         dir=$app_home
     fi
 
      echo $dir
- 
+     return 0
 }
 
 # function sd(): switch directory
 function sd() {
-    app=$1  # app name, e.g., hadoop, hive, spark, etc.
-    type=$2 # dir type, e.g., conf|cfg, log|logs
-
-    if [ -z "$app" ]; then
-        echo "Usage: sd <app> [conf|log|bin|...]"
-        echo "Options:"
-        echo "    app: hadoop, hive, spark, etc."
-        echo "    dir: conf|cfg, log|logs, bin, etc."
-        return
+    if dir=`fd $@`; then
+        echo "Entering into: $dir"
+        cd $dir
+    else
+        printf "$dir\n"
     fi
-    dir=`fd $app $type`
-    echo "Entering into: $dir"
-    cd $dir
+
 }
 
 # function catxml(): print only names and values from hadoop xml config files
