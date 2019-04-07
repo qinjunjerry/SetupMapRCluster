@@ -122,5 +122,5 @@ function catxml() {
     fi
 
     xmlfile=$1
-    cat yarn-site.xml | grep -E "name|value" | sed ':a;N;$!ba;s|</name>\n\s*<value>|=|g' | sed -E 's|\s*<name>(.*)</value>|\1;|g'
+    cat $xmlfile | grep -E "name|value" | sed ':a;N;$!ba;s|</name>\n\s*<value>|=|g' | sed -E 's|\s*<name>(.*)</value>|\1;|g'
 }
