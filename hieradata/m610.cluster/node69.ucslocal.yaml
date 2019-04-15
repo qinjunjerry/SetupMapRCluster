@@ -9,7 +9,9 @@ classes:
 
   - profile::mapr::ecosystem::hbase
   - profile::mapr::ecosystem::hivewebhcat
-
+  - profile::mapr::ecosystem::timelineserver
+  - profile::mapr::configure_r_tl
+  
   - profile::mapr::ecosystem::elasticsearch
   - profile::mapr::ecosystem::kibana
   - profile::mapr::configure_r_ot
