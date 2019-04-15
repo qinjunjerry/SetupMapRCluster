@@ -17,6 +17,7 @@ class profile::mapr::cluster (
   $mysql_node        = $profile::mapr::cluster::mysql_node,
   $hive_server2_node = $profile::mapr::cluster::hive_server2_node,
   $hive_meta_node    = $profile::mapr::cluster::hive_meta_node,
+  $timelineserver    = $profile::mapr::cluster::timelineserver,
    
   $oozie_node        = $profile::mapr::cluster::oozie_node,
    
