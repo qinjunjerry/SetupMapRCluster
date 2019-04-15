@@ -9,8 +9,19 @@ class profile::mapr::ecosystem::tez (
   require profile::mapr::core::cldb_ready
   require profile::mapr::ecosystem::hiveserver2
 
+  include profile::mapr::cluster
 
+  # append domain name to the hostname if not already done
+  $timelineserver = join ( 
+      split($profile::mapr::cluster::timelineserver,',').map |$item| { 
+          if $item =~ /.+\..+/ { "$item" } else { "${item}.${profile::mapr::prereq::domain}" }
+      },
+  ',')
+
+  $hostname = fact('networking.fqdn')
   $version = fact('mapr-tez:version')
+  $cfgfile = "/opt/mapr/tez/tez-$version/conf/tez-site.xml"
+
   $hive_version = fact('mapr-hive:version')
   $hive_envfile = "/opt/mapr/hive/hive-$hive_version/conf/hive-env.sh"
   $hive_cfgfile = "/opt/mapr/hive/hive-$hive_version/conf/hive-site.xml"
@@ -86,5 +97,63 @@ class profile::mapr::ecosystem::tez (
 	    "hive.exec.post.hooks"   : value => 'org.apache.hadoop.hive.ql.hooks.ATSHook';
 	  }
 	}
+
+  # Hive-Tez-UI steps overview:
+  # 1. install mapr-timelineserver (warden/role files), (who?) start timeline server and listening on 8190
+  # 2. on all hive nodes, configure (via configure.sh) yarn-site.xml to point to timeline server, optionally configure kerberos
+  # 3. on tez node, configure tez/tomcat to point to timelineserver and RM in configs.env, start tez-ui server.
+  # 4. on tez node, configure tez-site.xml to point to tez-ui server
+
+  # tez-ui
+  archive { "/opt/mapr/tez/tez-$version/tomcat/tomcat.tar.gz":
+    extract      => true,
+    extract_path => "/opt/mapr/tez/tez-$version/tomcat",
+    creates      => "/opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1",
+    cleanup      => false,
+    require      => Package['mapr-tez'],
+  } 
+  ->
+  exec { 'chmod TEZ_HOME/tomcat':
+    command   => "/usr/bin/chown -R mapr:mapr /opt/mapr/tez/tez-$version/tomcat",
+    logoutput => on_failure,
+    unless    => "/usr/bin/ls -d /opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1 | grep 'mapr mapr'",
+  }
+  ->
+  file_line {'TIME_LINE_BASE_URL in tez-ui/config/configs.env':
+    ensure   => 'present',
+    path     => "/opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1/webapps/tez-ui/config/configs.env",
+    line     => "    timeline: \'https://$timelineserver:8190\',",
+    match    => '^\s*timeline:',
+  }
+  ->
+  # TODO: support RM HA
+  file_line {'RM_WEB_URL in tez-ui/config/configs.env':
+    ensure   => 'present',
+    path     => "/opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1/webapps/tez-ui/config/configs.env",
+    line     => "    rm: 'https://node69.ucslocal:8190',",
+    match    => '^\s*rm:',
+  }
+  ->
+  exec { 'startup TEZ-UI':
+    command   => "/opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1/bin/startup.sh",
+    user      => 'mapr',
+    logoutput => on_failure,
+    unless    => "/usr/bin/ps -ef | grep catalina.base=/opt/mapr/tez/tez-0.9/tomcat/apache-tomcat-9.0.[1]",
+  } 
+  ->
+  # This notifies 'configure.sh -TL' which adds the following properties into yarn-site.xml:
+  # yarn.timeline-service.enabled=true;
+  # yarn.timeline-service.hostname=node67.ucslocal;
+  # yarn.resourcemanager.system-metrics-publisher.enabled=true;
+  # yarn.timeline-service.http-cross-origin.enabled=true;
+  # yarn.timeline-service.http-authentication.type=com.mapr.security.maprauth.MaprDelegationTokenAuthenticationHandler;
+  profile::hadoop::xmlconf_property {
+    default:
+      file   => $cfgfile,
+      notify  => Class['profile::mapr::configure_r_tl'];
+
+    "tez.history.logging.service.class" : value => 'org.apache.tez.dag.history.logging.ats.ATSHistoryLoggingService';
+    "tez.tez-ui.history-url.base"       : value => "http://$hostname:9383/tez-ui/";
+  }
 
 }
