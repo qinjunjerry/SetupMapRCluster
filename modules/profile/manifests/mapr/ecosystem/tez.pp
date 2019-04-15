@@ -130,7 +130,7 @@ class profile::mapr::ecosystem::tez (
   file_line {'RM_WEB_URL in tez-ui/config/configs.env':
     ensure   => 'present',
     path     => "/opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1/webapps/tez-ui/config/configs.env",
-    line     => "    rm: 'https://node69.ucslocal:8190',",
+    line     => "    rm: 'https://node69.ucslocal:8090',",
     match    => '^\s*rm:',
   }
   ->
@@ -141,16 +141,9 @@ class profile::mapr::ecosystem::tez (
     unless    => "/usr/bin/ps -ef | grep catalina.base=/opt/mapr/tez/tez-0.9/tomcat/apache-tomcat-9.0.[1]",
   } 
   ->
-  # This notifies 'configure.sh -TL' which adds the following properties into yarn-site.xml:
-  # yarn.timeline-service.enabled=true;
-  # yarn.timeline-service.hostname=node67.ucslocal;
-  # yarn.resourcemanager.system-metrics-publisher.enabled=true;
-  # yarn.timeline-service.http-cross-origin.enabled=true;
-  # yarn.timeline-service.http-authentication.type=com.mapr.security.maprauth.MaprDelegationTokenAuthenticationHandler;
   profile::hadoop::xmlconf_property {
     default:
-      file   => $cfgfile,
-      notify  => Class['profile::mapr::configure_r_tl'];
+      file   => $cfgfile;
 
     "tez.history.logging.service.class" : value => 'org.apache.tez.dag.history.logging.ats.ATSHistoryLoggingService';
     "tez.tez-ui.history-url.base"       : value => "http://$hostname:9383/tez-ui/";
