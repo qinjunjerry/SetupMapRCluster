@@ -21,7 +21,8 @@ class profile::mapr::configure_r_tl (
     command     => "/opt/mapr/server/configure.sh -R -TL $timelineserver",
     logoutput   => on_failure,
     refreshonly => true,
-    notify      => Class['profile::mapr::warden_restart2']
+    notify      => Class['profile::mapr::warden_restart2'],
+    require     => Exec['Run configure.sh'],
   }
 
   # configure.sh -TL above add the following properties into yarn-site.xml:
