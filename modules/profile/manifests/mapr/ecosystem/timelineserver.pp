@@ -14,8 +14,16 @@ class profile::mapr::ecosystem::timelineserver (
   #     /opt/mapr/roles/timelineserver
   #     /opt/mapr/servicesconf/timelineserver
 
+  # This notifies 'configure.sh -TL' which adds the following properties into yarn-site.xml:
+  # yarn.timeline-service.enabled=true;
+  # yarn.timeline-service.hostname=node67.ucslocal;
+  # yarn.resourcemanager.system-metrics-publisher.enabled=true;
+  # yarn.timeline-service.http-cross-origin.enabled=true;
+  # yarn.timeline-service.http-authentication.type=com.mapr.security.maprauth.MaprDelegationTokenAuthenticationHandler;
+
   package { 'mapr-timelineserver':
     ensure  => present,
+    notify  => Class['profile::mapr::configure_r_tl']
   }
 
 
@@ -24,10 +32,7 @@ class profile::mapr::ecosystem::timelineserver (
     profile::hadoop::xmlconf_property {
       default:
         file    => '/opt/mapr/hadoop/hadoop-2.7.0/etc/hadoop/yarn-site.xml',
-        notify  => Class['profile::mapr::warden_restart'];
-
-      # Enables cross-origin support (CORS) for web services
-      'yarn.timeline-service.http-cross-origin.enabled': value => 'true';
+        notify  => Class['profile::mapr::warden_restart2'];
 
       'yarn.timeline-service.keytab'                   : value => '/opt/mapr/conf/mapr.keytab';
       # kerberos realm is required if _HOST is used
