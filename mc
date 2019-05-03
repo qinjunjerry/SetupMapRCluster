@@ -131,7 +131,8 @@ mc_setup() {
         --hiera_config $BASE_DIR/hiera.yaml \
         --environmentpath=$BASE_DIR/environments \
         --environment=$ENVIRON \
-        $BASE_DIR/environments/$ENVIRON/manifests/default.pp
+        $BASE_DIR/environments/$ENVIRON/manifests/default.pp \
+        | awk '{print strftime("%Y-%m-%d %H:%M:%S") " " $0}'
 }
 
 mc_start() {
