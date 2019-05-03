@@ -116,7 +116,7 @@ class profile::mapr::ecosystem::tez (
   exec { 'chmod TEZ_HOME/tomcat':
     command   => "/usr/bin/chown -R mapr:mapr /opt/mapr/tez/tez-$version/tomcat",
     logoutput => on_failure,
-    unless    => "/usr/bin/ls -d /opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1 | grep 'mapr mapr'",
+    unless    => "/usr/bin/ls -l -d /opt/mapr/tez/tez-$version/tomcat/apache-tomcat-9.0.1 | grep 'mapr mapr'",
   }
   ->
   file_line {'TIME_LINE_BASE_URL in tez-ui/config/configs.env':
